@@ -15,6 +15,15 @@ import { template as soul_openclaw_compose } from './optimize/soul-openclaw-comp
 import { template as soul_openclaw_compose_en } from './optimize/soul-openclaw-compose_en';
 import { template as soul_hermes_compose } from './optimize/soul-hermes-compose';
 import { template as soul_hermes_compose_en } from './optimize/soul-hermes-compose_en';
+// 通用编程领域优化模板（中/英）
+import { template as code_review_optimize } from './optimize/programming/code-review-optimize';
+import { template as code_review_optimize_en } from './optimize/programming/code-review-optimize_en';
+import { template as refactor_suggest_optimize } from './optimize/programming/refactor-suggest-optimize';
+import { template as refactor_suggest_optimize_en } from './optimize/programming/refactor-suggest-optimize_en';
+import { template as algorithm_explain_optimize } from './optimize/programming/algorithm-explain-optimize';
+import { template as algorithm_explain_optimize_en } from './optimize/programming/algorithm-explain-optimize_en';
+import { template as error_diagnosis_optimize } from './optimize/programming/error-diagnosis-optimize';
+import { template as error_diagnosis_optimize_en } from './optimize/programming/error-diagnosis-optimize_en';
 import { template as context_iterate } from './iterate/context/context-iterate';
 import { template as context_iterate_en } from './iterate/context/context-iterate_en';
 // 上下文消息优化模板（多轮对话模式专用）- 通用模板优先
@@ -164,6 +173,15 @@ export const ALL_TEMPLATES = {
   soul_openclaw_compose_en,
   soul_hermes_compose,
   soul_hermes_compose_en,
+  // 通用编程领域优化模板
+  code_review_optimize,
+  code_review_optimize_en,
+  refactor_suggest_optimize,
+  refactor_suggest_optimize_en,
+  algorithm_explain_optimize,
+  algorithm_explain_optimize_en,
+  error_diagnosis_optimize,
+  error_diagnosis_optimize_en,
   context_iterate,
   context_iterate_en,
   context_message_optimize,
