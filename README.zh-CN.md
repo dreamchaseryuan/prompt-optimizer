@@ -47,7 +47,7 @@ Prompt Optimizer是一个强大的AI提示词优化工具，帮助你编写更�
 - 🎯 **智能优化**：一键优化提示词，支持多轮迭代改进，提升AI回复准确度
 - 📝 **双模式优化**：支持系统提示词优化和用户提示词优化，满足不同使用场景
 - 🔄 **分析与对比评估**：支持分析、单结果评估和多结果对比评估，帮助判断提示词是否真的改进
-- 🤖 **多模型集成**：支持OpenAI、Gemini、DeepSeek、Grok、智谱AI、SiliconFlow、MiniMax等主流AI模型
+- 🤖 **多模型集成**：支持OpenAI、Gemini、DeepSeek、Grok、智谱AI、SiliconFlow、MiniMax、Kimi（Moonshot）、豆包（火山方舟）、腾讯混元、讯飞星火等主流AI模型
 - 🖼️ **图像生成**：支持文生图（T2I）、图生图（I2I）和多图生图，集成Gemini、Seedream、Grok等图像模型
 - 🌱 **提示词来源**：可从手写、模板、本地导入或提示词库导入码开始
 - ⭐ **智能收藏**：资源感知的提示词资产，支持版本历史、可复现示例、媒体支持、来源绑定和工作区应用
@@ -285,7 +285,7 @@ docker run -d -p 8081:80 \
 4. 在弹出的配置框中输入对应的API密钥
 5. 点击"保存"即可
 
-支持的模型：OpenAI、Gemini、DeepSeek、Grok、Zhipu智谱、SiliconFlow、自定义API（OpenAI兼容接口）
+支持的模型：OpenAI、Gemini、DeepSeek、Grok、Zhipu智谱、SiliconFlow、Kimi（Moonshot）、豆包（火山方舟）、腾讯混元、讯飞星火、自定义API（OpenAI兼容接口）
 
 除了API密钥，您还可以在模型配置界面为每个模型单独设置高级LLM参数。这些参数通过一个名为 `llmParams` 的字段进行配置，它允许您以键值对的形式指定LLM SDK支持的任何参数，从而更精细地控制模型行为。
 
