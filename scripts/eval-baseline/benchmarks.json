@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "description": "prompt-optimizer template regression baseline set. Keep prompts short and deterministic; placeholders are intentional for preservation checks.",
+  "benchmarks": [
+    { "id": "zh-code-review", "language": "zh", "category": "code-review", "prompt": "请帮我审查这段 C 代码，重点看内存泄漏和数组越界问题。" },
+    { "id": "zh-refactor", "language": "zh", "category": "refactor", "prompt": "把这段 Python 脚本重构成更易维护的结构，保留现有行为。" },
+    { "id": "zh-algorithm", "language": "zh", "category": "algorithm", "prompt": "讲解一下快速排序的原理，最好配一个例子。" },
+    { "id": "zh-error", "language": "zh", "category": "error-diagnosis", "prompt": "我的程序报 segmentation fault，应该怎么排查？" },
+    { "id": "zh-placeholder", "language": "zh", "category": "general", "prompt": "请以 {{tone}} 的语气，写一段介绍 {{product}} 的文案。" },
+    { "id": "zh-general", "language": "zh", "category": "general", "prompt": "帮我写一份周报，总结本周工作。" },
+    { "id": "en-code-review", "language": "en", "category": "code-review", "prompt": "Review this TypeScript function for edge cases and error handling." },
+    { "id": "en-refactor", "language": "en", "category": "refactor", "prompt": "Refactor this function to reduce nesting while keeping the same behavior." },
+    { "id": "en-algorithm", "language": "en", "category": "algorithm", "prompt": "Explain how a binary heap works, with a small example." },
+    { "id": "en-error", "language": "en", "category": "error-diagnosis", "prompt": "My service returns 502 intermittently. How should I diagnose it?" },
+    { "id": "en-placeholder", "language": "en", "category": "general", "prompt": "Write a product blurb in a {{tone}} tone for {{product}}." },
+    { "id": "en-general", "language": "en", "category": "general", "prompt": "Draft a weekly status update summarizing this week's progress." }
+  ]
+}
