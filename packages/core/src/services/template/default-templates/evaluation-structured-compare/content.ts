@@ -1,15 +1,4 @@
-import type { MessageTemplate, Template } from '../../types';
-
 type Language = 'zh' | 'en';
-type TemplateKind = 'pair-judge' | 'synthesis';
-
-interface TemplateIdentity {
-  id: string;
-  name: string;
-  description: string;
-  language: Language;
-  tags: string[];
-}
 
 export const buildPairJudgeSystemPrompt = (language: Language): string => {
   if (language === 'en') {
@@ -95,10 +84,10 @@ Pair Judge Evidence Payload (JSON):
 
 export const buildSynthesisSystemPrompt = (language: Language): string => {
   if (language === 'en') {
-    return `# Role: {{roleName}}
+    return `# Role: {{{roleName}}}
 
 ## Goal
-- Synthesize multiple pairwise judge results into one final structured compare evaluation for the editable {{subjectLabel}}.
+- Synthesize multiple pairwise judge results into one final structured compare evaluation for the editable {{{subjectLabel}}}.
 
 ## Rules
 1. Target is the only optimization focus.
@@ -117,10 +106,10 @@ export const buildSynthesisSystemPrompt = (language: Language): string => {
 You are the structured compare synthesizer. Return valid JSON only.`;
   }
 
-  return `# Role: {{roleName}}
+  return `# Role: {{{roleName}}}
 
 ## Goal
-- 基于多条成对判断结果，为可编辑{{subjectLabel}}输出最终的 structured compare 评估结果。
+- 基于多条成对判断结果，为可编辑{{{subjectLabel}}}输出最终的 structured compare 评估结果。
 
 ## Rules
 1. Target 是唯一优化焦点。
@@ -162,39 +151,3 @@ Synthesis Payload (JSON):
 Synthesis Payload (JSON):
 {{{synthesisPayloadJson}}}`;
 };
-
-const buildMetadata = (identity: TemplateIdentity): Template['metadata'] => ({
-  version: '1.0.0',
-  lastModified: Date.now(),
-  author: 'System',
-  description: identity.description,
-  templateType: 'evaluation',
-  language: identity.language,
-  tags: identity.tags,
-});
-
-export const createStructuredCompareTemplate = (
-  identity: TemplateIdentity,
-  kind: TemplateKind,
-): Template => ({
-  id: identity.id,
-  name: identity.name,
-  content: [
-    {
-      role: 'system',
-      content:
-        kind === 'pair-judge'
-          ? buildPairJudgeSystemPrompt(identity.language)
-          : buildSynthesisSystemPrompt(identity.language),
-    },
-    {
-      role: 'user',
-      content:
-        kind === 'pair-judge'
-          ? buildPairJudgeUserPrompt(identity.language)
-          : buildSynthesisUserPrompt(identity.language),
-    },
-  ] as MessageTemplate[],
-  metadata: buildMetadata(identity),
-  isBuiltin: true,
-});

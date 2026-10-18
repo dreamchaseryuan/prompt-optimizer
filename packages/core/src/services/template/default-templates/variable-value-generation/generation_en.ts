@@ -100,7 +100,7 @@ Please intelligently infer reasonable example values for each variable based on 
   ] as MessageTemplate[],
   metadata: {
     version: '1.1.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'AI Variable Value Generation - Infer values based on prompt context',
     templateType: 'variable-value-generation',

@@ -33,7 +33,7 @@ await promptService.optimizePrompt({
 })
 ```
 
-> Web UI 暂未提供领域模板选择器（P1 待办），当前通过核心 API / MCP 请求体传 `templateId` 使用。
+> Web UI 无需额外配置：系统提示词工作区的模板选择器按 `templateType='optimize'` 自动列出全部内置模板，新领域模板直接可选。
 
 ### 3. 新增模型适配器（M4）
 

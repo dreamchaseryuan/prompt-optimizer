@@ -45,7 +45,10 @@
   - ambiguityControl
   - robustness
 - improvements：0-3 条，可复用的设计改进建议。
-- patchPlan：0-3 条，只允许修改当前工作区变量提示词。
+- patchPlan：0-3 条，只允许修改当前工作区变量提示词。每项字段：op（"insert" | "replace" | "delete"）、oldText（必须逐字摘自当前工作区；insert 时可省略）、newText、instruction；当 oldText 在原文中出现多次时，用 occurrence（从 1 起）指明第几处。
+- patchPlan 正反例：
+  - ✅ oldText 逐字摘自当前工作区原文且能精确匹配 → 正常输出对应 op 的补丁。
+  - ❌ oldText 是改写或杜撰的片段、无法精确匹配 → 必须输出 "patchPlan": []。
 - summary：一句短结论。
 
 ```json

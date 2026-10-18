@@ -76,7 +76,7 @@ const buildMetadata = (
   identity: TemplateIdentity,
 ): Template['metadata'] => ({
   version: '1.0.0',
-  lastModified: Date.now(),
+  lastModified: 1704067200000,
   author: 'System',
   description: identity.description,
   templateType: 'evaluation',

@@ -83,7 +83,7 @@ Please intelligently identify parameterizable variables in the prompt. Autonomou
   ] as MessageTemplate[],
   metadata: {
     version: '1.1.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'AI Intelligent Variable Extraction - LLM autonomously determines extraction granularity',
     templateType: 'variable-extraction',

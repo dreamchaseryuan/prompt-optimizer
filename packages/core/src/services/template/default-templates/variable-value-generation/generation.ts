@@ -100,7 +100,7 @@ export const template: Template = {
   ] as MessageTemplate[],
   metadata: {
     version: '1.1.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'AI智能变量值生成 - 根据提示词上下文推测变量值',
     templateType: 'variable-value-generation',

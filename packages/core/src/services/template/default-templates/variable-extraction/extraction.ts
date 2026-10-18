@@ -83,7 +83,7 @@ export const template: Template = {
   ] as MessageTemplate[],
   metadata: {
     version: '1.1.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'AI智能变量提取 - LLM自主决定提取粒度',
     templateType: 'variable-extraction',

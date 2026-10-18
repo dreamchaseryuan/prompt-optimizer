@@ -1,14 +1,4 @@
-import type { MessageTemplate, Template } from '../../types';
-
 type Language = 'zh' | 'en';
-
-interface TemplateIdentity {
-  id: string;
-  name: string;
-  description: string;
-  language: Language;
-  tags: string[];
-}
 
 interface SubjectConfig {
   subjectLabel: string;
@@ -81,7 +71,10 @@ export const buildAnalysisSystemPrompt = (
   - ambiguityControl
   - robustness
 - improvements: 0-3 reusable design improvements.
-- patchPlan: 0-3 precise local edits against the current workspace ${subject.subjectLabel}.
+- patchPlan: 0-3 precise local edits against the current workspace ${subject.subjectLabel}. Each item has op ("insert" | "replace" | "delete"), oldText (must be copied verbatim from the current workspace prompt; omit for insert), newText, and instruction. Add occurrence (1-based) only when oldText appears multiple times.
+- patchPlan examples:
+  - OK: oldText is copied verbatim from the current workspace prompt and matches exactly -> emit the edit.
+  - BAD: oldText is paraphrased or invented and cannot be matched -> "patchPlan": [].
 - summary: one short sentence.
 
 ${jsonContract}
@@ -145,7 +138,10 @@ As ${subject.roleName}, you must follow the Rules, execute the Workflow, and out
   - ambiguityControl
   - robustness
 - improvements：0-3 条，可复用的设计改进建议。
-- patchPlan：0-3 条，只允许修改当前工作区${subject.subjectLabel}。
+- patchPlan：0-3 条，只允许修改当前工作区${subject.subjectLabel}。每项字段：op（"insert" | "replace" | "delete"）、oldText（必须逐字摘自当前工作区；insert 时可省略）、newText、instruction；当 oldText 在原文中出现多次时，用 occurrence（从 1 起）指明第几处。
+- patchPlan 正反例：
+  - ✅ oldText 逐字摘自当前工作区原文且能精确匹配 → 正常输出对应 op 的补丁。
+  - ❌ oldText 是改写或杜撰的片段、无法精确匹配 → 必须输出 "patchPlan": []。
 - summary：一句短结论。
 
 ${jsonContract}
@@ -463,50 +459,54 @@ export const buildCompareSystemPrompt = (
 2. Do not use any prompt text outside the provided snapshots to influence scoring.
 3. Never hallucinate missing prompt text.
 {{#hasStructuredCompare}}
-4. This compare set is in structured mode with explicit snapshot roles.
-5. Keep the provided Target / Baseline / Reference / Reference Baseline / Replica / Auxiliary roles unchanged.
-6. Treat Target as the optimization focus, use Baseline to judge progress or regression, use Reference to judge learnable gap, and use Reference Baseline to judge whether the prompt change is structurally valid beyond the target model.
-7. Derive compareStopSignals conservatively from the observed evidence only. If a signal is not supported, omit it instead of guessing.
+S1. This compare set is in structured mode with explicit snapshot roles.
+S2. Keep the provided Target / Baseline / Reference / Reference Baseline / Replica / Auxiliary roles unchanged.
+S3. Treat Target as the optimization focus, use Baseline to judge progress or regression, use Reference to judge learnable gap, and use Reference Baseline to judge whether the prompt change is structurally valid beyond the target model.
+S4. Derive compareStopSignals conservatively from the observed evidence only. If a signal is not supported, omit it instead of guessing.
 {{/hasStructuredCompare}}
 {{#hasFocus}}
-4. Focus Brief is the highest-priority input for this task.
-5. If the evidence is insufficient to support the Focus Brief, say so explicitly.
+F1. Focus Brief is the highest-priority input for this task.
+F2. If the evidence is insufficient to support the Focus Brief, say so explicitly.
 {{/hasFocus}}
 {{#hasCrossModelComparison}}
-6. This compare set includes same-prompt cross-model evidence.
-7. Do not only say which model is stronger; explain what the prompt makes weaker models misunderstand.
-8. Prioritize improvements that increase cross-model clarity and robustness.
-9. If a cross-model gap is already visible, improvements must first target the observed misunderstanding point instead of drifting into generic advice.
-10. If the snapshots already show a concrete violated instruction or boundary, improvements must address that violated instruction before proposing unrelated enhancements.
-11. When such a violated instruction exists, summary must name it directly, and the first improvement must address it first.
+X1. This compare set includes same-prompt cross-model evidence.
+X2. Do not only say which model is stronger; explain what the prompt makes weaker models misunderstand.
+X3. Prioritize improvements that increase cross-model clarity and robustness.
+X4. If a cross-model gap is already visible, improvements must first target the observed misunderstanding point instead of drifting into generic advice.
+X5. If the snapshots already show a concrete violated instruction or boundary, improvements must address that violated instruction before proposing unrelated enhancements.
+X6. When such a violated instruction exists, summary must name it directly, and the first improvement must address it first.
 {{/hasCrossModelComparison}}
 {{^hasCrossModelComparison}}
 {{^hasFocus}}
-4. Improvements must be extracted from the observed gap between snapshots, not from speculative enhancements that never appeared in the evidence.
-5. If one snapshot is stronger because it adds a clearer role, task step, format, prohibition, or example, summary must name that observed difference directly and the first improvement must prioritize it.
-6. Do not invent extra scenario assumptions, user states, or settings that are not present in the shared test cases or outputs.
+G1. Improvements must be extracted from the observed gap between snapshots, not from speculative enhancements that never appeared in the evidence.
+G2. If one snapshot is stronger because it adds a clearer role, task step, format, prohibition, or example, summary must name that observed difference directly and the first improvement must prioritize it.
+G3. Do not invent extra scenario assumptions, user states, or settings that are not present in the shared test cases or outputs.
 {{/hasFocus}}
 {{#hasFocus}}
-6. Improvements must still be extracted from the observed gap between snapshots, not from speculative enhancements that never appeared in the evidence.
-7. If one snapshot is stronger because it adds a clearer role, task step, format, prohibition, or example, summary must name that observed difference directly and the first improvement must prioritize it.
-8. Do not invent extra scenario assumptions, user states, or settings that are not present in the shared test cases or outputs.
+G1. Improvements must still be extracted from the observed gap between snapshots, not from speculative enhancements that never appeared in the evidence.
+G2. If one snapshot is stronger because it adds a clearer role, task step, format, prohibition, or example, summary must name that observed difference directly and the first improvement must prioritize it.
+G3. Do not invent extra scenario assumptions, user states, or settings that are not present in the shared test cases or outputs.
 {{/hasFocus}}
 {{/hasCrossModelComparison}}
 
 ## Workflow
 1. Read the shared test cases and all execution snapshots.
 2. Identify stronger patterns, weaker patterns, and repeated failure modes across snapshots.
-{{#hasStructuredCompare}}3. Use the provided snapshot roles to judge Target vs Baseline first, then Target vs Reference, and then Reference vs Reference Baseline when that evidence exists.
-4. If you emit compareStopSignals, make them evidence-grounded and conservative.
+{{#hasStructuredCompare}}
+- Use the provided snapshot roles to judge Target vs Baseline first, then Target vs Reference, and then Reference vs Reference Baseline when that evidence exists.
+- If you emit compareStopSignals, make them evidence-grounded and conservative.
 {{/hasStructuredCompare}}
-{{#hasCrossModelComparison}}3. For same-prompt cross-model groups, explain whether differences expose prompt ambiguity, weak constraints, unclear boundaries, or pure model-capability limits.
-4. Identify the highest-priority violated instruction or misunderstood boundary in the snapshots, if one already exists.
-5. Write improvements only after mapping them to that observed misunderstanding point, and prefer edits that strengthen cross-model clarity, explicitness, examples, and constraints.
-{{/hasCrossModelComparison}}{{^hasCrossModelComparison}}3. Identify the highest-impact observed prompt difference that explains why one snapshot is stronger or weaker.
-4. Extract improvements only after mapping them back to that observed difference.
-5. Decide which conclusions are safely reusable beyond these snapshots.
-{{/hasCrossModelComparison}}6. Score the evidence using compare-oriented dimensions.
-7. Produce reusable improvements for the editable target.
+{{#hasCrossModelComparison}}
+- For same-prompt cross-model groups, explain whether differences expose prompt ambiguity, weak constraints, unclear boundaries, or pure model-capability limits.
+- Identify the highest-priority violated instruction or misunderstood boundary in the snapshots, if one already exists.
+- Write improvements only after mapping them to that observed misunderstanding point, and prefer edits that strengthen cross-model clarity, explicitness, examples, and constraints.
+{{/hasCrossModelComparison}}{{^hasCrossModelComparison}}
+- Identify the highest-impact observed prompt difference that explains why one snapshot is stronger or weaker.
+- Extract improvements only after mapping them back to that observed difference.
+- Decide which conclusions are safely reusable beyond these snapshots.
+{{/hasCrossModelComparison}}
+- Score the evidence using compare-oriented dimensions.
+- Produce reusable improvements for the editable target.
 
 ## Output Contract
 - Return valid JSON only.
@@ -588,50 +588,54 @@ As ${subject.roleName}, you must follow the Rules, execute the Workflow, and out
 2. 不得使用快照之外的提示词文本来影响评分判断。
 3. 不得杜撰不存在的提示词片段。
 {{#hasStructuredCompare}}
-4. 当前对比集处于 structured compare 模式，并已提供明确的快照角色。
-5. 必须保持给定的 Target / Baseline / Reference / Reference Baseline / Replica / Auxiliary 角色语义，不得自行改写角色含义。
-6. 必须以 Target 为优化焦点，优先用 Baseline 判断进步/回归，用 Reference 判断可学习差距，用 Reference Baseline 判断改动是否具有结构性。
-7. compareStopSignals 必须严格基于已观察到的证据保守输出；无法支持的信号宁可省略，也不要猜测。
+S1. 当前对比集处于 structured compare 模式，并已提供明确的快照角色。
+S2. 必须保持给定的 Target / Baseline / Reference / Reference Baseline / Replica / Auxiliary 角色语义，不得自行改写角色含义。
+S3. 必须以 Target 为优化焦点，优先用 Baseline 判断进步/回归，用 Reference 判断可学习差距，用 Reference Baseline 判断改动是否具有结构性。
+S4. compareStopSignals 必须严格基于已观察到的证据保守输出；无法支持的信号宁可省略，也不要猜测。
 {{/hasStructuredCompare}}
 {{#hasFocus}}
-4. Focus Brief 是本次任务的最高优先级输入。
-5. 如果当前证据不足以支撑 Focus Brief 指向的问题，必须明确说明。
+F1. Focus Brief 是本次任务的最高优先级输入。
+F2. 如果当前证据不足以支撑 Focus Brief 指向的问题，必须明确说明。
 {{/hasFocus}}
 {{#hasCrossModelComparison}}
-6. 当前对比集包含“同提示词跨模型”证据。
-7. 不要只总结哪个模型更强，要解释提示词为什么让较弱模型产生误解。
-8. 优先给出能提升跨模型清晰度与稳健性的改写建议。
-9. 如果已经出现跨模型差异，improvements 必须先针对该误解点，不能漂移成无关的泛化建议。
-10. 如果快照里已经出现某条明确指令或边界被违反，improvements 必须先处理这条被违反的指令，不能先谈无关增强项。
-11. 如果存在这样的“被违反指令”，summary 必须直接点名它，且第一条 improvement 必须先处理它。
+X1. 当前对比集包含“同提示词跨模型”证据。
+X2. 不要只总结哪个模型更强，要解释提示词为什么让较弱模型产生误解。
+X3. 优先给出能提升跨模型清晰度与稳健性的改写建议。
+X4. 如果已经出现跨模型差异，improvements 必须先针对该误解点，不能漂移成无关的泛化建议。
+X5. 如果快照里已经出现某条明确指令或边界被违反，improvements 必须先处理这条被违反的指令，不能先谈无关增强项。
+X6. 如果存在这样的“被违反指令”，summary 必须直接点名它，且第一条 improvement 必须先处理它。
 {{/hasCrossModelComparison}}
 {{^hasCrossModelComparison}}
 {{^hasFocus}}
-4. improvements 必须从快照之间已观察到的差异中提炼，不能先发散到证据里从未出现过的增强项。
-5. 如果某个快照之所以更强，是因为它补充了更明确的角色、任务步骤、输出格式、禁止项或示例，summary 必须直接点名这类已观察到的差异，且第一条 improvement 必须优先补它。
-6. 不得虚构公共测试用例或输出里没有出现的额外场景设定、用户状态或配置条件。
+G1. improvements 必须从快照之间已观察到的差异中提炼，不能先发散到证据里从未出现过的增强项。
+G2. 如果某个快照之所以更强，是因为它补充了更明确的角色、任务步骤、输出格式、禁止项或示例，summary 必须直接点名这类已观察到的差异，且第一条 improvement 必须优先补它。
+G3. 不得虚构公共测试用例或输出里没有出现的额外场景设定、用户状态或配置条件。
 {{/hasFocus}}
 {{#hasFocus}}
-6. improvements 仍必须从快照之间已观察到的差异中提炼，不能先发散到证据里从未出现过的增强项。
-7. 如果某个快照之所以更强，是因为它补充了更明确的角色、任务步骤、输出格式、禁止项或示例，summary 必须直接点名这类已观察到的差异，且第一条 improvement 必须优先补它。
-8. 不得虚构公共测试用例或输出里没有出现的额外场景设定、用户状态或配置条件。
+G1. improvements 仍必须从快照之间已观察到的差异中提炼，不能先发散到证据里从未出现过的增强项。
+G2. 如果某个快照之所以更强，是因为它补充了更明确的角色、任务步骤、输出格式、禁止项或示例，summary 必须直接点名这类已观察到的差异，且第一条 improvement 必须优先补它。
+G3. 不得虚构公共测试用例或输出里没有出现的额外场景设定、用户状态或配置条件。
 {{/hasFocus}}
 {{/hasCrossModelComparison}}
 
 ## Workflow
 1. 读取公共测试用例和全部执行快照。
 2. 识别多快照中的强模式、弱模式与重复失败模式。
-{{#hasStructuredCompare}}3. 如果存在结构化角色，必须优先判断 Target vs Baseline，再判断 Target vs Reference，并在证据存在时判断 Reference vs Reference Baseline。
-4. 如果输出 compareStopSignals，必须让每个信号都能回溯到当前快照证据。
+{{#hasStructuredCompare}}
+- 如果存在结构化角色，必须优先判断 Target vs Baseline，再判断 Target vs Reference，并在证据存在时判断 Reference vs Reference Baseline。
+- 如果输出 compareStopSignals，必须让每个信号都能回溯到当前快照证据。
 {{/hasStructuredCompare}}
-{{#hasCrossModelComparison}}3. 对“同提示词跨模型”分组，判断差异暴露的是提示词歧义、约束过弱、边界不清，还是模型能力边界。
-4. 先识别快照里最高优先级的“被违反指令”或“被误解边界”，如果已经存在，必须把它作为首要问题。
-5. 再把每条改进建议映射到该误解点，随后才收敛能提升跨模型清晰度、显式性、示例化和约束性的方向。
-{{/hasCrossModelComparison}}{{^hasCrossModelComparison}}3. 先识别最能解释快照差距的那条“已观察到的提示词差异”。
-4. 再把每条改进建议映射回这条已观察到的差异。
-5. 判断哪些规律可以安全提炼为可复用结论。
-{{/hasCrossModelComparison}}6. 按对比导向维度打分。
-7. 输出可迁移回可编辑目标的改进建议。
+{{#hasCrossModelComparison}}
+- 对“同提示词跨模型”分组，判断差异暴露的是提示词歧义、约束过弱、边界不清，还是模型能力边界。
+- 先识别快照里最高优先级的“被违反指令”或“被误解边界”，如果已经存在，必须把它作为首要问题。
+- 再把每条改进建议映射到该误解点，随后才收敛能提升跨模型清晰度、显式性、示例化和约束性的方向。
+{{/hasCrossModelComparison}}{{^hasCrossModelComparison}}
+- 先识别最能解释快照差距的那条“已观察到的提示词差异”。
+- 再把每条改进建议映射回这条已观察到的差异。
+- 判断哪些规律可以安全提炼为可复用结论。
+{{/hasCrossModelComparison}}
+- 按对比导向维度打分。
+- 输出可迁移回可编辑目标的改进建议。
 
 ## Output Contract
 - 只输出合法 JSON。
@@ -789,80 +793,6 @@ Please compare these snapshots and return strict JSON only.`;
 
 请基于这些快照做对比评估，并且只返回合法 JSON。`;
 };
-
-const buildMetadata = (
-  identity: TemplateIdentity,
-  templateType: 'evaluation',
-) => ({
-  version: '5.0.0',
-  lastModified: Date.now(),
-  author: 'System',
-  description: identity.description,
-  templateType,
-  language: identity.language,
-  tags: identity.tags,
-});
-
-export const createAnalysisTemplate = (
-  identity: TemplateIdentity,
-  subject: SubjectConfig,
-  iterate = false,
-): Template => ({
-  id: identity.id,
-  name: identity.name,
-  content: [
-    {
-      role: 'system',
-      content: buildAnalysisSystemPrompt(identity.language, subject, iterate),
-    },
-    {
-      role: 'user',
-      content: buildAnalysisUserPrompt(identity.language, subject, iterate),
-    },
-  ] as MessageTemplate[],
-  metadata: buildMetadata(identity, 'evaluation'),
-  isBuiltin: true,
-});
-
-export const createResultTemplate = (
-  identity: TemplateIdentity,
-  subject: SubjectConfig,
-): Template => ({
-  id: identity.id,
-  name: identity.name,
-  content: [
-    {
-      role: 'system',
-      content: buildResultSystemPrompt(identity.language, subject),
-    },
-    {
-      role: 'user',
-      content: buildResultUserPrompt(identity.language, subject),
-    },
-  ] as MessageTemplate[],
-  metadata: buildMetadata(identity, 'evaluation'),
-  isBuiltin: true,
-});
-
-export const createCompareTemplate = (
-  identity: TemplateIdentity,
-  subject: SubjectConfig,
-): Template => ({
-  id: identity.id,
-  name: identity.name,
-  content: [
-    {
-      role: 'system',
-      content: buildCompareSystemPrompt(identity.language, subject),
-    },
-    {
-      role: 'user',
-      content: buildCompareUserPrompt(identity.language, subject),
-    },
-  ] as MessageTemplate[],
-  metadata: buildMetadata(identity, 'evaluation'),
-  isBuiltin: true,
-});
 
 export const analysisJsonContractZh = jsonFence(`{
   "score": {
