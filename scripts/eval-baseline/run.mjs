@@ -14,7 +14,7 @@
  * 前提：先在仓库根执行 `corepack pnpm build:core`（读取 dist/index.cjs 的 ALL_TEMPLATES）。
  */
 
-import { readFile, mkdir, writeFile } from 'node:fs/promises'
+import { readFile, mkdir, writeFile, stat, readdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -44,6 +44,30 @@ const temperature = Number.parseFloat(process.env.BASELINE_TEMPERATURE || '0.7')
 function loadTemplates() {
   const { ALL_TEMPLATES } = require(resolve(repoRoot, 'packages/core/dist/index.cjs'))
   return Object.values(ALL_TEMPLATES || {}).filter(Boolean)
+}
+
+async function newestMtime(dir) {
+  let newest = 0
+  const files = await readdir(dir, { recursive: true })
+  for (const file of files) {
+    if (!file.endsWith('.ts')) continue
+    const stats = await stat(resolve(dir, file)).catch(() => null)
+    if (stats && stats.mtimeMs > newest) newest = stats.mtimeMs
+  }
+  return newest
+}
+
+async function warnIfDistStale() {
+  const distFile = resolve(repoRoot, 'packages/core/dist/index.cjs')
+  const distStats = await stat(distFile).catch(() => null)
+  if (!distStats) {
+    throw new Error('packages/core/dist/index.cjs not found. Run `corepack pnpm build:core` first.')
+  }
+  const srcDir = resolve(repoRoot, 'packages/core/src/services/template/default-templates')
+  const srcMtime = await newestMtime(srcDir).catch(() => 0)
+  if (srcMtime > distStats.mtimeMs) {
+    console.warn('[eval-baseline] warning: core dist is older than template sources. Run `corepack pnpm build:core` before trusting results.')
+  }
 }
 
 function renderTemplate(template, originalPrompt) {
@@ -103,6 +127,7 @@ async function callModel(messages) {
 }
 
 async function main() {
+  await warnIfDistStale()
   const templates = loadTemplates()
   const template = templates.find((item) => item.id === templateId)
   if (!template) {
