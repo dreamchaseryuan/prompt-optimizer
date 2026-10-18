@@ -154,6 +154,11 @@ export class CoreServicesManager {
         'VITE_DEEPSEEK_API_KEY',
         'VITE_ZHIPU_API_KEY',
         'VITE_SILICONFLOW_API_KEY',
+        'VITE_MOONSHOT_API_KEY',
+        'VITE_ARK_API_KEY',
+        'VITE_VOLCENGINE_ARK_API_KEY',
+        'VITE_HUNYUAN_API_KEY',
+        'VITE_SPARK_API_KEY',
         'VITE_CUSTOM_API_KEY'
       ];
 
@@ -185,6 +190,10 @@ export class CoreServicesManager {
         console.error('   VITE_DEEPSEEK_API_KEY=your-deepseek-key');
         console.error('   VITE_ZHIPU_API_KEY=your-zhipu-key');
         console.error('   VITE_SILICONFLOW_API_KEY=your-siliconflow-key');
+        console.error('   VITE_MOONSHOT_API_KEY=your-moonshot-key');
+        console.error('   VITE_ARK_API_KEY=your-ark-key');
+        console.error('   VITE_HUNYUAN_API_KEY=your-hunyuan-key');
+        console.error('   VITE_SPARK_API_KEY=your-spark-key');
         console.error('   VITE_CUSTOM_API_KEY=your-custom-key');
         console.error('   Or dynamic custom models:');
         console.error('   VITE_CUSTOM_API_KEY_qwen3=your-qwen-key');

@@ -291,4 +291,33 @@ describe('model defaults provider env mapping', () => {
     expect(models['xiaomi-mimo-token-plan'].connectionConfig.apiKey).toBe('tp-test-key')
     expect(models['xiaomi-mimo-token-plan'].connectionConfig.baseURL).toBe('https://token-plan-sgp.xiaomimimo.com/v1')
   })
+
+  it('should include the four new domestic providers and enable them from env keys', () => {
+    const builtinModelIds = getBuiltinModelIds()
+    expect(builtinModelIds).toEqual(
+      expect.arrayContaining(['moonshot', 'volcengine-ark', 'hunyuan', 'spark'])
+    )
+
+    process.env.VITE_MOONSHOT_API_KEY = 'test-moonshot-key'
+    process.env.VITE_ARK_API_KEY = 'test-ark-key'
+    process.env.VITE_HUNYUAN_API_KEY = 'test-hunyuan-key'
+    process.env.VITE_SPARK_API_KEY = 'test-spark-key'
+
+    try {
+      const models = getDefaultTextModels()
+      expect(models.moonshot.enabled).toBe(true)
+      expect(models.moonshot.connectionConfig.baseURL).toBe('https://api.moonshot.cn/v1')
+      expect(models['volcengine-ark'].enabled).toBe(true)
+      expect(models['volcengine-ark'].connectionConfig.baseURL).toBe('https://ark.cn-beijing.volces.com/api/v3')
+      expect(models.hunyuan.enabled).toBe(true)
+      expect(models.hunyuan.connectionConfig.baseURL).toBe('https://api.hunyuan.cloud.tencent.com/v1')
+      expect(models.spark.enabled).toBe(true)
+      expect(models.spark.connectionConfig.baseURL).toBe('https://spark-api-open.xf-yun.com/v1')
+    } finally {
+      delete process.env.VITE_MOONSHOT_API_KEY
+      delete process.env.VITE_ARK_API_KEY
+      delete process.env.VITE_HUNYUAN_API_KEY
+      delete process.env.VITE_SPARK_API_KEY
+    }
+  })
 })

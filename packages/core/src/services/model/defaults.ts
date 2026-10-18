@@ -24,7 +24,11 @@ const PROVIDER_ENV_KEYS = {
   minimax: ['VITE_MINIMAX_API_KEY'],
   cloudflare: ['VITE_CF_API_TOKEN'],
   grok: ['VITE_GROK_API_KEY', 'VITE_XAI_API_KEY'],
-  'xiaomi-mimo-token-plan': ['VITE_MIMO_TOKEN_PLAN_API_KEY']
+  'xiaomi-mimo-token-plan': ['VITE_MIMO_TOKEN_PLAN_API_KEY'],
+  moonshot: ['VITE_MOONSHOT_API_KEY'],
+  'volcengine-ark': ['VITE_ARK_API_KEY', 'VITE_VOLCENGINE_ARK_API_KEY'],
+  hunyuan: ['VITE_HUNYUAN_API_KEY'],
+  spark: ['VITE_SPARK_API_KEY']
 } as const;
 
 const PROVIDER_EXTRA_CONNECTION_ENV_KEYS: Record<string, Record<string, string[]>> = {

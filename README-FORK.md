@@ -48,6 +48,15 @@ await promptService.optimizePrompt({
 
 鉴权均为 `Authorization: Bearer <API Key>`，密钥只保存在本地（Web 端 localStorage / 桌面端本地文件），不经中间服务器。
 
+环境变量初始化（Web / MCP / Desktop 通用）：
+
+```bash
+VITE_MOONSHOT_API_KEY=sk-...      # moonshot
+VITE_ARK_API_KEY=...               # volcengine-ark（也接受 VITE_VOLCENGINE_ARK_API_KEY）
+VITE_HUNYUAN_API_KEY=...           # hunyuan
+VITE_SPARK_API_KEY=...             # spark
+```
+
 ## 开发环境
 
 - **Node ^24**（`.npmrc` 开启 `engine-strict=true`，Node 22 会被拒绝）
