@@ -20,6 +20,10 @@ export const template: Template = {
 
 请从对话中提炼真实目标、输入约束、领域偏好、交互方式等要素，作为迭代的重要依据。
 {{/conversationContext}}
+{{^conversationContext}}
+## 无上下文对话
+- 基于当前提示词本身做保守假设，避免臆测性修改。
+{{/conversationContext}}
 
 {{#toolsContext}}
 ## 可用工具证据（JSON）
@@ -28,6 +32,10 @@ export const template: Template = {
 }
 
 如提示词可能运行于具备工具调用能力的环境，请在迭代中明确工具使用时机、关键参数与输出格式。
+{{/toolsContext}}
+{{^toolsContext}}
+## 无工具信息
+- 不要假设存在工具调用能力，迭代结果应在不依赖工具的情况下可执行。
 {{/toolsContext}}
 
 ## 原则
