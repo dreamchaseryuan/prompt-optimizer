@@ -118,11 +118,11 @@ describe('TextAdapterRegistry', () => {
       const providers = registry.getAllProviders();
 
       expect(Array.isArray(providers)).toBe(true);
-      expect(providers.length).toBe(16);
+      expect(providers.length).toBe(20);
 
       const providerIds = providers.map(p => p.id);
       expect(providerIds).toEqual(
-        expect.arrayContaining(['openai', 'openai-compatible', 'deepseek', 'siliconflow', 'zhipu', 'gemini', 'anthropic', 'dashscope', 'openrouter', 'modelscope', 'ollama', 'minimax', 'cloudflare', 'grok', 'chrome-built-in', 'xiaomi-mimo-token-plan'])
+        expect.arrayContaining(['openai', 'openai-compatible', 'deepseek', 'siliconflow', 'zhipu', 'gemini', 'anthropic', 'dashscope', 'openrouter', 'modelscope', 'ollama', 'minimax', 'cloudflare', 'grok', 'chrome-built-in', 'xiaomi-mimo-token-plan', 'moonshot', 'volcengine-ark', 'hunyuan', 'spark'])
       );
     });
 
