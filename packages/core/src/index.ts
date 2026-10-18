@@ -202,6 +202,8 @@ export { validateCustomModelConfig } from './utils/environment'
 export { safeSerializeForIPC, debugIPCSerializability, safeSerializeArgs } from './utils/ipc-serialization'
 export { applyPatchOperationsToText } from './utils/patch-plan'
 export type { ApplyPatchResult, ApplyPatchReportItem, ApplyPatchStatus } from './utils/patch-plan'
+export { extractMustachePlaceholders, checkPlaceholdersPreserved } from './utils/variable-placeholder'
+export type { PlaceholderCheckResult } from './utils/variable-placeholder'
 
 // 导出存储键常量
 export {

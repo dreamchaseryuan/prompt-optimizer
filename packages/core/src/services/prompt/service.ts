@@ -20,6 +20,7 @@ import {
   ServiceDependencyError,
 } from "./errors";
 import { TemplateProcessor, TemplateContext } from "../template/processor";
+import { checkPlaceholdersPreserved } from "../../utils/variable-placeholder";
 
 /**
  * Default template IDs used by the system
@@ -91,6 +92,24 @@ export class PromptService implements IPromptService {
   }
 
   /**
+   * 校验优化/迭代输出是否逐字保留了源提示词中的变量占位符。
+   * 缺失或被改写时仅记录告警，不中断流程（占位符自检的最后一道防线，
+   * 提示词层已要求模型输出前自检）。
+   */
+  private warnIfPlaceholdersLost(sourcePrompt: string, output: string) {
+    if (!sourcePrompt?.trim() || !output?.trim()) {
+      return;
+    }
+    const check = checkPlaceholdersPreserved(output, sourcePrompt);
+    if (!check.ok) {
+      console.warn(
+        '[PromptService] Variable placeholders were not preserved exactly in the optimized output. '
+          + `missing: [${check.missing.join(', ')}] altered: [${check.altered.join(', ')}]`,
+      );
+    }
+  }
+
+  /**
    * 验证消息优化请求参数
    */
   private validateMessageOptimizationRequest(request: MessageOptimizationRequest) {
@@ -158,6 +177,7 @@ export class PromptService implements IPromptService {
       const result = await this.llmService.sendMessage(messages, request.modelKey);
 
       this.validateResponse(result, request.targetPrompt);
+      this.warnIfPlaceholdersLost(request.targetPrompt, result);
       // 注意：历史记录保存由UI层的historyManager.createNewChain方法处理
       // 移除重复的saveOptimizationHistory调用以避免重复保存
 
@@ -256,6 +276,7 @@ export class PromptService implements IPromptService {
 
       // 验证响应
       this.validateResponse(result, selectedMessage.content);
+      this.warnIfPlaceholdersLost(selectedMessage.content, result);
 
       return result;
     } catch (error) {
@@ -361,6 +382,10 @@ export class PromptService implements IPromptService {
 
       // 发送请求
       const result = await this.llmService.sendMessage(messages, modelKey);
+
+      // 迭代要求逐字保留 lastOptimizedPrompt 中的占位符（提示词层已自检要求，
+      // 这里做输出侧兜底校验，只告警不中断）
+      this.warnIfPlaceholdersLost(lastOptimizedPrompt, result);
 
       // 注意：迭代历史记录保存由UI层的historyManager.addIteration方法处理
       // 移除重复的addRecord调用以避免重复保存
