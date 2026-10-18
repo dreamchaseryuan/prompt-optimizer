@@ -172,6 +172,7 @@ const messages = {
     "focusTitle": "Focus",
     "focusPlaceholder": "Optional: what should the evaluation focus on? (e.g. output structure, missing constraints, example length)",
     "focusHint": "Leave blank to run the default smart evaluation.",
+    "degradedParse": "The model did not return valid JSON, so the result was parsed in degraded mode; scores and suggestions may be incomplete.",
     "stale": {
       "default": "This result is based on older content. Re-run the evaluation if needed.",
       "promptOnly": "The prompt has changed. Re-run the analysis if needed.",

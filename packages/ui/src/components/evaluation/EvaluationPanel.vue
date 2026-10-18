@@ -56,6 +56,16 @@
             >
               {{ evaluationDisableMessage }}
             </NAlert>
+            <NAlert
+              v-if="result.metadata?.degradedParse"
+              type="warning"
+              :show-icon="false"
+              :bordered="false"
+              class="stale-alert"
+              data-testid="evaluation-degraded-parse"
+            >
+              {{ t('evaluation.degradedParse') }}
+            </NAlert>
 
             <!-- 总分展示 -->
             <div class="score-section">

@@ -172,6 +172,7 @@ const messages = {
     "focusTitle": "聚焦点",
     "focusPlaceholder": "可选：输入你希望评估重点关注的方面/意见（例如输出结构、约束遗漏、示例长度等）",
     "focusHint": "不填写也可以直接开始（等同默认智能评估）",
+    "degradedParse": "模型未按 JSON 契约返回，已降级解析：评分与建议可能不完整。",
     "stale": {
       "default": "结果基于旧内容，建议重新评估。",
       "promptOnly": "提示词已变更，建议重新分析。",

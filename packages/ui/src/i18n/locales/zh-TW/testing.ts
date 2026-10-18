@@ -172,6 +172,7 @@ const messages = {
     "focusTitle": "聚焦點",
     "focusPlaceholder": "可選：輸入你希望評估重點關注的面向/意見（例如輸出結構、約束遺漏、示例長度等）",
     "focusHint": "不填也可以直接開始（等同預設智慧評估）",
+    "degradedParse": "模型未按 JSON 契約回傳，已降級解析：評分與建議可能不完整。",
     "stale": {
       "default": "結果基於舊內容，建議重新評估。",
       "promptOnly": "提示詞已變更，建議重新分析。",
