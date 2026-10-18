@@ -94,6 +94,17 @@ const templateManager = computed(() => {
   return manager
 })
 
+// 领域分组标签：已注册领域 → i18n 键；未注册领域回退显示原始值
+// 新增领域时需同步补充三语 locale（template.groupDomain.<domain>）
+const DOMAIN_GROUP_LABEL_KEYS: Record<string, string> = {
+  programming: 'template.groupDomain.programming'
+}
+
+const domainLabel = (domain: string): string => {
+  const key = DOMAIN_GROUP_LABEL_KEYS[domain]
+  return key ? t(key) : domain
+}
+
 // 选择框选项
 const selectOptions = computed(() => {
   const templateOptions = templates.value.map(template => ({
@@ -104,20 +115,61 @@ const selectOptions = computed(() => {
     description: template.metadata.description || t('template.noDescription'),
     type: 'template'
   }))
-  
+
   // 如果没有模板，返回空数组让placeholder显示
   if (templateOptions.length === 0) {
     return []
   }
-  
+
+  // 存在领域模板（metadata.domain）时按「通用 / 领域 / 用户自定义」分组展示，
+  // 其余模板类型保持原有扁平列表，行为不变
+  const hasDomainTemplates = templates.value.some(
+    template => template.isBuiltin && !!template.metadata?.domain
+  )
+
+  let groupedTemplateOptions: typeof templateOptions | Array<Record<string, unknown>>
+  if (!hasDomainTemplates) {
+    groupedTemplateOptions = templateOptions
+  } else {
+    const generalOptions = templateOptions.filter(
+      option => option.isBuiltin && !option.template.metadata?.domain
+    )
+    // 按首次出现的 domain 顺序建组，保证展示稳定
+    const domainOrder: string[] = []
+    for (const template of templates.value) {
+      const domain = template.isBuiltin ? template.metadata?.domain : undefined
+      if (domain && !domainOrder.includes(domain)) {
+        domainOrder.push(domain)
+      }
+    }
+    const domainGroups = domainOrder.map(domain => ({
+      type: 'group',
+      label: domainLabel(domain),
+      key: `domain-${domain}`,
+      children: templateOptions.filter(
+        option => option.isBuiltin && option.template.metadata?.domain === domain
+      )
+    }))
+    const userOptions = templateOptions.filter(option => !option.isBuiltin)
+    groupedTemplateOptions = [
+      ...(generalOptions.length > 0
+        ? [{ type: 'group', label: t('template.groupGeneral'), key: 'general', children: generalOptions }]
+        : []),
+      ...domainGroups,
+      ...(userOptions.length > 0
+        ? [{ type: 'group', label: t('template.groupUser'), key: 'user', children: userOptions }]
+        : [])
+    ]
+  }
+
   // 添加配置按钮选项
   const configOption = {
     label: '📝' + t('template.configure'),
     value: '__config__',
     type: 'config'
   }
-  
-  return [...templateOptions, configOption]
+
+  return [...groupedTemplateOptions, configOption]
 })
 
 // 处理模板选择

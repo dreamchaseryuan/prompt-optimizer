@@ -83,6 +83,7 @@ export const template: Template = {
     author: 'System',
     description: '代码审查场景专用：将原始提示词重写为含审查范围界定、P0-P3 严重度分级、逐条问题五要素与放行建议的审查提示词',
     templateType: 'optimize',
+    domain: 'programming',
     language: 'zh'
   },
   isBuiltin: true

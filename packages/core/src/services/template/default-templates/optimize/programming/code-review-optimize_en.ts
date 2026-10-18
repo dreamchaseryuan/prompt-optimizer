@@ -83,6 +83,7 @@ Please output the optimized prompt:
     author: 'System',
     description: 'For code review scenarios: rewrites an original prompt into a review prompt with scope boundaries, P0-P3 severity grading, five-element findings, and a release recommendation',
     templateType: 'optimize',
+    domain: 'programming',
     language: 'en'
   },
   isBuiltin: true

@@ -86,6 +86,7 @@ Please output the optimized prompt:
     author: 'System',
     description: 'For error diagnosis scenarios: rewrites an original prompt into a diagnosis prompt with error classification, probability-ranked hypotheses carrying ruling-out criteria, minimal verification steps, and primary plus fallback fixes',
     templateType: 'optimize',
+    domain: 'programming',
     language: 'en'
   },
   isBuiltin: true

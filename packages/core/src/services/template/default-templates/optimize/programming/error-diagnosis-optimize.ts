@@ -86,6 +86,7 @@ export const template: Template = {
     author: 'System',
     description: '报错解读场景专用：将原始提示词重写为含错误分类、按概率排序且带排除依据的根因假设、最小验证步骤、首选与备选修复方案的诊断提示词',
     templateType: 'optimize',
+    domain: 'programming',
     language: 'zh'
   },
   isBuiltin: true

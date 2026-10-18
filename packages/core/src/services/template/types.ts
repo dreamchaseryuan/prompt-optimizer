@@ -29,6 +29,7 @@ export interface TemplateMetadata {
     | 'image-prompt-composition'
     | 'image-prompt-migration'; // 模板类型标识
   language?: 'zh' | 'en';   // 模板语言（可选，主要用于内置模板语言切换）
+  domain?: string;          // 领域标识（可选，如 'programming'；用于 UI 分组展示，无值归入通用组）
   [key: string]: any;       // 允许任意额外字段
 }
 
@@ -159,7 +160,8 @@ export const templateSchema = z.object({
       'image-prompt-composition',
       'image-prompt-migration',
     ]),
-    language: z.enum(['zh', 'en']).optional()
+    language: z.enum(['zh', 'en']).optional(),
+    domain: z.string().optional()
   }).passthrough(), // 允许额外字段通过验证
   isBuiltin: z.boolean().optional()
 });

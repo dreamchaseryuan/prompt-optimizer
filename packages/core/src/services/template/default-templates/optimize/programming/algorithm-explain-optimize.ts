@@ -82,6 +82,7 @@ export const template: Template = {
     author: 'System',
     description: '算法讲解场景专用：将原始提示词重写为按直觉理解、逐步推演、带推导依据的复杂度分析、边界与反例、可运行示例讲解的提示词',
     templateType: 'optimize',
+    domain: 'programming',
     language: 'zh'
   },
   isBuiltin: true

@@ -99,6 +99,11 @@ const messages = {
     "selected": "Selected",
     "select": "Select",
     "noAvailableTemplates": "No available templates",
+    "groupGeneral": "General",
+    "groupUser": "Custom",
+    "groupDomain": {
+      "programming": "Programming"
+    },
     "builtinLanguage": "Built-in Template Language",
     "switchBuiltinLanguage": "Switch built-in template language",
     "languageChanged": "Built-in template language switched to {language}",

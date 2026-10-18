@@ -83,6 +83,7 @@ export const template: Template = {
     author: 'System',
     description: '重构建议场景专用：将原始提示词重写为含现状诊断、行为不变与接口兼容约束、可独立验证的分步计划、回滚策略与验收标准的重构提示词',
     templateType: 'optimize',
+    domain: 'programming',
     language: 'zh'
   },
   isBuiltin: true

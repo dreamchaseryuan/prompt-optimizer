@@ -82,6 +82,7 @@ Please output the optimized prompt:
     author: 'System',
     description: 'For algorithm teaching scenarios: rewrites an original prompt into an explanation prompt covering intuition, step-by-step walkthrough, derived complexity analysis, edge cases and counterexamples, and a runnable example',
     templateType: 'optimize',
+    domain: 'programming',
     language: 'en'
   },
   isBuiltin: true

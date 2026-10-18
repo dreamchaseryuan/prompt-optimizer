@@ -83,6 +83,7 @@ Please output the optimized prompt:
     author: 'System',
     description: 'For refactoring scenarios: rewrites an original prompt into a refactoring prompt with current-state diagnosis, behavior-unchanged and interface-compatible constraints, an independently verifiable stepwise plan, rollback strategy, and acceptance criteria',
     templateType: 'optimize',
+    domain: 'programming',
     language: 'en'
   },
   isBuiltin: true

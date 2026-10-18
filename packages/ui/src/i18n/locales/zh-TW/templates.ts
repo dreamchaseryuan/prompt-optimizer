@@ -99,6 +99,11 @@ const messages = {
     "selected": "已選擇",
     "select": "選擇",
     "noAvailableTemplates": "暫無可用範本",
+    "groupGeneral": "通用",
+    "groupUser": "使用者自訂",
+    "groupDomain": {
+      "programming": "程式設計領域"
+    },
     "builtinLanguage": "內建範本語言",
     "switchBuiltinLanguage": "切換內建範本語言",
     "languageChanged": "內建範本語言已切換為 {language}",
