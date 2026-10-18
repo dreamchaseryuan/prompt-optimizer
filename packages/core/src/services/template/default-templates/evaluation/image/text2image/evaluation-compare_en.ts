@@ -114,7 +114,7 @@ Please use the attached image evidence to perform a generic compare across snaps
   ] as MessageTemplate[],
   metadata: {
     version: '1.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'Generic compare grounded in same image-generation intent, executed prompts, and generated images',
     templateType: 'evaluation',

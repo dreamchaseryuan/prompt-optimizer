@@ -114,7 +114,7 @@ Compare 证据（JSON）：
   ] as MessageTemplate[],
   metadata: {
     version: '1.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: '基于同一生图意图、执行 prompt 与生成图的通用 compare',
     templateType: 'evaluation',

@@ -83,7 +83,7 @@ Additional requirements:
   ] as MessageTemplate[],
   metadata: {
     version: '1.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'Combine a reference image and the current prompt into a reusable style transfer result',
     templateType: 'image-prompt-migration',

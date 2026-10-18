@@ -60,7 +60,7 @@ Additional requirements:
   ] as MessageTemplate[],
   metadata: {
     version: '1.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'Replicate a reference image into a structured JSON prompt with optional variable defaults',
     templateType: 'image-prompt-composition',

@@ -203,7 +203,7 @@ Based on the formatting optimization principles and examples, please output the 
   ] as MessageTemplate[],
   metadata: {
     version: '3.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'Best for data analysis and report generation that need stable structured output',
     templateType: 'conversationMessageOptimize',

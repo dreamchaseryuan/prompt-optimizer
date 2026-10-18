@@ -163,7 +163,7 @@ Based on the analytical optimization principles and examples, please output the 
   ] as MessageTemplate[],
   metadata: {
     version: '3.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'Best for code reviews and technical evaluations that need explicit reasoning and evidence',
     templateType: 'conversationMessageOptimize',

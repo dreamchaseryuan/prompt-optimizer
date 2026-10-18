@@ -60,7 +60,7 @@ export const template: Template = {
   ] as MessageTemplate[],
   metadata: {
     version: '1.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: '直接根据参考图复刻图片，生成结构化 JSON 提示词和变量默认值',
     templateType: 'image-prompt-composition',

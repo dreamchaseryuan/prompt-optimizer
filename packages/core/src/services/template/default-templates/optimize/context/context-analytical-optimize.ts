@@ -173,7 +173,7 @@ def process_data(data):
   ] as MessageTemplate[],
   metadata: {
     version: '3.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: '适合代码审查、方案评估等需要明确推理依据的技术场景',
     templateType: 'conversationMessageOptimize',

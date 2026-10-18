@@ -213,7 +213,7 @@ export const template: Template = {
   ] as MessageTemplate[],
   metadata: {
     version: '3.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: '适合数据分析、报告生成等需要稳定结构化输出的场景',
     templateType: 'conversationMessageOptimize',

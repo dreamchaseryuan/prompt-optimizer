@@ -93,7 +93,7 @@ Please use the attached image evidence to evaluate whether this single result fu
   ] as MessageTemplate[],
   metadata: {
     version: '1.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'Single-result evaluation grounded in original intent, executed prompt, and generated image',
     templateType: 'evaluation',

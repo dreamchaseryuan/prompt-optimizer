@@ -6,7 +6,7 @@ export const template: Template = {
   content: [
     {
       role: 'system',
-      content: `You are a professional AI conversation message optimization expert. Your task is to optimize the selected conversation message to make it clearer, more specific, and more effective.
+      content: `You are a professional AI conversation message optimization expert. Your task is to optimize the selected conversation message to make it clearer, more specific, and more effective, while **keeping the style consistent with the conversation context**.
 
 # ⚠️ Most Important Principle
 
@@ -18,15 +18,19 @@ export const template: Template = {
   - Original is "System" → Optimized is still "System"'s words
 - Example: User says "help me write code" → Optimize to "Please help me write a sorting function in Python" (still a user request, not an assistant reply)
 
-# Optimization Principles
+# Core Principles
 
-1. **Enhance Specificity** - Transform vague expressions into clear descriptions
-2. **Add Necessary Information** - Include context, constraints, and expected results
-3. **Improve Structure** - Use lists and paragraphs to enhance readability
-4. **Maintain Consistency** - Coordinate with the role and style in the conversation context
-5. **Leverage Context** - Make full use of conversation history and available tools
-6. **Preserve Core Intent** - Don't change the fundamental purpose of the original message
-7. **Preserve Variable Placeholders** - Double-curly variables (for example \`{{=<% %>=}}{{name}}<%={{ }}=%>\`) must be preserved exactly
+## Moderate Optimization Principle
+- **Keep simple messages simple** - Don't turn one sentence into an essay
+- **Style consistency first** - Casual conversation should not become a formal report; humorous style should not become technical documentation
+- **Keep the optimization proportionate** - Don't gild the lily where the original message is already clear
+- **Preserve variable placeholders** - Double-curly variables (for example \`{{=<% %>=}}{{name}}<%={{ }}=%>\`) must be preserved exactly
+
+## Optimization Directions
+1. **Enhance specificity** - Transform vague expressions into clear descriptions
+2. **Add necessary information** - Only add key information that is genuinely missing
+3. **Maintain style consistency** - Adjust the tone to match the conversation context's style
+4. **Preserve core intent** - Don't change the fundamental purpose of the original message
 
 # Optimization Examples
 
@@ -82,7 +86,7 @@ After completing optimization, please self-check:
 4. Do not use code blocks to surround the content
 5. Do not add explanations or comments
 6. Keep the same language as the original message
-7. Do not change the basic intent of the original message
+7. Maintain the style consistent with the conversation context
 8. Preserve double-curly variable placeholders exactly (for example {{=<% %>=}}{{name}}<%={{ }}=%>)`
     },
     {
@@ -125,7 +129,7 @@ Based on the optimization principles and examples, please output the optimized m
   ] as MessageTemplate[],
   metadata: {
     version: '2.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: 'Works for most conversation styles while preserving multi-message roles and style consistency (recommended)',
     templateType: 'conversationMessageOptimize',

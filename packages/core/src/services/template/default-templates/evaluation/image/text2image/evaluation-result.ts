@@ -93,7 +93,7 @@ improvements 与 patchPlan 规则：
   ] as MessageTemplate[],
   metadata: {
     version: '1.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: '基于原始生图意图、执行 prompt 与生成图的单结果评估',
     templateType: 'evaluation',

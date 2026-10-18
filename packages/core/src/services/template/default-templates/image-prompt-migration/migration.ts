@@ -83,7 +83,7 @@ export const template: Template = {
   ] as MessageTemplate[],
   metadata: {
     version: '1.0.0',
-    lastModified: Date.now(),
+    lastModified: 1704067200000,
     author: 'System',
     description: '结合参考图和当前提示词，直接生成可复用的风格迁移结果',
     templateType: 'image-prompt-migration',
