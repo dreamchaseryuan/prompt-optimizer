@@ -602,11 +602,6 @@ export class EvaluationService implements IEvaluationService {
     const focus = request.focus?.content?.trim() || '';
     baseContext.hasFocus = !!focus;
     baseContext.focusBrief = focus;
-    // 兼容仍使用旧字段命名的模板
-    baseContext.hasUserFeedback = !!focus;
-    if (focus) {
-      baseContext.userFeedback = focus;
-    }
 
     switch (request.type) {
       case 'result':
@@ -2969,6 +2964,7 @@ export class EvaluationService implements IEvaluationService {
     const textResult = this.parseTextEvaluation(content, type, metadata);
     if (textResult) {
       console.warn('[EvaluationService] Using text fallback parsing');
+      textResult.metadata = { ...(textResult.metadata || {}), degradedParse: true };
       return textResult;
     }
 

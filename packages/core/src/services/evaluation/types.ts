@@ -479,6 +479,8 @@ export interface EvaluationResponse {
     compareStopSignals?: CompareStopSignals;
     compareJudgements?: CompareJudgement[];
     compareInsights?: CompareInsights;
+    /** 解析降级标记：JSON 解析失败、改用文本兜底解析时为 true */
+    degradedParse?: boolean;
   };
 }
 

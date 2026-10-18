@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { EvaluationService } from '../../../src/services/evaluation/service'
 import type {
+  PromptOnlyEvaluationRequest,
   ResultEvaluationRequest,
 } from '../../../src/services/evaluation/types'
 import type {
@@ -174,7 +175,42 @@ class PatchPlanLLM implements ILLMService {
   }
 }
 
-const createService = () => {
+class DegradedParseLLM implements ILLMService {
+  async sendMessage(_messages: Message[], _provider: string): Promise<string> {
+    return '综合评分：85\n整体结构尚可，但约束仍可更明确。'
+  }
+
+  async sendMessageStructured(messages: Message[], provider: string): Promise<LLMResponse> {
+    return { content: await this.sendMessage(messages, provider) }
+  }
+
+  async sendMessageStream(
+    _messages: Message[],
+    _provider: string,
+    callbacks: StreamHandlers
+  ): Promise<void> {
+    callbacks.onError(new Error('DegradedParseLLM.sendMessageStream is not used in this test'))
+  }
+
+  async sendMessageStreamWithTools(
+    _messages: Message[],
+    _provider: string,
+    _tools: ToolDefinition[],
+    callbacks: StreamHandlers
+  ): Promise<void> {
+    callbacks.onError(new Error('DegradedParseLLM.sendMessageStreamWithTools is not used in this test'))
+  }
+
+  async testConnection(_provider: string): Promise<void> {
+    throw new Error('DegradedParseLLM.testConnection is not used in this test')
+  }
+
+  async fetchModelList(_provider: string, _customConfig?: any): Promise<ModelOption[]> {
+    return []
+  }
+}
+
+const createService = (llmInstance: ILLMService = new PatchPlanLLM()) => {
   const modelKey = 'test-model'
   const templateManager = new TemplateManager(
     new MemoryStorageProvider(),
@@ -203,7 +239,7 @@ const createService = () => {
       paramOverrides: {},
     },
   })
-  const llm = new PatchPlanLLM()
+  const llm = llmInstance
 
   return {
     llm,
@@ -261,5 +297,25 @@ describe('patchPlan empty-match guard through the evaluation service', () => {
     expect(skipped.ok).toBe(false)
     expect(skipped.report.status).toBe('skipped')
     expect(skipped.text).toBe(WORKSPACE_PROMPT)
+  })
+})
+
+describe('degraded parse marker', () => {
+  it('marks metadata.degradedParse when JSON parsing falls back to text parsing', async () => {
+    const { modelKey, service } = createService(new DegradedParseLLM())
+
+    const request: PromptOnlyEvaluationRequest = {
+      type: 'prompt-only',
+      evaluationModelKey: modelKey,
+      mode: { functionMode: 'basic', subMode: 'system' },
+      target: {
+        workspacePrompt: WORKSPACE_PROMPT,
+      },
+    }
+
+    const result = await service.evaluate(request)
+
+    expect(result.metadata?.degradedParse).toBe(true)
+    expect(result.score.overall).toBe(85)
   })
 })
