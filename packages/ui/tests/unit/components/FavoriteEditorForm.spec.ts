@@ -1143,4 +1143,91 @@ describe('FavoriteEditorForm', () => {
       'ex-002',
     ])
   })
+
+  it('hydrates a video prefill and saves a video favorite with correct mode tags (QA P1)', async () => {
+    const addFavorite = vi.fn(async () => 'fav-video')
+    const getCategories = vi.fn(async () => [])
+
+    const wrapper = mount(FavoriteEditorForm, {
+      props: {
+        mode: 'save',
+        content: '视频提示词内容',
+        currentFunctionMode: 'video',
+        prefill: {
+          title: '视频收藏',
+          functionMode: 'video',
+          videoSubMode: 'image2video',
+        },
+      },
+      global: {
+        stubs: naiveStubs,
+        provide: {
+          services: ref({
+            favoriteImageStorageService: {},
+            imageStorageService: {},
+            favoriteManager: {
+              getAllTags: vi.fn(async () => []),
+              addTag: vi.fn(async () => {}),
+              getCategories,
+              addCategory: vi.fn(async () => 'cat-x'),
+              addFavorite,
+            },
+          } as any),
+        },
+      },
+    })
+
+    await flushPromises()
+
+    await wrapper.find('[data-testid="favorite-editor-save"]').trigger('click')
+    await flushPromises()
+
+    expect(addFavorite).toHaveBeenCalledWith(expect.objectContaining({
+      functionMode: 'video',
+      videoSubMode: 'image2video',
+      imageSubMode: undefined,
+    }))
+  })
+
+  it('defaults to video/text2video when current mode is video and prefill omits functionMode', async () => {
+    const addFavorite = vi.fn(async () => 'fav-video-default')
+    const getCategories = vi.fn(async () => [])
+
+    const wrapper = mount(FavoriteEditorForm, {
+      props: {
+        mode: 'save',
+        content: '视频提示词内容',
+        currentFunctionMode: 'video',
+        prefill: {},
+      },
+      global: {
+        stubs: naiveStubs,
+        provide: {
+          services: ref({
+            favoriteImageStorageService: {},
+            imageStorageService: {},
+            favoriteManager: {
+              getAllTags: vi.fn(async () => []),
+              addTag: vi.fn(async () => {}),
+              getCategories,
+              addCategory: vi.fn(async () => 'cat-x'),
+              addFavorite,
+            },
+          } as any),
+        },
+      },
+    })
+
+    await flushPromises()
+
+    await wrapper.find('[data-testid="favorite-editor-save"]').trigger('click')
+    await flushPromises()
+
+    expect(addFavorite).toHaveBeenCalledWith(expect.objectContaining({
+      functionMode: 'video',
+      videoSubMode: 'text2video',
+      imageSubMode: undefined,
+      optimizationMode: undefined,
+    }))
+  })
 })

@@ -1377,6 +1377,9 @@ watch(() => [
     formData.imageSubMode = shouldApplyIncomingContent && prefill?.imageSubMode
       ? prefill.imageSubMode
       : props.favorite.imageSubMode
+    formData.videoSubMode = shouldApplyIncomingContent && prefill?.videoSubMode
+      ? prefill.videoSubMode
+      : props.favorite.videoSubMode
     await hydrateMediaDraft(undefined, props.favorite, isStale)
     if (isStale()) return
     const draft = props.applyIncomingContentOnEdit ? props.prefill?.reproducibilityDraft : undefined
@@ -1418,7 +1421,15 @@ watch(() => [
     ? normalizeFavoriteFunctionMode(prefill.functionMode)
     : null
 
-  if (prefillFunctionMode === 'image') {
+  if (prefillFunctionMode === 'video') {
+    formData.functionMode = 'video'
+    formData.videoSubMode =
+      prefill?.videoSubMode === 'image2video'
+        ? 'image2video'
+        : 'text2video'
+    formData.optimizationMode = undefined
+    formData.imageSubMode = undefined
+  } else if (prefillFunctionMode === 'image') {
     formData.functionMode = 'image'
     formData.imageSubMode =
       prefill?.imageSubMode === 'image2image'
@@ -1427,22 +1438,35 @@ watch(() => [
           ? 'multiimage'
           : 'text2image'
     formData.optimizationMode = undefined
+    formData.videoSubMode = undefined
   } else if (prefillFunctionMode === 'context' || prefillFunctionMode === 'basic') {
     formData.functionMode = prefillFunctionMode
     formData.optimizationMode = prefill?.optimizationMode === 'user' ? 'user' : 'system'
+    formData.imageSubMode = undefined
+    formData.videoSubMode = undefined
+  } else if (props.currentFunctionMode === 'video') {
+    formData.functionMode = 'video'
+    formData.videoSubMode =
+      prefill?.videoSubMode === 'image2video'
+        ? 'image2video'
+        : 'text2video'
+    formData.optimizationMode = undefined
     formData.imageSubMode = undefined
   } else if (props.currentFunctionMode === 'image') {
     formData.functionMode = 'image'
     formData.imageSubMode = 'text2image'
     formData.optimizationMode = undefined
+    formData.videoSubMode = undefined
   } else if (props.currentFunctionMode === 'context' || props.currentFunctionMode === 'pro') {
     formData.functionMode = 'context'
     formData.optimizationMode = props.currentOptimizationMode
     formData.imageSubMode = undefined
+    formData.videoSubMode = undefined
   } else {
     formData.functionMode = 'basic'
     formData.optimizationMode = props.currentOptimizationMode
     formData.imageSubMode = undefined
+    formData.videoSubMode = undefined
   }
 
   // Save prefill is normalized by useAppFavorite so create/save and edit hydrate the same metadata source.
