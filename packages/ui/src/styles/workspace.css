@@ -19,7 +19,26 @@
   padding-bottom: 8px;
 }
 
+/* 卡片标题排版：小号加粗，弱化装饰 */
+.app-shell .app-content .n-card .n-card-header__main {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* 编辑器可读性：输入/输出文本域字号与行高 */
+.app-shell .app-content .n-input .n-input__textarea-el,
+.app-shell .app-content .n-input .n-input__input-el {
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
 /* 工作区顶栏内按钮组与内容区留出呼吸 */
 .app-shell .app-content > * > .workspace-page-tools {
   row-gap: 8px;
+}
+
+/* 优化变体卡片间距统一 */
+.app-shell .app-content .variant-deck {
+  gap: 12px;
 }
