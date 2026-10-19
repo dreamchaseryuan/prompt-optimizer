@@ -1,11 +1,12 @@
 {
   "name": "@prompt-optimizer/desktop",
+  "productName": "Always200Prompt",
   "version": "2.11.11",
   "description": "Desktop application for Always200 Prompt",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/linshenkx/prompt-optimizer.git"
+    "url": "https://github.com/dreamchaseryuan/prompt-optimizer.git"
   },
   "scripts": {
     "build": "pnpm run build:web && pnpm run package",
