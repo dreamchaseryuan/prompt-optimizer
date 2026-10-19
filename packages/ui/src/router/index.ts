@@ -64,6 +64,12 @@ const routes: RouteRecordRaw[] = [
     path: '/favorites',
     name: 'favorites',
     component: () => import('../components/favorites/FavoritesPage.vue')
+  },
+  // 批量优化：独立页面型目的地（同 favorites 模式，不进工作区子模式体系）
+  {
+    path: '/batch',
+    name: 'batch',
+    component: () => import('../components/batch-mode/BatchOptimizeWorkspace.vue')
   }
 ]
 

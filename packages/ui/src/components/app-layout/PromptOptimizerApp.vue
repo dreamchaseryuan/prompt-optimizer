@@ -38,7 +38,7 @@
                 <template #core-nav>
                     <AppCoreNav
                         :workspace-path="activeWorkspaceContextPath"
-                        :allow-workspace-reselect="isFavoritesRoute"
+                        :allow-workspace-reselect="isFavoritesRoute || isBatchRoute"
                     />
                 </template>
 
@@ -49,9 +49,11 @@
                         @open-history="historyManager.showHistory = true"
                         @open-model-manager="modelManager.showConfig = true"
                         @open-favorites="openFavoritesPage"
+                        @open-batch="openBatchPage"
                         @open-data-manager="showDataManager = true"
                         @open-variables="handleOpenVariableManager()"
                         :favorites-active="isFavoritesRoute"
+                        :batch-active="isBatchRoute"
                         :backup-reminder-due="dataBackupReminderDue"
                         :app-version="appVersion"
                         @open-website="openOfficialWebsite"
@@ -486,6 +488,7 @@ const lastWorkspacePath = ref<string | null>(
 )
 
 const isFavoritesRoute = computed(() => routerInstance.currentRoute.value.path === '/favorites')
+const isBatchRoute = computed(() => routerInstance.currentRoute.value.path === '/batch')
 
 watch(
   () => routerInstance.currentRoute.value.fullPath,
@@ -1710,6 +1713,25 @@ const resolveFavoritesReturnPath = () =>
         lastWorkspacePath.value,
         () => getWorkspacePathFromGlobalSettings(),
     );
+
+const openBatchPage = () => {
+    const fromPath = resolveWorkspacePathFallback(
+        routerInstance.currentRoute.value.path,
+        lastWorkspacePath.value,
+        () => getWorkspacePathFromGlobalSettings(),
+    );
+
+    if (isBatchRoute.value && getCurrentRouteFromWorkspaceQuery() === fromPath) {
+        return;
+    }
+
+    void routerInstance.push({
+        name: 'batch',
+        query: {
+            from: fromPath,
+        },
+    });
+};
 
 const openFavoritesPage = () => {
     const fromPath = resolveWorkspacePathFallback(

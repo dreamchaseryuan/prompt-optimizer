@@ -145,6 +145,7 @@ const messages = {
     "templates": "Templates",
     "dataManager": "Data Manager",
     "favorites": "Favorite Library",
+    "batch": "Batch Optimize",
     "advancedMode": "Advanced Mode",
     "variableManager": "Variable Manager",
     "about": "About",

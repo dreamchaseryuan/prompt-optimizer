@@ -14,6 +14,19 @@
     <!-- 页面型管理入口：会接管主内容区 -->
     <div class="page-destination-group" data-testid="header-page-destinations">
         <ActionButtonUI
+            icon="⚡"
+            :text="$t('nav.batch')"
+            @click="emit('open-batch')"
+            :type="batchActive ? 'primary' : 'default'"
+            data-testid="header-batch-page-action"
+            size="medium"
+            :ghost="false"
+            :round="true"
+            :title="$t('batch.subtitle')"
+            :aria-current="batchActive ? 'page' : undefined"
+            :class="{ 'page-destination-active': batchActive }"
+        />
+        <ActionButtonUI
             icon="⭐"
             :text="$t('nav.favorites')"
             @click="emit('open-favorites')"
@@ -227,11 +240,13 @@ import { NBadge, NButton, NPopover, NTag } from 'naive-ui'
 interface Props {
     appVersion: string
     favoritesActive?: boolean
+    batchActive?: boolean
     backupReminderDue?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
     favoritesActive: false,
+    batchActive: false,
     backupReminderDue: false,
 })
 
@@ -247,6 +262,8 @@ const emit = defineEmits<{
     'open-model-manager': []
     /** 打开收藏夹 */
     'open-favorites': []
+    /** 打开批量优化页 */
+    'open-batch': []
     /** 打开数据管理器 */
     'open-data-manager': []
     /** 打开变量管理器 */

@@ -145,6 +145,7 @@ const messages = {
     "templates": "功能提示詞",
     "dataManager": "資料管理",
     "favorites": "收藏",
+    "batch": "批次優化",
     "advancedMode": "進階模式",
     "variableManager": "變數管理",
     "about": "關於",
