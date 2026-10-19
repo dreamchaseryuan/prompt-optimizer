@@ -2,6 +2,37 @@ import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 import { mount } from '@vue/test-utils'
 
+const i18nMap: Record<string, string> = {
+  'nav.templates': 'Templates',
+  'nav.history': 'History',
+  'nav.modelManager': 'Model Manager',
+  'nav.favorites': 'Favorite Library',
+  'nav.dataManager': 'Data Manager',
+  'nav.variableManager': 'Variable Manager',
+  'nav.more': 'More Tools',
+  'nav.about': 'About',
+  'updater.viewOnGitHub': 'View on GitHub',
+  'about.title': 'Prompt Optimizer',
+  'about.website': 'Website',
+  'about.websiteLabel': 'always200.com',
+  'about.documentation': 'Docs',
+  'about.documentationLabel': 'docs.always200.com',
+  'dataManager.backupReminder.tooltip':
+    'No data export in over 10 days. Export a local copy.',
+}
+
+const translate = (key: string) => i18nMap[key] ?? key
+
+vi.mock('vue-i18n', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('vue-i18n')>()
+  return {
+    ...actual,
+    useI18n: () => ({
+      t: translate,
+    }),
+  }
+})
+
 vi.mock('naive-ui', async (importOriginal) => {
   const actual = await importOriginal<typeof import('naive-ui')>()
 
@@ -47,6 +78,32 @@ vi.mock('naive-ui', async (importOriginal) => {
 
 import AppHeaderActions from '../../../src/components/app-layout/AppHeaderActions.vue'
 
+const actionButtonStub = defineComponent({
+  name: 'ActionButtonUI',
+  props: ['text', 'type'],
+  emits: ['click'],
+  setup(props, { emit, attrs }) {
+    return () =>
+      h(
+        'button',
+        {
+          ...attrs,
+          class: attrs.class,
+          'data-type': props.type,
+          onClick: () => emit('click'),
+        },
+        props.text,
+      )
+  },
+})
+
+const baseStubs = {
+  ThemeToggleUI: true,
+  LanguageSwitchDropdown: true,
+  UpdaterIcon: true,
+  ActionButtonUI: actionButtonStub,
+}
+
 describe('AppHeaderActions about menu layout hooks', () => {
   it('renders the about popover with naive-themed panel content', () => {
     const wrapper = mount(AppHeaderActions, {
@@ -55,26 +112,7 @@ describe('AppHeaderActions about menu layout hooks', () => {
       },
       global: {
         renderStubDefaultSlot: true,
-        mocks: {
-          $t: (key: string) => {
-            const map: Record<string, string> = {
-              'nav.templates': 'Templates',
-              'nav.history': 'History',
-              'nav.modelManager': 'Model Manager',
-              'nav.favorites': 'Favorite Library',
-              'nav.dataManager': 'Data Manager',
-              'nav.variableManager': 'Variable Manager',
-              'nav.about': 'About',
-              'updater.viewOnGitHub': 'View on GitHub',
-              'about.title': 'Prompt Optimizer',
-              'about.website': 'Website',
-              'about.websiteLabel': 'always200.com',
-              'about.documentation': 'Docs',
-              'about.documentationLabel': 'docs.always200.com',
-            }
-            return map[key] ?? key
-          },
-        },
+        mocks: { $t: translate },
         stubs: {
           ThemeToggleUI: true,
           LanguageSwitchDropdown: true,
@@ -93,65 +131,29 @@ describe('AppHeaderActions about menu layout hooks', () => {
     expect(wrapper.text()).toContain('docs.always200.com')
   })
 
-  it('separates the favorites page destination from modal actions and marks it active', async () => {
+  it('separates the favorites page destination from modal tools and marks it active', async () => {
     const wrapper = mount(AppHeaderActions, {
       props: {
         appVersion: 'v2.7.0',
         favoritesActive: true,
       },
       global: {
-        mocks: {
-          $t: (key: string) => {
-            const map: Record<string, string> = {
-              'nav.templates': 'Templates',
-              'nav.history': 'History',
-              'nav.modelManager': 'Model Manager',
-              'nav.favorites': 'Favorite Library',
-              'nav.dataManager': 'Data Manager',
-              'nav.variableManager': 'Variable Manager',
-              'nav.about': 'About',
-              'updater.viewOnGitHub': 'View on GitHub',
-              'about.website': 'Website',
-              'about.websiteLabel': 'always200.com',
-              'about.documentation': 'Docs',
-              'about.documentationLabel': 'docs.always200.com',
-            }
-            return map[key] ?? key
-          },
-        },
-        stubs: {
-          ThemeToggleUI: true,
-          LanguageSwitchDropdown: true,
-          UpdaterIcon: true,
-          ActionButtonUI: defineComponent({
-            name: 'ActionButtonUI',
-            props: ['text', 'type'],
-            emits: ['click'],
-            setup(props, { emit, attrs }) {
-              return () =>
-                h(
-                  'button',
-                  {
-                    ...attrs,
-                    class: attrs.class,
-                    'data-type': props.type,
-                    onClick: () => emit('click'),
-                  },
-                  props.text,
-                )
-            },
-          }),
-        },
+        mocks: { $t: translate },
+        stubs: baseStubs,
       },
     })
 
     const pageGroup = wrapper.find('[data-testid="header-page-destinations"]')
-    const modalGroup = wrapper.find('[data-testid="header-modal-actions"]')
+    const moreMenu = wrapper.find('[data-testid="header-modal-actions"]')
 
     expect(pageGroup.exists()).toBe(true)
-    expect(modalGroup.exists()).toBe(true)
+    expect(moreMenu.exists()).toBe(true)
     expect(pageGroup.text()).toContain('Favorite Library')
-    expect(modalGroup.text()).not.toContain('Favorite Library')
+    expect(moreMenu.text()).not.toContain('Favorite Library')
+    expect(moreMenu.text()).toContain('Templates')
+    expect(moreMenu.text()).toContain('History')
+    expect(moreMenu.text()).toContain('Model Manager')
+
     const favoritesAction = pageGroup.find('[data-testid="header-favorites-page-action"]')
     expect(favoritesAction.attributes('data-type')).toBe('primary')
     expect(favoritesAction.attributes('aria-current')).toBe('page')
@@ -162,62 +164,58 @@ describe('AppHeaderActions about menu layout hooks', () => {
     expect(wrapper.emitted('open-favorites')).toHaveLength(1)
   })
 
-  it('marks the data manager action when an existing backup is stale', async () => {
+  it('marks the data manager menu item when an existing backup is stale', async () => {
     const wrapper = mount(AppHeaderActions, {
       props: {
         appVersion: 'v2.7.0',
         backupReminderDue: true,
       },
       global: {
-        mocks: {
-          $t: (key: string) => {
-            const map: Record<string, string> = {
-              'nav.templates': 'Templates',
-              'nav.history': 'History',
-              'nav.modelManager': 'Model Manager',
-              'nav.favorites': 'Favorite Library',
-              'nav.dataManager': 'Data Manager',
-              'nav.variableManager': 'Variable Manager',
-              'nav.about': 'About',
-              'updater.viewOnGitHub': 'View on GitHub',
-              'dataManager.backupReminder.tooltip': 'No data export in over 10 days. Export a local copy.',
-            }
-            return map[key] ?? key
-          },
-        },
-        stubs: {
-          ThemeToggleUI: true,
-          LanguageSwitchDropdown: true,
-          UpdaterIcon: true,
-          ActionButtonUI: defineComponent({
-            name: 'ActionButtonUI',
-            props: ['text', 'type'],
-            emits: ['click'],
-            setup(props, { emit, attrs }) {
-              return () =>
-                h(
-                  'button',
-                  {
-                    ...attrs,
-                    'data-type': props.type,
-                    onClick: () => emit('click'),
-                  },
-                  props.text,
-                )
-            },
-          }),
-        },
+        mocks: { $t: translate },
+        stubs: baseStubs,
       },
     })
 
-    const dataManagerAction = wrapper.findAll('button').find((button) => button.text() === 'Data Manager')
+    const dataManagerItem = wrapper
+      .findAll('[data-testid="header-modal-actions"] button')
+      .find((button) => button.text().includes('Data Manager'))
 
     expect(wrapper.find('.n-badge-stub[data-show="true"]').exists()).toBe(true)
-    expect(dataManagerAction?.attributes('data-type')).toBe('warning')
-    expect(dataManagerAction?.attributes('title')).toBe('No data export in over 10 days. Export a local copy.')
+    expect(dataManagerItem?.classes()).toContain('more-tools-item-warning')
+    expect(dataManagerItem?.find('.more-tools-item-dot').attributes('title')).toBe(
+      'No data export in over 10 days. Export a local copy.',
+    )
 
-    await dataManagerAction!.trigger('click')
+    await dataManagerItem!.trigger('click')
 
     expect(wrapper.emitted('open-data-manager')).toHaveLength(1)
+    expect(wrapper.emitted('open-templates')).toBeUndefined()
+  })
+
+  it('emits each management entry from the more-tools menu', async () => {
+    const wrapper = mount(AppHeaderActions, {
+      props: {
+        appVersion: 'v2.7.0',
+      },
+      global: {
+        mocks: { $t: translate },
+        stubs: baseStubs,
+      },
+    })
+
+    const menu = wrapper.find('[data-testid="header-modal-actions"]')
+    const entries: Array<[string, string]> = [
+      ['more-tools-templates', 'open-templates'],
+      ['more-tools-history', 'open-history'],
+      ['more-tools-model-manager', 'open-model-manager'],
+      ['more-tools-variables', 'open-variables'],
+    ]
+
+    for (const [testId, event] of entries) {
+      const item = menu.find(`[data-testid="${testId}"]`)
+      expect(item.exists()).toBe(true)
+      await item.trigger('click')
+      expect(wrapper.emitted(event)).toHaveLength(1)
+    }
   })
 })

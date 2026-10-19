@@ -41,57 +41,57 @@
         />
     </div>
 
-    <!-- 弹窗型管理/配置入口 -->
-    <div class="modal-action-group" data-testid="header-modal-actions">
-        <ActionButtonUI
-            icon="📝"
-            :text="$t('nav.templates')"
-            @click="emit('open-templates')"
-            type="default"
-            size="medium"
-            :ghost="false"
-            :round="true"
-        />
-        <ActionButtonUI
-            icon="📜"
-            :text="$t('nav.history')"
-            @click="emit('open-history')"
-            type="default"
-            size="medium"
-            :ghost="false"
-            :round="true"
-        />
-        <ActionButtonUI
-            icon="⚙️"
-            :text="$t('nav.modelManager')"
-            @click="emit('open-model-manager')"
-            type="default"
-            size="medium"
-            :ghost="false"
-            :round="true"
-        />
-        <NBadge :show="backupReminderDue" dot processing>
-            <ActionButtonUI
-                icon="💾"
-                :text="$t('nav.dataManager')"
-                @click="emit('open-data-manager')"
-                :type="backupReminderDue ? 'warning' : 'default'"
-                size="medium"
-                :ghost="false"
-                :round="true"
-                :title="backupReminderDue ? $t('dataManager.backupReminder.tooltip') : $t('nav.dataManager')"
-            />
-        </NBadge>
-        <ActionButtonUI
-            icon="🔣"
-            :text="$t('nav.variableManager')"
-            @click="emit('open-variables')"
-            type="default"
-            size="medium"
-            :ghost="false"
-            :round="true"
-        />
-    </div>
+    <!-- 弹窗型管理/配置入口：收敛为「更多工具」菜单，降低头部视觉密度 -->
+    <NPopover
+        v-model:show="showMoreTools"
+        trigger="click"
+        placement="bottom-end"
+        :show-arrow="false"
+    >
+        <template #trigger>
+            <NBadge :show="backupReminderDue" dot processing>
+                <NButton
+                    quaternary
+                    size="medium"
+                    class="more-tools-trigger"
+                    data-testid="header-more-tools"
+                    :title="$t('nav.more')"
+                    :aria-label="$t('nav.more')"
+                    :aria-expanded="showMoreTools"
+                >
+                    <template #icon>
+                        <svg class="more-tools-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <circle cx="5" cy="12" r="1.8" />
+                            <circle cx="12" cy="12" r="1.8" />
+                            <circle cx="19" cy="12" r="1.8" />
+                        </svg>
+                    </template>
+                </NButton>
+            </NBadge>
+        </template>
+
+        <div class="more-tools-menu" data-testid="header-modal-actions" role="menu">
+            <button
+                v-for="item in moreToolsItems"
+                :key="item.key"
+                type="button"
+                role="menuitem"
+                class="more-tools-item"
+                :class="{ 'more-tools-item-warning': item.warning }"
+                :data-testid="item.testId"
+                @click="handleMoreToolClick(item)"
+            >
+                <span class="more-tools-item-icon" aria-hidden="true">{{ item.icon }}</span>
+                <span class="more-tools-item-label">{{ item.label }}</span>
+                <span
+                    v-if="item.warning"
+                    class="more-tools-item-dot"
+                    :title="$t('dataManager.backupReminder.tooltip')"
+                    aria-label="attention"
+                />
+            </button>
+        </div>
+    </NPopover>
     <!-- 辅助功能区 - 使用简化样式降低视觉权重 -->
     <ThemeToggleUI />
     <div class="aux-icon-group">
@@ -229,7 +229,8 @@
  * </template>
  * ```
  */
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import ActionButtonUI from '../ActionButton.vue'
 import ThemeToggleUI from '../ThemeToggleUI.vue'
@@ -244,11 +245,87 @@ interface Props {
     backupReminderDue?: boolean
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
     favoritesActive: false,
     batchActive: false,
     backupReminderDue: false,
 })
+
+const { t } = useI18n()
+
+// ========================
+// 「更多工具」菜单（弹窗型入口收敛）
+// ========================
+interface MoreToolItem {
+    key: string
+    icon: string
+    label: string
+    emitEvent: 'open-templates' | 'open-history' | 'open-model-manager' | 'open-data-manager' | 'open-variables'
+    testId: string
+    warning?: boolean
+}
+
+const showMoreTools = ref(false)
+
+const moreToolsItems = computed<MoreToolItem[]>(() => [
+    {
+        key: 'templates',
+        icon: '📝',
+        label: t('nav.templates'),
+        emitEvent: 'open-templates',
+        testId: 'more-tools-templates',
+    },
+    {
+        key: 'history',
+        icon: '📜',
+        label: t('nav.history'),
+        emitEvent: 'open-history',
+        testId: 'more-tools-history',
+    },
+    {
+        key: 'modelManager',
+        icon: '⚙️',
+        label: t('nav.modelManager'),
+        emitEvent: 'open-model-manager',
+        testId: 'more-tools-model-manager',
+    },
+    {
+        key: 'dataManager',
+        icon: '💾',
+        label: t('nav.dataManager'),
+        emitEvent: 'open-data-manager',
+        testId: 'more-tools-data-manager',
+        warning: props.backupReminderDue,
+    },
+    {
+        key: 'variables',
+        icon: '🔣',
+        label: t('nav.variableManager'),
+        emitEvent: 'open-variables',
+        testId: 'more-tools-variables',
+    },
+])
+
+const handleMoreToolClick = (item: MoreToolItem) => {
+    showMoreTools.value = false
+    switch (item.emitEvent) {
+        case 'open-templates':
+            emit('open-templates')
+            break
+        case 'open-history':
+            emit('open-history')
+            break
+        case 'open-model-manager':
+            emit('open-model-manager')
+            break
+        case 'open-data-manager':
+            emit('open-data-manager')
+            break
+        case 'open-variables':
+            emit('open-variables')
+            break
+    }
+}
 
 // ========================
 // Emits 定义
@@ -312,20 +389,86 @@ const handleOpenDocs = () => {
     margin-left: 6px;
 }
 
-.page-destination-group,
-.modal-action-group {
+.page-destination-group {
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
-.page-destination-group {
-    padding-right: 8px;
-    border-right: 1px solid var(--n-border-color);
+.page-destination-active {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--n-primary-color) 22%, transparent);
 }
 
-.page-destination-active {
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--n-primary-color) 18%, transparent);
+.more-tools-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.more-tools-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.more-tools-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 200px;
+    padding: 6px;
+}
+
+.more-tools-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.more-tools-item:hover {
+    background: color-mix(in srgb, var(--n-primary-color) 8%, transparent);
+}
+
+.more-tools-item:focus-visible {
+    outline: none;
+    background: color-mix(in srgb, var(--n-primary-color) 12%, transparent);
+}
+
+.more-tools-item-icon {
+    font-size: 15px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.more-tools-item-label {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.more-tools-item-warning .more-tools-item-label {
+    color: var(--n-warning-color, #d97706);
+}
+
+.more-tools-item-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--n-warning-color, #d97706);
+    flex-shrink: 0;
 }
 
 .about-panel {

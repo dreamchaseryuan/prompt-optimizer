@@ -148,6 +148,7 @@ const messages = {
     "batch": "批次優化",
     "advancedMode": "進階模式",
     "variableManager": "變數管理",
+    "more": "更多工具",
     "about": "關於",
     "basicMode": "基礎",
     "contextMode": "情境",

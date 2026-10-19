@@ -147,10 +147,15 @@ const openBrandWebsite = async () => {
   min-height: 0;
 }
 
-/* 增强导航栏样式 */
+/* 增强导航栏样式：单行悬浮毛玻璃条 */
 .nav-header-enhanced {
-  min-height: 64px !important;
-  padding: 12px 16px !important;
+  min-height: 60px !important;
+  padding: 10px 20px !important;
+  background: color-mix(in srgb, var(--n-card-color) 82%, transparent) !important;
+  backdrop-filter: saturate(1.6) blur(14px);
+  -webkit-backdrop-filter: saturate(1.6) blur(14px);
+  border-bottom: 1px solid var(--n-border-color) !important;
+  box-shadow: 0 1px 2px rgba(18, 22, 33, 0.03) !important;
 }
 
 .nav-content {

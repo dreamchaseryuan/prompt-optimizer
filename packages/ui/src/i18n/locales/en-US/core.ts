@@ -148,6 +148,7 @@ const messages = {
     "batch": "Batch Optimize",
     "advancedMode": "Advanced Mode",
     "variableManager": "Variable Manager",
+    "more": "More Tools",
     "about": "About",
     "basicMode": "Basic",
     "contextMode": "Context",
