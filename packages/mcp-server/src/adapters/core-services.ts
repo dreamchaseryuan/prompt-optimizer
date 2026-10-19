@@ -159,6 +159,7 @@ export class CoreServicesManager {
         'VITE_VOLCENGINE_ARK_API_KEY',
         'VITE_HUNYUAN_API_KEY',
         'VITE_SPARK_API_KEY',
+        'VITE_MIMO_API_KEY',
         'VITE_CUSTOM_API_KEY'
       ];
 
@@ -194,6 +195,7 @@ export class CoreServicesManager {
         console.error('   VITE_ARK_API_KEY=your-ark-key');
         console.error('   VITE_HUNYUAN_API_KEY=your-hunyuan-key');
         console.error('   VITE_SPARK_API_KEY=your-spark-key');
+        console.error('   VITE_MIMO_API_KEY=your-mimo-key');
         console.error('   VITE_CUSTOM_API_KEY=your-custom-key');
         console.error('   Or dynamic custom models:');
         console.error('   VITE_CUSTOM_API_KEY_qwen3=your-qwen-key');

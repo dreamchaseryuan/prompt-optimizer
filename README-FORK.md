@@ -45,6 +45,8 @@ await promptService.optimizePrompt({
 | `volcengine-ark` | Volcengine Ark (Doubao) | `https://ark.cn-beijing.volces.com/api/v3` | doubao-seed-2-1-pro-260915（model 字段也支持自建 Endpoint ID） |
 | `hunyuan` | Tencent Hunyuan | `https://api.hunyuan.cloud.tencent.com/v1` | hunyuan-turbos-latest、hunyuan-turbo |
 | `spark` | iFlytek Spark | `https://spark-api-open.xf-yun.com/v1` | generalv3.5、4.0Ultra、lite（X1 系列需把 Base URL 改为 `/v2`） |
+| `xiaomi-mimo` | Xiaomi MiMo | `https://api.xiaomimimo.com/v1` | mimo-v2.6-pro、mimo-v2.6-pro-ultraspeed、mimo-v2.6-flash |
+| `xiaomi-mimo-token-plan` | Xiaomi MiMo Token Plan | `https://token-plan-cn.xiaomimimo.com/v1` | mimo-v2.5-pro、mimo-v2.5 |
 
 鉴权均为 `Authorization: Bearer <API Key>`，密钥只保存在本地（Web 端 localStorage / 桌面端本地文件），不经中间服务器。
 
@@ -55,6 +57,7 @@ VITE_MOONSHOT_API_KEY=sk-...      # moonshot
 VITE_ARK_API_KEY=...               # volcengine-ark（也接受 VITE_VOLCENGINE_ARK_API_KEY）
 VITE_HUNYUAN_API_KEY=...           # hunyuan
 VITE_SPARK_API_KEY=...             # spark
+VITE_MIMO_API_KEY=sk-...           # xiaomi-mimo（按量付费；Token Plan 用 VITE_MIMO_TOKEN_PLAN_API_KEY）
 ```
 
 ### 4. 前端增强（M7 / M8）

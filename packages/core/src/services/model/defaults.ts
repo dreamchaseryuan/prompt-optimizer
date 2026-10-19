@@ -25,6 +25,7 @@ const PROVIDER_ENV_KEYS = {
   cloudflare: ['VITE_CF_API_TOKEN'],
   grok: ['VITE_GROK_API_KEY', 'VITE_XAI_API_KEY'],
   'xiaomi-mimo-token-plan': ['VITE_MIMO_TOKEN_PLAN_API_KEY'],
+  'xiaomi-mimo': ['VITE_MIMO_API_KEY'],
   moonshot: ['VITE_MOONSHOT_API_KEY'],
   'volcengine-ark': ['VITE_ARK_API_KEY', 'VITE_VOLCENGINE_ARK_API_KEY'],
   hunyuan: ['VITE_HUNYUAN_API_KEY'],
@@ -37,6 +38,9 @@ const PROVIDER_EXTRA_CONNECTION_ENV_KEYS: Record<string, Record<string, string[]
   },
   'xiaomi-mimo-token-plan': {
     baseURL: ['VITE_MIMO_TOKEN_PLAN_API_BASE_URL']
+  },
+  'xiaomi-mimo': {
+    baseURL: ['VITE_MIMO_API_BASE_URL']
   }
 };
 

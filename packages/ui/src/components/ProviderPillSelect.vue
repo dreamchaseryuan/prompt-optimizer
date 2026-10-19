@@ -125,6 +125,7 @@ const providerOrder = [
   'hunyuan',
   'spark',
   'xiaomi-mimo-token-plan',
+  'xiaomi-mimo',
   'modelscope',
   'cloudflare',
   'openai-compatible'

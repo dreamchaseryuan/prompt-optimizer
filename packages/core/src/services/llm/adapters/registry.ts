@@ -22,6 +22,7 @@ import { CloudflareAdapter } from './cloudflare-adapter';
 import { GrokAdapter } from './grok-adapter';
 import { ChromeBuiltInAdapter } from './chrome-built-in-adapter';
 import { XiaomiMimoTokenPlanAdapter } from './xiaomi-mimo-token-plan-adapter';
+import { XiaomiMimoAdapter } from './xiaomi-mimo-adapter';
 import { MoonshotAdapter } from './moonshot-adapter';
 import { VolcengineArkAdapter } from './volcengine-ark-adapter';
 import { HunyuanAdapter } from './hunyuan-adapter';
@@ -74,6 +75,7 @@ export class TextAdapterRegistry
     const grokAdapter = new GrokAdapter();
     const chromeBuiltInAdapter = new ChromeBuiltInAdapter();
     const xiaomiMimoTokenPlanAdapter = new XiaomiMimoTokenPlanAdapter();
+    const xiaomiMimoAdapter = new XiaomiMimoAdapter();
     const moonshotAdapter = new MoonshotAdapter();
     const volcengineArkAdapter = new VolcengineArkAdapter();
     const hunyuanAdapter = new HunyuanAdapter();
@@ -95,6 +97,7 @@ export class TextAdapterRegistry
     this.adapters.set('grok', grokAdapter);
     this.adapters.set('chrome-built-in', chromeBuiltInAdapter);
     this.adapters.set('xiaomi-mimo-token-plan', xiaomiMimoTokenPlanAdapter);
+    this.adapters.set('xiaomi-mimo', xiaomiMimoAdapter);
     this.adapters.set('moonshot', moonshotAdapter);
     this.adapters.set('volcengine-ark', volcengineArkAdapter);
     this.adapters.set('hunyuan', hunyuanAdapter);

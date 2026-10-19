@@ -273,7 +273,7 @@ describe('model defaults provider env mapping', () => {
     const models = getDefaultTextModels()
 
     expect(builtinModelIds).toContain('xiaomi-mimo-token-plan')
-    expect(models['xiaomi-mimo']).toBeUndefined()
+    expect(models['xiaomi-mimo']).toBeDefined()
     expect(models['xiaomi-mimo-token-plan']).toBeDefined()
     expect(models['xiaomi-mimo-token-plan'].providerMeta.id).toBe('xiaomi-mimo-token-plan')
     expect(models['xiaomi-mimo-token-plan'].modelMeta.id).toBe('mimo-v2.5-pro')
@@ -318,6 +318,22 @@ describe('model defaults provider env mapping', () => {
       delete process.env.VITE_ARK_API_KEY
       delete process.env.VITE_HUNYUAN_API_KEY
       delete process.env.VITE_SPARK_API_KEY
+    }
+  })
+
+  it('should enable xiaomi-mimo from env keys with pay-as-you-go defaults', () => {
+    const builtinModelIds = getBuiltinModelIds()
+    expect(builtinModelIds).toEqual(expect.arrayContaining(['xiaomi-mimo']))
+
+    process.env.VITE_MIMO_API_KEY = 'sk-test-mimo-key'
+
+    try {
+      const models = getDefaultTextModels()
+      expect(models['xiaomi-mimo'].enabled).toBe(true)
+      expect(models['xiaomi-mimo'].connectionConfig.apiKey).toBe('sk-test-mimo-key')
+      expect(models['xiaomi-mimo'].connectionConfig.baseURL).toBe('https://api.xiaomimimo.com/v1')
+    } finally {
+      delete process.env.VITE_MIMO_API_KEY
     }
   })
 })
