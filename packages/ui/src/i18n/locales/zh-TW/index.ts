@@ -8,6 +8,7 @@ import context from './context'
 import image from './image'
 import errors from './errors'
 import batch from './batch'
+import video from './video'
 
 const messages = {
   ...core,
@@ -20,6 +21,7 @@ const messages = {
   ...image,
   ...errors,
   ...batch,
+  ...video,
 } as const;
 
 export default messages;

@@ -21,6 +21,7 @@ import {
   type BasicSubMode,
   type ProSubMode,
   type ImageSubMode,
+  type VideoSubMode,
   type PromptSession,
 } from '@prompt-optimizer/core'
 import type { FunctionMode } from '../../composables/mode/useFunctionMode'
@@ -32,6 +33,8 @@ import { useProVariableSession } from './useProVariableSession'
 import { useImageText2ImageSession } from './useImageText2ImageSession'
 import { useImageImage2ImageSession } from './useImageImage2ImageSession'
 import { useImageMultiImageSession } from './useImageMultiImageSession'
+import { useVideoText2VideoSession } from './useVideoText2VideoSession'
+import { useVideoImage2VideoSession } from './useVideoImage2VideoSession'
 import {
   buildPromptSessionFromStores,
   buildPromptSessionRegistryFromStores,
@@ -108,6 +111,7 @@ export interface SubModeReaders {
   getBasicSubMode: () => BasicSubMode
   getProSubMode: () => ProSubMode
   getImageSubMode: () => ImageSubMode
+  getVideoSubMode: () => VideoSubMode
 }
 
 export const useSessionManager = defineStore('sessionManager', () => {
@@ -164,6 +168,9 @@ export const useSessionManager = defineStore('sessionManager', () => {
       case 'image':
         subMode = readers.getImageSubMode()
         break
+      case 'video':
+        subMode = readers.getVideoSubMode()
+        break
       default:
         subMode = 'system'
     }
@@ -179,7 +186,8 @@ export const useSessionManager = defineStore('sessionManager', () => {
     mode: FunctionMode,
     basicSubMode: string,
     proSubMode: string,
-    imageSubMode: string
+    imageSubMode: string,
+    videoSubMode: string
   ): SubModeKey => {
     let subMode: string
 
@@ -192,6 +200,9 @@ export const useSessionManager = defineStore('sessionManager', () => {
         break
       case 'image':
         subMode = imageSubMode
+        break
+      case 'video':
+        subMode = videoSubMode
         break
       default:
         subMode = 'system'
@@ -208,6 +219,8 @@ export const useSessionManager = defineStore('sessionManager', () => {
     'image-text2image': useImageText2ImageSession(),
     'image-image2image': useImageImage2ImageSession(),
     'image-multiimage': useImageMultiImageSession(),
+    'video-text2video': useVideoText2VideoSession(),
+    'video-image2video': useVideoImage2VideoSession(),
   })
 
   const getPromptSession = (key: SubModeKey = getActiveSubModeKey()) =>
@@ -323,6 +336,12 @@ export const useSessionManager = defineStore('sessionManager', () => {
         case 'image-multiimage':
           await useImageMultiImageSession().saveSession()
           break
+        case 'video-text2video':
+          await useVideoText2VideoSession().saveSession()
+          break
+        case 'video-image2video':
+          await useVideoImage2VideoSession().saveSession()
+          break
       }
     } catch (error) {
       console.error(`[SessionManager] Failed to save ${key} session:`, error)
@@ -380,6 +399,12 @@ export const useSessionManager = defineStore('sessionManager', () => {
           break
         case 'image-multiimage':
           await useImageMultiImageSession().restoreSession()
+          break
+        case 'video-text2video':
+          await useVideoText2VideoSession().restoreSession()
+          break
+        case 'video-image2video':
+          await useVideoImage2VideoSession().restoreSession()
           break
       }
     } catch (error) {

@@ -17,7 +17,7 @@ const isPlainObject = (value: unknown): value is Record<string, unknown> =>
 const isFunctionMode = (
   value: unknown,
 ): value is FavoritePrompt['functionMode'] =>
-  value === 'basic' || value === 'context' || value === 'image'
+  value === 'basic' || value === 'context' || value === 'image' || value === 'video'
 
 const isOptimizationMode = (
   value: unknown,
@@ -28,6 +28,11 @@ const isImageSubMode = (
   value: unknown,
 ): value is NonNullable<FavoritePrompt['imageSubMode']> =>
   value === 'text2image' || value === 'image2image' || value === 'multiimage'
+
+export const isVideoSubMode = (
+  value: unknown,
+): value is NonNullable<FavoritePrompt['videoSubMode']> =>
+  value === 'text2video' || value === 'image2video'
 
 const toTrimmedString = (value: unknown): string | undefined => {
   if (typeof value !== 'string') return undefined
@@ -189,6 +194,9 @@ export const normalizeFavoriteRecord = (
   let imageSubMode: FavoritePrompt['imageSubMode'] = isImageSubMode(raw.imageSubMode)
     ? raw.imageSubMode
     : undefined
+  let videoSubMode: FavoritePrompt['videoSubMode'] = isVideoSubMode(raw.videoSubMode)
+    ? raw.videoSubMode
+    : undefined
 
   if (!isFunctionMode(raw.functionMode)) {
     optimizationMode = 'system'
@@ -196,6 +204,7 @@ export const normalizeFavoriteRecord = (
 
   if (functionMode === 'basic' || functionMode === 'context') {
     imageSubMode = undefined
+    videoSubMode = undefined
     if (!optimizationMode) {
       optimizationMode = 'system'
     }
@@ -203,15 +212,26 @@ export const normalizeFavoriteRecord = (
     optimizationMode = undefined
   }
 
+  // video 模式：imageSubMode 无效；videoSubMode 缺失时按文生视频兜底（旧数据不涉及 video，不影响兼容）
+  if (functionMode === 'video') {
+    imageSubMode = undefined
+    if (!videoSubMode) {
+      videoSubMode = 'text2video'
+    }
+  } else {
+    videoSubMode = undefined
+  }
+
   const mapping = {
     functionMode,
     optimizationMode,
     imageSubMode,
+    videoSubMode,
   }
 
   if (!TypeMapper.validateMapping(mapping)) {
     throw new FavoriteValidationError(
-      `Invalid favorite mode mapping: functionMode=${String(functionMode)}, optimizationMode=${String(optimizationMode)}, imageSubMode=${String(imageSubMode)}`,
+      `Invalid favorite mode mapping: functionMode=${String(functionMode)}, optimizationMode=${String(optimizationMode)}, imageSubMode=${String(imageSubMode)}, videoSubMode=${String(videoSubMode)}`,
     )
   }
 
@@ -244,6 +264,10 @@ export const normalizeFavoriteRecord = (
     imageSubMode:
       functionMode === 'image'
         ? (imageSubMode as 'text2image' | 'image2image' | 'multiimage')
+        : undefined,
+    videoSubMode:
+      functionMode === 'video'
+        ? (videoSubMode as 'text2video' | 'image2video')
         : undefined,
     metadata: nextMetadata,
   }

@@ -16,6 +16,8 @@ import type { ProVariableSessionApi } from './useProVariableSession'
 import type { ImageText2ImageSessionApi } from './useImageText2ImageSession'
 import type { ImageImage2ImageSessionApi } from './useImageImage2ImageSession'
 import type { ImageMultiImageSessionApi } from './useImageMultiImageSession'
+import type { VideoText2VideoSessionApi } from './useVideoText2VideoSession'
+import type { VideoImage2VideoSessionApi } from './useVideoImage2VideoSession'
 
 export type PromptSessionProjectionStoreMap = {
   'basic-system': BasicSystemSessionApi
@@ -25,6 +27,8 @@ export type PromptSessionProjectionStoreMap = {
   'image-text2image': ImageText2ImageSessionApi
   'image-image2image': ImageImage2ImageSessionApi
   'image-multiimage': ImageMultiImageSessionApi
+  'video-text2video': VideoText2VideoSessionApi
+  'video-image2video': VideoImage2VideoSessionApi
 }
 
 const toTrimmedString = (value: unknown): string | undefined => {
@@ -242,6 +246,51 @@ const buildImageMultiSnapshot = (
   },
 })
 
+const buildVideoTextSnapshot = (
+  subModeKey: 'video-text2video',
+  session: VideoText2VideoSessionApi,
+): LegacyPromptSessionSnapshot => ({
+  subModeKey,
+  originalPrompt: session.originalPrompt,
+  optimizedPrompt: session.optimizedPrompt,
+  reasoning: session.reasoning,
+  chainId: session.chainId,
+  versionId: session.versionId,
+  temporaryVariables: session.temporaryVariables,
+  selectedTextModelKey: session.selectedTextModelKey,
+  selectedTemplateId: session.selectedTemplateId,
+  selectedIterateTemplateId: session.selectedIterateTemplateId,
+  lastActiveAt: session.lastActiveAt,
+  assetBinding: session.assetBinding,
+  origin: session.origin,
+})
+
+const buildVideoImageSnapshot = (
+  session: VideoImage2VideoSessionApi,
+): LegacyPromptSessionSnapshot => ({
+  subModeKey: 'video-image2video',
+  originalPrompt: session.originalPrompt,
+  optimizedPrompt: session.optimizedPrompt,
+  reasoning: session.reasoning,
+  chainId: session.chainId,
+  versionId: session.versionId,
+  temporaryVariables: session.temporaryVariables,
+  inputImageId: session.inputImageId,
+  inputImages: [
+    imageInputItemFromFields(
+      session.inputImageId,
+      session.inputImageB64,
+      session.inputImageMime,
+    ),
+  ].filter((image): image is LegacyImageResultItem => Boolean(image)),
+  selectedTextModelKey: session.selectedTextModelKey,
+  selectedTemplateId: session.selectedTemplateId,
+  selectedIterateTemplateId: session.selectedIterateTemplateId,
+  lastActiveAt: session.lastActiveAt,
+  assetBinding: session.assetBinding,
+  origin: session.origin,
+})
+
 export const buildLegacyPromptSessionSnapshot = (
   subModeKey: SubModeKey,
   stores: PromptSessionProjectionStoreMap,
@@ -259,6 +308,10 @@ export const buildLegacyPromptSessionSnapshot = (
       return buildImageImageSnapshot(stores[subModeKey])
     case 'image-multiimage':
       return buildImageMultiSnapshot(stores[subModeKey])
+    case 'video-text2video':
+      return buildVideoTextSnapshot(subModeKey, stores[subModeKey])
+    case 'video-image2video':
+      return buildVideoImageSnapshot(stores[subModeKey])
     case 'basic-system':
     default:
       return buildTextSnapshot('basic-system', stores['basic-system'])

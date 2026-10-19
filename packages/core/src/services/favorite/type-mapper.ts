@@ -6,11 +6,13 @@ import type { PromptRecordType } from '../history/types';
  */
 export interface FunctionModeMapping {
   /** 功能模式 (一级分类) */
-  functionMode: 'basic' | 'context' | 'image';
+  functionMode: 'basic' | 'context' | 'image' | 'video';
   /** 优化模式 (二级分类,仅用于 basic/context 模式) */
   optimizationMode?: 'system' | 'user';
   /** 图像子模式 (二级分类,仅用于 image 模式) */
   imageSubMode?: 'text2image' | 'image2image' | 'multiimage';
+  /** 视频子模式 (二级分类,仅用于 video 模式) */
+  videoSubMode?: 'text2video' | 'image2video';
 }
 
 /**
@@ -50,6 +52,21 @@ export class TypeMapper {
       return {
         functionMode: 'image',
         imageSubMode: 'multiimage'
+      };
+    }
+
+    // 视频模式映射
+    if (recordType === 'text2videoOptimize') {
+      return {
+        functionMode: 'video',
+        videoSubMode: 'text2video'
+      };
+    }
+
+    if (recordType === 'image2videoOptimize') {
+      return {
+        functionMode: 'video',
+        videoSubMode: 'image2video'
       };
     }
 
@@ -111,7 +128,7 @@ export class TypeMapper {
     }
 
     // 检查功能模式值合法性
-    if (!['basic', 'context', 'image'].includes(mapping.functionMode)) {
+    if (!['basic', 'context', 'image', 'video'].includes(mapping.functionMode)) {
       return false;
     }
 
@@ -123,8 +140,8 @@ export class TypeMapper {
       if (!['system', 'user'].includes(mapping.optimizationMode)) {
         return false;
       }
-      // 这两种模式不应有 imageSubMode
-      if (mapping.imageSubMode) {
+      // 这两种模式不应有 imageSubMode / videoSubMode
+      if (mapping.imageSubMode || mapping.videoSubMode) {
         return false;
       }
     }
@@ -137,8 +154,22 @@ export class TypeMapper {
       if (!['text2image', 'image2image', 'multiimage'].includes(mapping.imageSubMode)) {
         return false;
       }
-      // 图像模式不应有 optimizationMode
-      if (mapping.optimizationMode) {
+      // 图像模式不应有 optimizationMode / videoSubMode
+      if (mapping.optimizationMode || mapping.videoSubMode) {
+        return false;
+      }
+    }
+
+    // 视频模式必须有视频子模式
+    if (mapping.functionMode === 'video') {
+      if (!mapping.videoSubMode) {
+        return false;
+      }
+      if (!['text2video', 'image2video'].includes(mapping.videoSubMode)) {
+        return false;
+      }
+      // 视频模式不应有 optimizationMode / imageSubMode
+      if (mapping.optimizationMode || mapping.imageSubMode) {
         return false;
       }
     }
@@ -153,7 +184,7 @@ export class TypeMapper {
    * @returns 可能的历史记录类型
    */
   static inferRecordTypes(mapping: FunctionModeMapping): PromptRecordType[] {
-    const { functionMode, optimizationMode, imageSubMode } = mapping;
+    const { functionMode, optimizationMode, imageSubMode, videoSubMode } = mapping;
 
     // 基础模式
     if (functionMode === 'basic') {
@@ -185,6 +216,16 @@ export class TypeMapper {
       }
       if (imageSubMode === 'multiimage') {
         return ['multiimageOptimize'];
+      }
+    }
+
+    // 视频模式
+    if (functionMode === 'video') {
+      if (videoSubMode === 'text2video') {
+        return ['text2videoOptimize'];
+      }
+      if (videoSubMode === 'image2video') {
+        return ['image2videoOptimize'];
       }
     }
 

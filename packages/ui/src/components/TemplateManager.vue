@@ -685,7 +685,9 @@ const props = defineProps<{
     | 'imageIterate'
     | 'conversationMessageOptimize'
     | 'contextUserOptimize'
-   | 'contextIterate',
+   | 'contextIterate'
+    | 'text2videoOptimize'
+    | 'image2videoOptimize',
   show: boolean
   basicSubMode?: 'system' | 'user'
   proSubMode?: 'multi' | 'variable'

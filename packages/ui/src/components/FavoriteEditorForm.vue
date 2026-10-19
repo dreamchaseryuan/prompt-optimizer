@@ -446,16 +446,17 @@ interface Props {
   mode?: 'create' | 'save' | 'edit'
   content?: string
   originalContent?: string
-  currentFunctionMode?: 'basic' | 'context' | 'pro' | 'image'
+  currentFunctionMode?: 'basic' | 'context' | 'pro' | 'image' | 'video'
   currentOptimizationMode?: 'system' | 'user'
   prefill?: {
     title?: string
     description?: string
     category?: string
     tags?: string[]
-    functionMode?: 'basic' | 'context' | 'image'
+    functionMode?: 'basic' | 'context' | 'image' | 'video'
     optimizationMode?: 'system' | 'user'
     imageSubMode?: 'text2image' | 'image2image' | 'multiimage'
+    videoSubMode?: 'text2video' | 'image2video'
     metadata?: Record<string, unknown>
     reproducibilityDraft?: FavoriteReproducibilityDraft
     updateIntent?: 'content' | 'examples'
@@ -522,9 +523,10 @@ const formData = reactive({
   content: '',
   category: '',
   tags: [] as string[],
-  functionMode: 'basic' as 'basic' | 'context' | 'image',
+  functionMode: 'basic' as 'basic' | 'context' | 'image' | 'video',
   optimizationMode: 'system' as 'system' | 'user' | undefined,
   imageSubMode: undefined as 'text2image' | 'image2image' | 'multiimage' | undefined,
+  videoSubMode: undefined as 'text2video' | 'image2video' | undefined,
 })
 
 const mediaDraft = reactive({
@@ -1085,14 +1087,20 @@ const imageSubModeOptions = computed(() => [
   { label: t('imageMode.multiimage'), value: 'multiimage' },
 ])
 
-const handleFunctionModeChange = (mode: 'basic' | 'context' | 'image') => {
+const handleFunctionModeChange = (mode: 'basic' | 'context' | 'image' | 'video') => {
   formData.functionMode = mode
 
   if (mode === 'basic' || mode === 'context') {
     formData.optimizationMode = formData.optimizationMode || 'system'
     formData.imageSubMode = undefined
+    formData.videoSubMode = undefined
+  } else if (mode === 'video') {
+    formData.videoSubMode = formData.videoSubMode || 'text2video'
+    formData.imageSubMode = undefined
+    formData.optimizationMode = undefined
   } else {
     formData.imageSubMode = formData.imageSubMode || 'text2image'
+    formData.videoSubMode = undefined
     formData.optimizationMode = undefined
   }
 }
@@ -1232,6 +1240,7 @@ const handleSave = async () => {
       functionMode: formData.functionMode,
       optimizationMode: formData.optimizationMode,
       imageSubMode: formData.imageSubMode,
+      videoSubMode: formData.videoSubMode,
     }
 
     let existingMetadata =

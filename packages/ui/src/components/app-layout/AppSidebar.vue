@@ -255,6 +255,13 @@ const workspaceSections = computed<NavSection[]>(() => [
       { path: '/image/multiimage', labelKey: 'imageMode.multiimage', icon: '🗂️' },
     ],
   },
+  {
+    titleKey: 'nav.videoMode',
+    items: [
+      { path: '/video/text2video', labelKey: 'videoMode.text2video', icon: '🎬' },
+      { path: '/video/image2video', labelKey: 'videoMode.image2video', icon: '🎞️' },
+    ],
+  },
 ])
 
 const activePath = computed(() => routerInstance.currentRoute.value.path)

@@ -62,17 +62,20 @@ export interface ConversationMessage {
 export type OptimizationMode = "system" | "user";
 
 /**
- * 功能模式枚举（Basic / Pro / Image）
+ * 功能模式枚举（Basic / Pro / Image / Video）
+ * NOTE: ui 侧 composables/mode/useFunctionMode.ts 与 stores/settings/useGlobalSettings.ts
+ * 存在同型本地定义（双源），扩展时需同步维护（见设计文档 R2）。
  */
-export type FunctionMode = "basic" | "pro" | "image";
+export type FunctionMode = "basic" | "pro" | "image" | "video";
 
 /**
- * 子模式类型定义（三种功能模式独立）
+ * 子模式类型定义（四种功能模式独立）
  * 用于持久化各功能模式下的子模式选择
  */
 export type BasicSubMode = "system" | "user"; // 基础模式
 export type ProSubMode = "multi" | "variable"; // Pro 模式（多消息/变量）
 export type ImageSubMode = "text2image" | "image2image" | "multiimage"; // 图像模式
+export type VideoSubMode = "text2video" | "image2video"; // 视频模式
 
 /**
  * 优化请求接口

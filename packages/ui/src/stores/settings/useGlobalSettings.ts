@@ -17,10 +17,12 @@ import { ref, watch, type Ref } from 'vue'
 import { UI_SETTINGS_KEYS } from '@prompt-optimizer/core'
 import { getPiniaServices } from '../../plugins/pinia'
 
-export type FunctionMode = 'basic' | 'pro' | 'image'
+// NOTE: 与 core 的 FunctionMode 为双源定义（见设计文档 R2），扩展需同步
+export type FunctionMode = 'basic' | 'pro' | 'image' | 'video'
 export type BasicSubMode = 'system' | 'user'
 export type ProSubMode = 'multi' | 'variable'
 export type ImageSubMode = 'text2image' | 'image2image' | 'multiimage'
+export type VideoSubMode = 'text2video' | 'image2video'
 
 export interface GlobalSettingsState {
   selectedThemeId: string
@@ -31,6 +33,7 @@ export interface GlobalSettingsState {
   basicSubMode: BasicSubMode
   proSubMode: ProSubMode
   imageSubMode: ImageSubMode
+  videoSubMode: VideoSubMode
 
   lastActiveAt: number
 }
@@ -45,11 +48,12 @@ const createDefaultState = (): GlobalSettingsState => ({
   basicSubMode: 'system',
   proSubMode: 'variable',
   imageSubMode: 'text2image',
+  videoSubMode: 'text2video',
   lastActiveAt: Date.now(),
 })
 
 const isFunctionMode = (value: unknown): value is FunctionMode =>
-  value === 'basic' || value === 'pro' || value === 'image'
+  value === 'basic' || value === 'pro' || value === 'image' || value === 'video'
 
 const isBasicSubMode = (value: unknown): value is BasicSubMode =>
   value === 'system' || value === 'user'
@@ -66,6 +70,9 @@ const normalizeLegacyProSubMode = (value: unknown): ProSubMode | null => {
 
 const isImageSubMode = (value: unknown): value is ImageSubMode =>
   value === 'text2image' || value === 'image2image' || value === 'multiimage'
+
+const isVideoSubMode = (value: unknown): value is VideoSubMode =>
+  value === 'text2video' || value === 'image2video'
 
 export const useGlobalSettings = defineStore('globalSettings', () => {
   /**
@@ -133,6 +140,12 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
   const updateImageSubMode = (mode: ImageSubMode) => {
     if (state.value.imageSubMode === mode) return
     state.value.imageSubMode = mode
+    touch()
+  }
+
+  const updateVideoSubMode = (mode: VideoSubMode) => {
+    if (state.value.videoSubMode === mode) return
+    state.value.videoSubMode = mode
     touch()
   }
 
@@ -254,7 +267,6 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
       console.warn('[GlobalSettings] Failed to migrate from UI_SETTINGS_KEYS (ignored):', error)
     }
   }
-
   /**
    * 从持久化存储恢复
    * 使用 PreferenceService
@@ -299,6 +311,9 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
             imageSubMode: isImageSubMode(parsed.imageSubMode)
               ? parsed.imageSubMode
               : defaults.imageSubMode,
+            videoSubMode: isVideoSubMode(parsed.videoSubMode)
+              ? parsed.videoSubMode
+              : defaults.videoSubMode,
             lastActiveAt: Date.now(),
           }
         } else {
@@ -316,6 +331,9 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
             imageSubMode: isImageSubMode(state.value.imageSubMode)
               ? state.value.imageSubMode
               : defaults.imageSubMode,
+            videoSubMode: isVideoSubMode(state.value.videoSubMode)
+              ? state.value.videoSubMode
+              : defaults.videoSubMode,
             lastActiveAt: Date.now(),
           }
         }
@@ -378,6 +396,7 @@ export const useGlobalSettings = defineStore('globalSettings', () => {
     updateBasicSubMode,
     updateProSubMode,
     updateImageSubMode,
+    updateVideoSubMode,
 
     // 工具方法
     reset,

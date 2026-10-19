@@ -60,6 +60,17 @@ const routes: RouteRecordRaw[] = [
     name: 'image-multiimage',
     component: () => import('../components/image-mode/ImageMultiImageWorkspace.vue')
   },
+  // ✨ Video 模式：2 个独立路由（批次 1：路由骨架 + 会话 store，工作区组件由批次 2 实现）
+  {
+    path: '/video/text2video',
+    name: 'video-text2video',
+    component: () => import('../components/video-mode/VideoText2VideoWorkspace.vue')
+  },
+  {
+    path: '/video/image2video',
+    name: 'video-image2video',
+    component: () => import('../components/video-mode/VideoImage2VideoWorkspace.vue')
+  },
   {
     path: '/favorites',
     name: 'favorites',

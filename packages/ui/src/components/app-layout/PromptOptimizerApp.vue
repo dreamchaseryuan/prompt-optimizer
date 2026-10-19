@@ -293,6 +293,7 @@ import {
     useBasicSubMode,
     useProSubMode,
     useImageSubMode,
+    useVideoSubMode,
     // 上下文相关
     useContextManagement,
     useContextEditorUIState,
@@ -329,6 +330,8 @@ import { useSessionRestoreCoordinator } from '../../composables/session/useSessi
 import { useImageText2ImageSession } from '../../stores/session/useImageText2ImageSession'
 import { useImageImage2ImageSession } from '../../stores/session/useImageImage2ImageSession'
 import { useImageMultiImageSession } from '../../stores/session/useImageMultiImageSession'
+import { useVideoText2VideoSession } from '../../stores/session/useVideoText2VideoSession'
+import { useVideoImage2VideoSession } from '../../stores/session/useVideoImage2VideoSession'
 import { useGlobalSettings } from '../../stores/settings/useGlobalSettings'
 
 import type { TemplateManagerTemplateType } from '../../composables/prompt/useTemplateManager'
@@ -343,7 +346,7 @@ import {
 
 // Types
 import type { ModelSelectOption, TestAreaPanelInstance } from '../../types'
-import { type IPromptService, type PromptAssetBinding, type PromptSessionOrigin, type PromptRecordChain, type PatchOperation, type Template, type TemplateType, type FunctionMode, type BasicSubMode, type ProSubMode, type ImageSubMode, type OptimizationMode, type ConversationMessage, type ToolDefinition, type ContextEditorState, type ContextMode, type FavoritePrompt } from "@prompt-optimizer/core";
+import { type IPromptService, type PromptAssetBinding, type PromptSessionOrigin, type PromptRecordChain, type PatchOperation, type Template, type TemplateType, type FunctionMode, type BasicSubMode, type ProSubMode, type ImageSubMode, type VideoSubMode, type OptimizationMode, type ConversationMessage, type ToolDefinition, type ContextEditorState, type ContextMode, type FavoritePrompt } from "@prompt-optimizer/core";
 
 // 1. 基础 composables
 const hljsInstance = hljs;
@@ -461,6 +464,8 @@ const proSubModeApi = useProSubMode(services);
  
 const imageSubModeApi = useImageSubMode(services);
 
+const videoSubModeApi = useVideoSubMode(services);
+
 // 3.5. 🔧 Step A: 建立路由驱动的单一真源（优先于 state，避免双真源）
 //
 // ⚠️ 注意：PromptOptimizerApp 不在 RouterView 上下文中，无法使用 useRoute/useRouter
@@ -469,8 +474,9 @@ const imageSubModeApi = useImageSubMode(services);
 //
 const getWorkspacePathFromGlobalSettings = () => {
   const globalSettings = useGlobalSettings()
-  const { functionMode, basicSubMode, proSubMode, imageSubMode } = globalSettings.state
+  const { functionMode, basicSubMode, proSubMode, imageSubMode, videoSubMode } = globalSettings.state
   if (functionMode === 'image') return normalizeWorkspacePath(`/image/${imageSubMode}`)
+  if (functionMode === 'video') return normalizeWorkspacePath(`/video/${videoSubMode}`)
   if (functionMode === 'pro') return normalizeWorkspacePath(`/pro/${proSubMode}`)
   return normalizeWorkspacePath(`/basic/${basicSubMode}`)
 }
@@ -499,6 +505,8 @@ const currentPageTitle = computed(() => {
         '/image/text2image': 'imageMode.text2image',
         '/image/image2image': 'imageMode.image2image',
         '/image/multiimage': 'imageMode.multiimage',
+        '/video/text2video': 'videoMode.text2video',
+        '/video/image2video': 'videoMode.image2video',
     }
     const key = titleByKey[path]
     return key ? t(key) : t('common.appName')
@@ -545,6 +553,8 @@ const parseRouteInfo = (path = activeWorkspaceContextPath.value) => {
       (functionMode === 'pro' ? subMode : 'variable') as 'multi' | 'variable',
     imageSubMode:
       (functionMode === 'image' ? subMode : 'text2image') as 'text2image' | 'image2image' | 'multiimage',
+    videoSubMode:
+      (functionMode === 'video' ? subMode : 'text2video') as 'text2video' | 'image2video',
     isValid: true,
     canonicalPath: workspaceRoute.path,
   }
@@ -555,6 +565,7 @@ const routeFunctionMode = computed<FunctionMode>(() => parseRouteInfo().function
 const routeBasicSubMode = computed<BasicSubMode>(() => parseRouteInfo().basicSubMode)
 const routeProSubMode = computed<ProSubMode>(() => parseRouteInfo().proSubMode)
 const routeImageSubMode = computed<ImageSubMode>(() => parseRouteInfo().imageSubMode)
+const routeVideoSubMode = computed<VideoSubMode>(() => parseRouteInfo().videoSubMode)
 
 // ========== GlobalSettings 初始化 Gate（避免 restore 前渲染/纠错） ==========
 // 目的：确保 PreferenceService 注入后先 restoreGlobalSettings，再允许 UI 渲染/执行部分 watch
@@ -602,6 +613,9 @@ watch(
     if (routeInfo.functionMode === 'image' && routeInfo.imageSubMode !== globalSettings.state.imageSubMode) {
       globalSettings.updateImageSubMode(routeInfo.imageSubMode)
     }
+    if (routeInfo.functionMode === 'video' && routeInfo.videoSubMode !== globalSettings.state.videoSubMode) {
+      globalSettings.updateVideoSubMode(routeInfo.videoSubMode)
+    }
   }
 )
 
@@ -614,6 +628,7 @@ sessionManager.injectSubModeReaders({
   getBasicSubMode: () => routeBasicSubMode.value,
   getProSubMode: () => routeProSubMode.value,
   getImageSubMode: () => routeImageSubMode.value,
+  getVideoSubMode: () => routeVideoSubMode.value,
 });
 
 // 5. Initialize i18n with storage when services are ready
@@ -878,6 +893,8 @@ const proVariableSession = useProVariableSession();
 const imageText2ImageSession = useImageText2ImageSession();
 const imageImage2ImageSession = useImageImage2ImageSession();
 const imageMultiImageSession = useImageMultiImageSession();
+const videoText2VideoSession = useVideoText2VideoSession();
+const videoImage2VideoSession = useVideoImage2VideoSession();
 
 // 🔧 Step E: 使用 route-computed 代替旧 state
 const activeBasicSession = computed(() =>
@@ -1712,6 +1729,8 @@ const {
     imageText2ImageSession,
     imageImage2ImageSession,
     imageMultiImageSession,
+    videoText2VideoSession,
+    videoImage2VideoSession,
     optimizerCurrentVersions,
     getFavoriteImageStorageService:
       () => services.value?.favoriteImageStorageService || services.value?.imageStorageService || null,
@@ -1719,6 +1738,7 @@ const {
     getCurrentFunctionMode: () => routeFunctionMode.value,
     getCurrentOptimizationMode: () => selectedOptimizationMode.value,
     getCurrentImageSubMode: () => routeImageSubMode.value,
+    getCurrentVideoSubMode: () => routeVideoSubMode.value,
 });
 
 const resolveFavoritesReturnPath = () =>
@@ -2271,10 +2291,10 @@ async function navigateToSubModeKey(
   toKey: SubModeKey,
   opts?: { replace?: boolean }
 ) {
-  // SubModeKey 格式：'basic-system' | 'pro-variable' | 'image-text2image'
+  // SubModeKey 格式：'basic-system' | 'pro-variable' | 'image-text2image' | 'video-text2video' 等
   const [mode, subMode] = toKey.split('-') as [
     FunctionMode,
-    BasicSubMode | ProSubMode | ImageSubMode
+    BasicSubMode | ProSubMode | ImageSubMode | VideoSubMode
   ]
 
   const path = `/${mode}/${subMode}`
