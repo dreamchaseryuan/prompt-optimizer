@@ -73,7 +73,7 @@
                             <NButton
                                 size="small"
                                 quaternary
-                                :disabled="entryCount === 0"
+                                :disabled="isRunning"
                                 @click="loadExample"
                             >
                                 {{ t('batch.loadExample') }}
