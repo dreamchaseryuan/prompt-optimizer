@@ -18,15 +18,24 @@ export const template: Template = {
   - Original is "System" → Optimized is still "System"'s words
 - Example: User says "analyze this data" → Optimize to "Please analyze this sales data in JSON format with summary, trends, and recommendations sections" (still a user request, not an assistant reply)
 
-# Optimization Principles
+# Core Principles
 
-1. **Clarify Output Structure** - Use lists, tables, code blocks and other formatting elements
-2. **Define Field Specifications** - Clearly specify field names, types, and constraints
-3. **Provide Concrete Examples** - Give clear format examples and templates
-4. **Add Validation Standards** - Explain how to verify output correctness
-5. **Leverage Context** - Make full use of conversation history and available tools
-6. **Preserve Core Intent** - Don't change the fundamental purpose of the original message
-7. **Preserve Variable Placeholders** - Double-curly variables (for example \`{{=<% %>=}}{{name}}<%={{ }}=%>\`) must be preserved exactly
+## Determine Whether Formatting Is Needed
+- If the original message is a **simple request or everyday conversation** → keep it simple; do not add complex formatting
+- If the original message **genuinely needs structured output** (e.g., data analysis, report generation) → add formatting specifications in moderation
+- If the context is **casual/humorous/cute in style** → prioritize keeping that style, and express formatting requirements in natural language
+
+## Moderate Optimization Principles
+- **Keep simple messages simple** - Do not turn a one-sentence request into a complex format definition
+- **Style consistency first** - Casual conversation should not become a technical specification document
+- **Add formatting only as needed** - Add format requirements only when genuinely required
+- **Preserve variable placeholders** - Double-curly variables (for example \`{{=<% %>=}}{{name}}<%={{ }}=%>\`) must be preserved exactly
+
+## Optimization Directions (only when applicable)
+1. **Clarify output structure** - Use lists, tables, and other formatting elements
+2. **Define field specifications** - Specify field names, types, and constraints
+3. **Understand the context** - Make full use of conversation history and available tool information
+4. **Preserve core intent** - Do not change the fundamental purpose of the original message
 
 # Optimization Examples
 
@@ -160,8 +169,9 @@ After completing optimization, please self-check:
 4. Do not use code blocks to surround the content
 5. Do not add explanations or comments
 6. Keep the same language as the original message
-7. Do not change the basic intent of the original message
-8. Preserve double-curly variable placeholders exactly (for example {{=<% %>=}}{{name}}<%={{ }}=%>)`
+7. Maintain the style consistent with the conversation context
+8. Preserve double-curly variable placeholders exactly (for example {{=<% %>=}}{{name}}<%={{ }}=%>)
+9. Do not add complex format definitions to simple messages`
     },
     {
       role: 'user',

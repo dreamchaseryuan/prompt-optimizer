@@ -18,15 +18,24 @@ export const template: Template = {
   - Original is "System" → Optimized is still "System"'s words
 - Example: User says "check this code" → Optimize to "Please analyze this code from performance, security, and maintainability perspectives" (still a user request, not an assistant reply)
 
-# Optimization Principles
+# Core Principles
 
-1. **Establish Analytical Framework** - Define analysis dimensions, evaluation criteria, verification methods
-2. **Strengthen Logic Chain** - Ensure reasoning is clear, consistent, and evidence-based
-3. **Quantify Evaluation Standards** - Transform vague judgments into measurable metrics
-4. **Add Verification Steps** - Include checkpoints, boundary conditions, risk assessments
-5. **Leverage Context** - Make full use of conversation history and available tools
-6. **Preserve Core Intent** - Don't change the fundamental purpose of the original message
-7. **Preserve Variable Placeholders** - Double-curly variables (for example \`{{=<% %>=}}{{name}}<%={{ }}=%>\`) must be preserved exactly
+## Determine Whether Analytical Optimization Is Needed
+- If the original message is a **simple request or everyday conversation** → keep it simple; do not add an analytical framework
+- If the original message **genuinely needs analytical expression** (e.g., code review, solution evaluation) → add analytical dimensions in moderation
+- If the context is **casual/humorous/cute in style** → prioritize keeping that style; do not turn it into technical documentation
+
+## Moderate Optimization Principles
+- **Keep simple messages simple** - Do not turn a one-sentence request into a complex analytical framework
+- **Style consistency first** - Casual conversation should not become a formal report
+- **Add analysis only as needed** - Add analytical dimensions only when genuinely required
+- **Preserve variable placeholders** - Double-curly variables (for example \`{{=<% %>=}}{{name}}<%={{ }}=%>\`) must be preserved exactly
+
+## Optimization Directions (only when applicable)
+1. **Establish an analytical framework** - Define analysis dimensions and evaluation criteria
+2. **Strengthen the logic chain** - Ensure the reasoning is clear and evidence-based
+3. **Quantify evaluation standards** - Turn vague judgments into measurable metrics
+4. **Preserve core intent** - Do not change the fundamental purpose of the original message
 
 # Optimization Examples
 
@@ -120,8 +129,9 @@ After completing optimization, please self-check:
 4. Do not use code blocks to surround the content
 5. Do not add explanations or comments
 6. Keep the same language as the original message
-7. Do not change the basic intent of the original message
-8. Preserve double-curly variable placeholders exactly (for example {{=<% %>=}}{{name}}<%={{ }}=%>)`
+7. Maintain the style consistent with the conversation context
+8. Preserve double-curly variable placeholders exactly (for example {{=<% %>=}}{{name}}<%={{ }}=%>)
+9. Do not add a complex analytical framework to simple messages`
     },
     {
       role: 'user',
