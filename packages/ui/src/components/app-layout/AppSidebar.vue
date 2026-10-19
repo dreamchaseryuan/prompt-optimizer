@@ -369,8 +369,8 @@ const handleOpenDocs = () => {
 .sidebar-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 16px 12px;
+  gap: 7px;
+  padding: 14px 10px 12px 12px;
   flex-shrink: 0;
 }
 
@@ -404,9 +404,9 @@ const handleOpenDocs = () => {
 }
 
 .sidebar-brand-name {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   color: var(--n-text-color-1);
   white-space: nowrap;
   overflow: hidden;
