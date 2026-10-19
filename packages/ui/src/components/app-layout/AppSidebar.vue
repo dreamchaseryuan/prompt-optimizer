@@ -8,7 +8,7 @@
       - 工具入口（批量优化 / 收藏夹 / 弹窗型管理入口）
       - 底部辅助（主题 / 语言 / GitHub / 关于 / 更新）
   -->
-  <aside class="app-sidebar" data-testid="app-sidebar">
+  <aside class="app-sidebar" :class="{ 'app-sidebar-collapsed': collapsed }" data-testid="app-sidebar">
     <!-- 品牌 -->
     <div class="sidebar-brand">
       <AppPreviewImage
@@ -22,13 +22,29 @@
         :preview-disabled="true"
         :fallback-src="fallbackLogoSrc"
       />
-      <span class="sidebar-brand-name">{{ t('common.appName') }}</span>
+      <span v-if="!collapsed" class="sidebar-brand-name">{{ t('common.appName') }}</span>
+      <NButton
+        quaternary
+        size="tiny"
+        class="sidebar-collapse-button"
+        data-testid="sidebar-collapse"
+        :title="collapsed ? t('nav.expand') : t('nav.collapse')"
+        :aria-label="collapsed ? t('nav.expand') : t('nav.collapse')"
+        :aria-expanded="!collapsed"
+        @click="toggleCollapsed"
+      >
+        <template #icon>
+          <svg class="collapse-icon" :class="{ 'collapse-icon-flipped': collapsed }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </template>
+      </NButton>
     </div>
 
     <!-- 工作区分组 -->
     <nav class="sidebar-nav" data-testid="sidebar-workspace-nav">
       <div v-for="section in workspaceSections" :key="section.titleKey" class="nav-section">
-        <div class="nav-section-title">{{ t(section.titleKey) }}</div>
+        <div v-if="!collapsed" class="nav-section-title">{{ t(section.titleKey) }}</div>
         <button
           v-for="item in section.items"
           :key="item.path"
@@ -36,18 +52,19 @@
           class="nav-item"
           :class="{ 'nav-item-active': isActivePath(item.path) }"
           :data-testid="`sidebar-nav-${item.path.replace(/\W+/g, '-')}`"
+          :title="collapsed ? t(item.labelKey) : undefined"
           :aria-current="isActivePath(item.path) ? 'page' : undefined"
           @click="navigate(item.path)"
         >
           <span class="nav-item-icon" aria-hidden="true">{{ item.icon }}</span>
-          <span class="nav-item-label">{{ t(item.labelKey) }}</span>
+          <span v-if="!collapsed" class="nav-item-label">{{ t(item.labelKey) }}</span>
         </button>
       </div>
     </nav>
 
     <!-- 工具入口 -->
     <div class="nav-section nav-section-tools" data-testid="sidebar-tools">
-      <div class="nav-section-title">{{ t('nav.tools') }}</div>
+      <div v-if="!collapsed" class="nav-section-title">{{ t('nav.tools') }}</div>
       <button
         v-for="tool in toolItems"
         :key="tool.key"
@@ -55,19 +72,20 @@
         class="nav-item"
         :class="{ 'nav-item-active': tool.active, 'nav-item-warning': tool.warn }"
         :data-testid="`sidebar-tool-${tool.key}`"
+        :title="collapsed ? t(tool.labelKey) : undefined"
         :aria-current="tool.active ? 'page' : undefined"
         @click="handleToolClick(tool)"
       >
         <span class="nav-item-icon" aria-hidden="true">{{ tool.icon }}</span>
-        <span class="nav-item-label">{{ t(tool.labelKey) }}</span>
-        <span v-if="tool.warn" class="nav-item-dot" :title="t('dataManager.backupReminder.tooltip')" />
+        <span v-if="!collapsed" class="nav-item-label">{{ t(tool.labelKey) }}</span>
+        <span v-if="!collapsed && tool.warn" class="nav-item-dot" :title="t('dataManager.backupReminder.tooltip')" />
       </button>
     </div>
 
     <!-- 底部辅助 -->
     <div class="sidebar-footer">
       <ThemeToggleUI />
-      <div class="sidebar-footer-icons">
+      <div v-if="!collapsed" class="sidebar-footer-icons">
         <NButton
           quaternary
           circle
@@ -141,6 +159,28 @@ import AppPreviewImage from '../media/AppPreviewImage.vue'
 import logoImage from '../../assets/logo.png'
 
 const { t } = useI18n()
+
+// ========================
+// 折叠状态（localStorage 持久化）
+// ========================
+const SIDEBAR_COLLAPSED_KEY = 'ui.sidebarCollapsed'
+
+const collapsed = ref((() => {
+  try {
+    return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1'
+  } catch {
+    return false
+  }
+})())
+
+const toggleCollapsed = () => {
+  collapsed.value = !collapsed.value
+  try {
+    localStorage.setItem(SIDEBAR_COLLAPSED_KEY, collapsed.value ? '1' : '0')
+  } catch {
+    /* 存储不可用时仅内存态生效 */
+  }
+}
 
 interface Props {
   appVersion: string
@@ -297,6 +337,33 @@ const handleOpenDocs = () => {
   background: var(--n-card-color);
   border-right: 1px solid var(--n-border-color);
   overflow: hidden;
+  transition: width 0.16s ease;
+}
+
+.app-sidebar-collapsed {
+  width: 60px;
+}
+
+.app-sidebar-collapsed .sidebar-brand {
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 8px 10px;
+}
+
+.app-sidebar-collapsed .nav-item {
+  justify-content: center;
+  padding: 0;
+}
+
+.app-sidebar-collapsed .nav-section,
+.app-sidebar-collapsed .nav-section-tools {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.app-sidebar-collapsed .sidebar-footer {
+  flex-direction: column;
+  gap: 8px;
 }
 
 .sidebar-brand {
@@ -305,6 +372,30 @@ const handleOpenDocs = () => {
   gap: 10px;
   padding: 14px 16px 12px;
   flex-shrink: 0;
+}
+
+.sidebar-collapse-button {
+  margin-left: auto;
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+.app-sidebar-collapsed .sidebar-collapse-button {
+  margin-left: 0;
+}
+
+.sidebar-collapse-button:hover {
+  opacity: 1;
+}
+
+.collapse-icon {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.16s ease;
+}
+
+.collapse-icon-flipped {
+  transform: rotate(180deg);
 }
 
 .sidebar-logo {

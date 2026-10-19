@@ -150,6 +150,8 @@ const messages = {
     "variableManager": "Variable Manager",
     "more": "More Tools",
     "tools": "Tools",
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar",
     "about": "About",
     "basicMode": "Basic",
     "contextMode": "Context",

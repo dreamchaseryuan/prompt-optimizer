@@ -148,4 +148,28 @@ describe('AppSidebar', () => {
     await wrapper.find('[data-testid="sidebar-github"]').trigger('click')
     expect(wrapper.emitted('open-github')).toHaveLength(1)
   })
+
+  it('collapses to icon rail and persists the choice', async () => {
+    localStorage.removeItem('ui.sidebarCollapsed')
+    const wrapper = mountSidebar()
+
+    const aside = wrapper.find('[data-testid="app-sidebar"]')
+    expect(aside.classes()).not.toContain('app-sidebar-collapsed')
+    expect(wrapper.find('.sidebar-brand-name').exists()).toBe(true)
+    expect(wrapper.find('.nav-section-title').exists()).toBe(true)
+
+    await wrapper.find('[data-testid="sidebar-collapse"]').trigger('click')
+
+    expect(aside.classes()).toContain('app-sidebar-collapsed')
+    expect(wrapper.find('.sidebar-brand-name').exists()).toBe(false)
+    expect(wrapper.find('.nav-section-title').exists()).toBe(false)
+    expect(aside.find('[data-testid="sidebar-tool-batch"]').attributes('title')).toBe('Batch Optimize')
+    expect(localStorage.getItem('ui.sidebarCollapsed')).toBe('1')
+
+    await wrapper.find('[data-testid="sidebar-collapse"]').trigger('click')
+    expect(aside.classes()).not.toContain('app-sidebar-collapsed')
+    expect(localStorage.getItem('ui.sidebarCollapsed')).toBe('0')
+
+    localStorage.removeItem('ui.sidebarCollapsed')
+  })
 })

@@ -150,6 +150,8 @@ const messages = {
     "variableManager": "变量管理",
     "more": "更多工具",
     "tools": "工具",
+    "collapse": "收起侧边栏",
+    "expand": "展开侧边栏",
     "about": "关于",
     "basicMode": "基础",
     "contextMode": "上下文",
