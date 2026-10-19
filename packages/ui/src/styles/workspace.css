@@ -1,0 +1,25 @@
+/* 工作区统一视觉层（应用壳 v2）
+   高特异性选择器（.app-shell .app-content 前缀）以覆盖工作区组件内的 scoped 样式 */
+
+/* 分栏拖拽条：hover/拖拽时使用主题强调色 */
+.app-shell .app-content .split-divider:hover,
+.app-shell .app-content .split-divider:active {
+  background: color-mix(in srgb, var(--n-primary-color) 55%, transparent);
+}
+
+/* 工作区卡片：统一轻边框替代重阴影（工具风） */
+.app-shell .app-content .n-card {
+  box-shadow: none;
+  border: 1px solid var(--n-border-color);
+}
+
+/* 卡片标题行更紧凑 */
+.app-shell .app-content .n-card .n-card-header {
+  padding-top: 12px;
+  padding-bottom: 8px;
+}
+
+/* 工作区顶栏内按钮组与内容区留出呼吸 */
+.app-shell .app-content > * > .workspace-page-tools {
+  row-gap: 8px;
+}
