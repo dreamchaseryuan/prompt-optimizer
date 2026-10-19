@@ -9,6 +9,7 @@ const messages = {
     "cleared": "History cleared",
     "chainDeleted": "History record deleted",
     "useThisVersion": "Use This Version",
+    "compare": "Compare",
     "noHistory": "No history records"
   },
   "test": {

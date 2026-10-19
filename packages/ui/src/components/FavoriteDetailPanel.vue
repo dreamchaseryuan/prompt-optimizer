@@ -433,7 +433,7 @@
         v-model:show="showVersionPreview"
         :version="previewVersion"
       />
-      <FavoritePromptAssetVersionCompareModal
+      <VersionCompareModal
         v-model:show="showVersionCompare"
         :prompt-asset="promptAsset"
         :initial-left-version-id="compareVersionId"
@@ -482,7 +482,7 @@ import FavoritePreviewExtensionHost from './FavoritePreviewExtensionHost.vue'
 import FavoriteReproducibilityDisplay from './FavoriteReproducibilityDisplay.vue'
 import FavoritePromptAssetVersionList from './favorites/FavoritePromptAssetVersionList.vue'
 import FavoritePromptAssetVersionPreviewModal from './favorites/FavoritePromptAssetVersionPreviewModal.vue'
-import FavoritePromptAssetVersionCompareModal from './favorites/FavoritePromptAssetVersionCompareModal.vue'
+import VersionCompareModal from './VersionCompareModal.vue'
 import FavoriteSurfaceSection from './favorites/FavoriteSurfaceSection.vue'
 import AppPreviewImage from './media/AppPreviewImage.vue'
 import AppPreviewImageGroup from './media/AppPreviewImageGroup.vue'

@@ -4,7 +4,7 @@
     @update:show="$emit('update:show', $event)"
   >
     <NCard
-      class="favorite-prompt-asset-version-compare-modal"
+      class="version-compare-modal"
       :title="t('favorites.version.compareTitle')"
       :bordered="false"
       size="small"
@@ -16,7 +16,7 @@
           v-if="hasDiff"
           size="small"
           :bordered="false"
-          data-testid="favorite-prompt-asset-version-compare-stats"
+          data-testid="version-compare-stats"
         >
           <NText type="success">+{{ diff.added }}</NText>
           <NText depth="3"> / </NText>
@@ -24,59 +24,59 @@
         </NTag>
       </template>
 
-      <div class="favorite-prompt-asset-version-compare-modal__selectors">
-        <label class="favorite-prompt-asset-version-compare-modal__selector">
+      <div class="version-compare-modal__selectors">
+        <label class="version-compare-modal__selector">
           <NText depth="3">{{ t('favorites.version.compareLeft') }}</NText>
           <NSelect
             v-model:value="leftVersionId"
             size="small"
             :options="versionOptions"
-            data-testid="favorite-prompt-asset-version-compare-left"
+            data-testid="version-compare-left"
           />
         </label>
-        <label class="favorite-prompt-asset-version-compare-modal__selector">
+        <label class="version-compare-modal__selector">
           <NText depth="3">{{ t('favorites.version.compareRight') }}</NText>
           <NSelect
             v-model:value="rightVersionId"
             size="small"
             :options="versionOptions"
-            data-testid="favorite-prompt-asset-version-compare-right"
+            data-testid="version-compare-right"
           />
         </label>
       </div>
 
       <div
         v-if="hasDiff"
-        class="favorite-prompt-asset-version-compare-modal__diff"
-        data-testid="favorite-prompt-asset-version-compare-diff"
+        class="version-compare-modal__diff"
+        data-testid="version-compare-diff"
       >
         <div
           v-for="(line, index) in diff.lines"
           :key="index"
-          class="favorite-prompt-asset-version-compare-modal__line"
+          class="version-compare-modal__line"
           :class="`is-${line.type}`"
           :data-line-type="line.type"
         >
-          <span class="favorite-prompt-asset-version-compare-modal__gutter">
+          <span class="version-compare-modal__gutter">
             {{ line.leftLineNumber ?? '' }}
           </span>
-          <span class="favorite-prompt-asset-version-compare-modal__gutter">
+          <span class="version-compare-modal__gutter">
             {{ line.rightLineNumber ?? '' }}
           </span>
-          <span class="favorite-prompt-asset-version-compare-modal__marker">
+          <span class="version-compare-modal__marker">
             {{ line.type === 'add' ? '+' : line.type === 'remove' ? '-' : ' ' }}
           </span>
-          <span class="favorite-prompt-asset-version-compare-modal__text">{{ line.text }}</span>
+          <span class="version-compare-modal__text">{{ line.text }}</span>
         </div>
       </div>
       <NEmpty
         v-else
         :description="t('favorites.version.compareNoDiff')"
-        data-testid="favorite-prompt-asset-version-compare-empty"
+        data-testid="version-compare-empty"
       />
 
       <template #footer>
-        <div class="favorite-prompt-asset-version-compare-modal__footer">
+        <div class="version-compare-modal__footer">
           <NButton @click="$emit('update:show', false)">
             {{ t('favorites.version.compareClose') }}
           </NButton>
@@ -95,8 +95,8 @@ import type { PromptAsset, PromptContentVersion } from '@prompt-optimizer/core'
 import {
   promptContentToEditableText,
   sortPromptAssetVersionsForDisplay,
-} from '../../utils/favorite-prompt-versions'
-import { diffTextLines } from '../../utils/text-diff'
+} from '../utils/favorite-prompt-versions'
+import { diffTextLines } from '../utils/text-diff'
 
 const props = defineProps<{
   show: boolean
@@ -173,17 +173,17 @@ const hasDiff = computed(() => diff.value.lines.some((line) => line.type !== 'eq
 </script>
 
 <style scoped>
-.favorite-prompt-asset-version-compare-modal {
+.version-compare-modal {
   width: min(920px, calc(100vw - 32px));
 }
 
-.favorite-prompt-asset-version-compare-modal__selectors {
+.version-compare-modal__selectors {
   display: flex;
   gap: 12px;
   margin-bottom: 10px;
 }
 
-.favorite-prompt-asset-version-compare-modal__selector {
+.version-compare-modal__selector {
   display: flex;
   flex: 1;
   min-width: 0;
@@ -191,7 +191,7 @@ const hasDiff = computed(() => diff.value.lines.some((line) => line.type !== 'eq
   gap: 4px;
 }
 
-.favorite-prompt-asset-version-compare-modal__diff {
+.version-compare-modal__diff {
   max-height: 56vh;
   overflow: auto;
   border: 1px solid color-mix(in srgb, var(--n-border-color) 72%, transparent);
@@ -202,21 +202,21 @@ const hasDiff = computed(() => diff.value.lines.some((line) => line.type !== 'eq
   line-height: 1.6;
 }
 
-.favorite-prompt-asset-version-compare-modal__line {
+.version-compare-modal__line {
   display: flex;
   min-width: 0;
   white-space: pre;
 }
 
-.favorite-prompt-asset-version-compare-modal__line.is-add {
+.version-compare-modal__line.is-add {
   background: rgba(46, 160, 67, 0.14);
 }
 
-.favorite-prompt-asset-version-compare-modal__line.is-remove {
+.version-compare-modal__line.is-remove {
   background: rgba(248, 81, 73, 0.14);
 }
 
-.favorite-prompt-asset-version-compare-modal__gutter {
+.version-compare-modal__gutter {
   flex: 0 0 44px;
   border-right: 1px solid color-mix(in srgb, var(--n-border-color) 55%, transparent);
   color: var(--n-text-color-3);
@@ -225,29 +225,29 @@ const hasDiff = computed(() => diff.value.lines.some((line) => line.type !== 'eq
   user-select: none;
 }
 
-.favorite-prompt-asset-version-compare-modal__marker {
+.version-compare-modal__marker {
   flex: 0 0 18px;
   color: var(--n-text-color-3);
   text-align: center;
   user-select: none;
 }
 
-.favorite-prompt-asset-version-compare-modal__line.is-add .favorite-prompt-asset-version-compare-modal__marker {
+.version-compare-modal__line.is-add .version-compare-modal__marker {
   color: #1a7f37;
 }
 
-.favorite-prompt-asset-version-compare-modal__line.is-remove .favorite-prompt-asset-version-compare-modal__marker {
+.version-compare-modal__line.is-remove .version-compare-modal__marker {
   color: #cf222e;
 }
 
-.favorite-prompt-asset-version-compare-modal__text {
+.version-compare-modal__text {
   flex: 1;
   min-width: 0;
   overflow-x: auto;
   padding-right: 12px;
 }
 
-.favorite-prompt-asset-version-compare-modal__footer {
+.version-compare-modal__footer {
   display: flex;
   justify-content: flex-end;
 }

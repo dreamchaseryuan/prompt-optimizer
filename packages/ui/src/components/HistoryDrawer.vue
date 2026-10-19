@@ -170,6 +170,15 @@
                       {{ t('common.iterate') }}
                     </NTag>
                     <NButton
+                      v-if="chain.versions.length > 1"
+                      @click="openVersionCompare(chain, record)"
+                      size="small"
+                      quaternary
+                      data-testid="history-version-compare"
+                    >
+                      {{ t('history.compare') }}
+                    </NButton>
+                    <NButton
                       @click="reuse(record, chain)"
                       size="small"
                       quaternary
@@ -216,6 +225,12 @@
       </NEmpty>
     </NScrollbar>
   </NModal>
+
+  <VersionCompareModal
+    v-model:show="showVersionCompare"
+    :prompt-asset="compareAsset"
+    :initial-left-version-id="compareInitialLeftId"
+  />
 </template>
 
 <script setup lang="ts">
@@ -226,10 +241,11 @@ import {
   NModal, NScrollbar, NSpace, NCard, NText, NTag, NButton, 
   NDivider, NCollapse, NCollapseItem, NEmpty, NInput
 } from 'naive-ui'
-import type { PromptRecord, PromptRecordChain } from '@prompt-optimizer/core'
+import type { PromptAsset, PromptContentVersion, PromptRecord, PromptRecordChain } from '@prompt-optimizer/core'
 import { useConfirmDialog } from '../composables/ui/useConfirmDialog'
 import { useToast } from '../composables/ui/useToast'
 import SourceAssetBadge from './source/SourceAssetBadge.vue'
+import VersionCompareModal from './VersionCompareModal.vue'
 import { extractHistorySourceBinding } from '../utils/history-source-binding'
 import { resolveSourceAssetRef } from '../utils/source-asset'
 
@@ -323,6 +339,30 @@ watch(() => props.show, (newShow) => {
 
 const formatDate = (timestamp: number) => {
   return new Date(timestamp).toLocaleString()
+}
+
+// ---- 版本对比（复用通用对比弹窗，将历史版本投影为 PromptAsset） ----
+const showVersionCompare = ref(false)
+const compareAsset = ref<PromptAsset | null>(null)
+const compareInitialLeftId = ref('')
+
+const openVersionCompare = (chain: PromptRecordChain, record: PromptRecord) => {
+  const versions = chain.versions.map((item) => ({
+    id: item.id,
+    version: item.version,
+    createdAt: item.timestamp,
+    content: { kind: 'text', text: item.optimizedPrompt || '' },
+  })) as unknown as PromptContentVersion[]
+  const latest = chain.versions.reduce(
+    (acc, item) => (item.version > acc.version ? item : acc),
+    chain.versions[0],
+  )
+  compareAsset.value = {
+    currentVersionId: latest.id,
+    versions,
+  } as unknown as PromptAsset
+  compareInitialLeftId.value = record.id
+  showVersionCompare.value = true
 }
 
 const reuse = (record: PromptRecord, chain: PromptRecordChain) => {

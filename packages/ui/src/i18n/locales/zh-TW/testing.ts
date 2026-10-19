@@ -9,6 +9,7 @@ const messages = {
     "cleared": "歷史紀錄已清空",
     "chainDeleted": "歷史紀錄已刪除",
     "useThisVersion": "使用此版本",
+    "compare": "對比",
     "noHistory": "暫無歷史紀錄"
   },
   "test": {

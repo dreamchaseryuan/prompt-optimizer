@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 
 import type { PromptAsset, PromptContentVersion } from '@prompt-optimizer/core'
 
-import FavoritePromptAssetVersionCompareModal from '../../../src/components/favorites/FavoritePromptAssetVersionCompareModal.vue'
+import VersionCompareModal from '../../../src/components/VersionCompareModal.vue'
 
 vi.mock('vue-i18n', async (importOriginal) => {
   const actual = await importOriginal<typeof import('vue-i18n')>()
@@ -56,7 +56,7 @@ const makeAsset = (versions: PromptContentVersion[], currentVersionId: string): 
   }) as unknown as PromptAsset
 
 const mountModal = (asset: PromptAsset, initialLeftVersionId?: string) =>
-  mount(FavoritePromptAssetVersionCompareModal, {
+  mount(VersionCompareModal, {
     props: {
       show: true,
       promptAsset: asset,
@@ -67,7 +67,7 @@ const mountModal = (asset: PromptAsset, initialLeftVersionId?: string) =>
     },
   })
 
-describe('FavoritePromptAssetVersionCompareModal', () => {
+describe('VersionCompareModal', () => {
   it('renders added and removed lines with stats', () => {
     const versions = [
       makeVersion('v1', 1, 'line one\nold value\nline three', 1),
@@ -81,8 +81,8 @@ describe('FavoritePromptAssetVersionCompareModal', () => {
     expect(added).toHaveLength(1)
     expect(removed[0].text()).toContain('old value')
     expect(added[0].text()).toContain('new value')
-    expect(wrapper.get('[data-testid="favorite-prompt-asset-version-compare-stats"]').text()).toContain('+1')
-    expect(wrapper.get('[data-testid="favorite-prompt-asset-version-compare-stats"]').text()).toContain('-1')
+    expect(wrapper.get('[data-testid="version-compare-stats"]').text()).toContain('+1')
+    expect(wrapper.get('[data-testid="version-compare-stats"]').text()).toContain('-1')
   })
 
   it('shows the empty state when versions are identical', () => {
@@ -92,8 +92,8 @@ describe('FavoritePromptAssetVersionCompareModal', () => {
     ]
     const wrapper = mountModal(makeAsset(versions, 'v2'), 'v1')
 
-    expect(wrapper.find('[data-testid="favorite-prompt-asset-version-compare-diff"]').exists()).toBe(false)
-    expect(wrapper.find('[data-testid="favorite-prompt-asset-version-compare-empty"]').exists()).toBe(true)
+    expect(wrapper.find('[data-testid="version-compare-diff"]').exists()).toBe(false)
+    expect(wrapper.find('[data-testid="version-compare-empty"]').exists()).toBe(true)
   })
 
   it('defaults to the newest non-current version against the current one', () => {
@@ -104,7 +104,7 @@ describe('FavoritePromptAssetVersionCompareModal', () => {
     ]
     const wrapper = mountModal(makeAsset(versions, 'v3'))
 
-    const diff = wrapper.get('[data-testid="favorite-prompt-asset-version-compare-diff"]')
+    const diff = wrapper.get('[data-testid="version-compare-diff"]')
     expect(diff.text()).toContain('current draft')
     expect(diff.text()).toContain('second draft')
   })
