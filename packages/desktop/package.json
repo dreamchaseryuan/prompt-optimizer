@@ -33,7 +33,7 @@
     "webdav": "^5.10.0"
   },
   "build": {
-    "appId": "com.promptoptimizer.desktop",
+    "appId": "com.always200.prompt",
     "productName": "Always200Prompt",
     "executableName": "PromptOptimizer",
     "directories": {
@@ -50,7 +50,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "linshenkx",
+      "owner": "dreamchaseryuan",
       "repo": "prompt-optimizer",
       "private": false
     },
