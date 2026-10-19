@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   createPromptContract,
   promptModeKeyToFavoriteMode,
+  promptModeKeyToLegacySessionSubModeKey,
   resolvePromptModeKey,
 } from '../../../src/services/prompt-model'
 
@@ -91,5 +92,10 @@ describe('prompt-model mode mapping', () => {
       subMode: 'image2video',
       modeKey: 'video-image2video',
     })
+  })
+
+  it('maps video mode keys identically to legacy session sub-mode keys (R3)', () => {
+    expect(promptModeKeyToLegacySessionSubModeKey('video-text2video')).toBe('video-text2video')
+    expect(promptModeKeyToLegacySessionSubModeKey('video-image2video')).toBe('video-image2video')
   })
 })
