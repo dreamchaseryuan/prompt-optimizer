@@ -924,6 +924,13 @@ const selectedOptimizeModelKey = computed<string>({
                         : imageImage2ImageSession;
             return session.selectedTextModelKey || "";
         }
+        if (routeFunctionMode.value === "video") {
+            const session =
+                routeVideoSubMode.value === "image2video"
+                    ? videoImage2VideoSession
+                    : videoText2VideoSession;
+            return session.selectedTextModelKey || "";
+        }
         return "";
     },
     set: (value) => {
@@ -947,6 +954,14 @@ const selectedOptimizeModelKey = computed<string>({
                     : routeImageSubMode.value === "multiimage"
                         ? imageMultiImageSession
                         : imageImage2ImageSession;
+            session.updateTextModel(next);
+            return;
+        }
+        if (routeFunctionMode.value === "video") {
+            const session =
+                routeVideoSubMode.value === "image2video"
+                    ? videoImage2VideoSession
+                    : videoText2VideoSession;
             session.updateTextModel(next);
         }
     },
@@ -1354,6 +1369,8 @@ const restoreSessionToUIInternal = async () => {
         // Image 模式：使用专用恢复逻辑
         restoreImageSession();
     }
+    // Video 模式：session store 的字段即工作区状态的单一真源（workspace 通过 computed 直绑），
+    // switchMode/restoreAllSessions 已把持久化内容写入 store，无需额外 UI 分发。
 };
 
 // 🔧 架构优化：使用 session 恢复协调器
@@ -1411,6 +1428,8 @@ watch(
         // 避免重复同步（尤其是 streaming token 会造成双写）。
         if (routeFunctionMode.value === 'basic') return;
         if (routeFunctionMode.value === 'image') return;
+        // Video 工作区自管理 session store（流式 token 直写），不经过 optimizer
+        if (routeFunctionMode.value === 'video') return;
 
         // Pro-user 模式的优化结果由 ContextUserWorkspace 内部管理，避免用 optimizer 覆盖 session
         if (routeFunctionMode.value === 'pro' && routeProSubMode.value === 'variable') {
@@ -1518,7 +1537,9 @@ watch(
 
         // ⚠️ Image 模式使用独立的 session 模板管理
         // 🔧 Pro 模式的模板选择已由 workspace/controller 持久化到 session store
+        // ⚠️ Video 模式使用独立的 session 模板管理（与 Image 同型）
         if (routeFunctionMode.value === 'image') return;
+        if (routeFunctionMode.value === 'video') return;
         if (routeFunctionMode.value === 'pro') return;
 
         getCurrentBasicSession().updateTemplate(newTemplate?.id || null);
@@ -1538,7 +1559,9 @@ watch(
         // - Pro-system：没有 updateIterateTemplate 方法
         // - Pro-user：已由 workspace/controller 持久化
         // - Image：使用独立的模板管理
+        // - Video：使用独立的模板管理（与 Image 同型）
         if (routeFunctionMode.value === 'image') return;
+        if (routeFunctionMode.value === 'video') return;
         if (routeFunctionMode.value === 'pro') return;
 
         getCurrentBasicSession().updateIterateTemplate(newTemplate?.id || null);
@@ -1554,8 +1577,9 @@ watch(
         if (!hasRestoredInitialState.value) return;
 
         // 🔧 仅 Basic 模式使用此 testContent
-        // Image 模式没有 testContent；Pro 模式已由 workspace 内部管理
+        // Image 模式没有 testContent；Pro 模式已由 workspace 内部管理；Video 同理
         if (routeFunctionMode.value === 'image') return;
+        if (routeFunctionMode.value === 'video') return;
         if (routeFunctionMode.value === 'pro') return;
 
         getCurrentBasicSession().updateTestContent(newContent || '');
@@ -1570,6 +1594,8 @@ watch(
     (newMode) => {
         // 🔧 Pro 模式的对比模式已由 workspace/controller 持久化到 session store
         if (routeFunctionMode.value === 'pro') return;
+        // Video 会话无对比模式字段（精简形态）
+        if (routeFunctionMode.value === 'video') return;
 
         if (routeFunctionMode.value === 'basic') {
             getCurrentBasicSession().toggleCompareMode(newMode);
@@ -1668,6 +1694,8 @@ const getSessionBySubModeKey = (targetKey: SubModeKey) => {
         case 'image-text2image': return imageText2ImageSession;
         case 'image-image2image': return imageImage2ImageSession;
         case 'image-multiimage': return imageMultiImageSession;
+        case 'video-text2video': return videoText2VideoSession;
+        case 'video-image2video': return videoImage2VideoSession;
         default: return null;
     }
 };
@@ -1896,6 +1924,10 @@ const handleTemplateSelected = (
                     : routeImageSubMode.value === "multiimage"
                         ? imageMultiImageSession
                     : imageText2ImageSession;
+            case "video-text2video-optimize":
+                return videoText2VideoSession;
+            case "video-image2video-optimize":
+                return videoImage2VideoSession;
             default:
                 return null;
         }
@@ -2007,6 +2039,8 @@ watch(services, async (newServices) => {
         );
     } else if (routeFunctionMode.value === "image") {
         await imageSubModeApi.ensureInitialized();
+    } else if (routeFunctionMode.value === "video") {
+        await videoSubModeApi.ensureInitialized();
     }
     if (isAppUnmounted) return;
 
@@ -2095,6 +2129,8 @@ const normalizeTemplateTypeForManager = (
         "conversationMessageOptimize",
         "contextUserOptimize",
         "contextIterate",
+        "text2videoOptimize",
+        "image2videoOptimize",
     ];
 
     const isTemplateManagerTemplateType = (
@@ -2134,6 +2170,8 @@ const handleTemplateLanguageChanged = (_newLanguage: string) => {
         window.dispatchEvent(new Event("pro-workspace-refresh-templates"));
         window.dispatchEvent(new Event("image-workspace-refresh-templates"));
         window.dispatchEvent(new Event("image-workspace-refresh-iterate-select"));
+        window.dispatchEvent(new Event("video-workspace-refresh-templates"));
+        window.dispatchEvent(new Event("video-workspace-refresh-iterate-select"));
     }
 };
 
@@ -2151,6 +2189,7 @@ const handleTemplateManagerClosed = () => {
         window.dispatchEvent(new Event("basic-workspace-refresh-templates"));
         window.dispatchEvent(new Event("pro-workspace-refresh-templates"));
         window.dispatchEvent(new Event("image-workspace-refresh-templates"));
+        window.dispatchEvent(new Event("video-workspace-refresh-templates"));
     }
 };
 
@@ -2214,6 +2253,7 @@ const dispatchTextModelRefreshEvents = () => {
     window.dispatchEvent(new Event("basic-workspace-refresh-text-models"));
     window.dispatchEvent(new Event("pro-workspace-refresh-text-models"));
     window.dispatchEvent(new Event("image-workspace-refresh-text-models"));
+    window.dispatchEvent(new Event("video-workspace-refresh-text-models"));
 };
 
 // 文本模型更新回调

@@ -513,6 +513,10 @@ export function useAppFavorite(options: AppFavoriteOptions): AppFavoriteReturn {
                 return imageImage2ImageSession || null
             case 'image-multiimage':
                 return imageMultiImageSession || null
+            case 'video-text2video':
+                return videoText2VideoSession || null
+            case 'video-image2video':
+                return videoImage2VideoSession || null
             default:
                 return null
         }
@@ -642,6 +646,8 @@ export function useAppFavorite(options: AppFavoriteOptions): AppFavoriteReturn {
         imageText2ImageSession,
         imageImage2ImageSession,
         imageMultiImageSession,
+        videoText2VideoSession,
+        videoImage2VideoSession,
         optimizerCurrentVersions,
     })
 
@@ -760,6 +766,38 @@ export function useAppFavorite(options: AppFavoriteOptions): AppFavoriteReturn {
             applyFavoriteSessionBinding(favorite, draft, targetKey)
 
             toast.success(t('toast.success.imageFavoriteLoaded'))
+        } else if (
+            favoriteMode?.functionMode === 'video' &&
+            targetKey?.startsWith('video-')
+        ) {
+            // 视频模式：根据 videoSubMode 确定目标子模式（默认 text2video）
+            const targetSubMode = favoriteMode.videoSubMode || 'text2video'
+
+            const didNavigate = await navigateToSubModeKey(targetKey)
+            if (didNavigate === false) return false
+            toast.info(t('toast.info.switchedToVideoMode'))
+
+            await nextTick()
+
+            clearFavoriteWorkspaceBeforeApply(targetKey)
+
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(
+                    new CustomEvent('video-workspace-restore-favorite', {
+                        detail: {
+                            content: draft.content,
+                            videoSubMode: targetSubMode,
+                            metadata: draft.metadata,
+                        },
+                    }),
+                )
+            }
+
+            applyFavoriteVariables(draft)
+            await applyFavoriteExample(draft)
+            applyFavoriteSessionBinding(favorite, draft, targetKey)
+
+            toast.success(t('toast.success.favoriteLoaded'))
         } else if (
             favoriteMode?.functionMode === 'basic' ||
             favoriteMode?.functionMode === 'context'

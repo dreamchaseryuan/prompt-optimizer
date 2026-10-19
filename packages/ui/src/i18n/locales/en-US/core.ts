@@ -246,6 +246,7 @@ const messages = {
       "versionApplied": "Applied to conversation",
       "chainAutoRestored": "Optimization chain automatically restored from history",
       "imageHistoryRestored": "Image history restored",
+      "videoHistoryRestored": "Video history restored",
       "conversationRestored": "Complete conversation restored from history",
       "imageFavoriteLoaded": "Favorite image prompt loaded",
       "favoriteLoaded": "Prompt loaded to input",
@@ -283,6 +284,7 @@ const messages = {
       "templateSelected": "Template selected",
       "optimizationModeAutoSwitched": "Automatically switched to {mode} prompt optimization mode",
       "switchedToImageMode": "Automatically switched to image mode",
+      "switchedToVideoMode": "Automatically switched to video mode",
       "switchedToFunctionMode": "Automatically switched to {mode} mode",
       "multiTurnOptimizationPrompt": "Multi-turn conversation optimization ({count} messages)"
     }

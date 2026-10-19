@@ -15,6 +15,8 @@ const messages = {
     "imageText2ImageTemplates": "Image · Text-to-Image Templates",
     "imageImage2ImageTemplates": "Image · Image-to-Image Templates",
     "imageIterateTemplates": "Image · Iterate Templates",
+    "videoText2VideoTemplates": "Video · Text-to-Video Templates",
+    "videoImage2VideoTemplates": "Video · Image-to-Video Templates",
     "addTemplate": "Add",
     "editTemplate": "Edit",
     "deleteTemplate": "Delete",

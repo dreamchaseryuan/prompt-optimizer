@@ -230,7 +230,8 @@ const messages = {
         "functionMode": {
           "basic": "Basic",
           "context": "Context",
-          "image": "Image"
+          "image": "Image",
+          "video": "Video"
         },
         "optimizationMode": {
           "system": "System",
@@ -240,6 +241,10 @@ const messages = {
           "text2image": "Text-to-Image",
           "image2image": "Image-to-Image",
           "multiimage": "Multi-Image"
+        },
+        "videoSubMode": {
+          "text2video": "Text-to-Video",
+          "image2video": "Image-to-Video"
         },
         "variableCount": "{count} vars",
         "exampleCount": "{count} examples"

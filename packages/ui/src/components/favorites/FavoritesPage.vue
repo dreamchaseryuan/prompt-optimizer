@@ -54,6 +54,8 @@ type FavoriteInitialModeFilter =
   | 'image-text2image'
   | 'image-image2image'
   | 'image-multiimage'
+  | 'video-text2video'
+  | 'video-image2video'
 
 const resolveInitialModeFilter = (workspacePath: string | null): FavoriteInitialModeFilter => {
   if (!workspacePath) return 'all'
@@ -67,6 +69,10 @@ const resolveInitialModeFilter = (workspacePath: string | null): FavoriteInitial
 
   if (workspace.mode === 'basic') {
     return workspace.subMode === 'user' ? 'basic-user' : 'basic-system'
+  }
+
+  if (workspace.mode === 'video') {
+    return workspace.subMode === 'image2video' ? 'video-image2video' : 'video-text2video'
   }
 
   if (workspace.subMode === 'image2image') return 'image-image2image'

@@ -11,6 +11,8 @@ export type WorkspaceApplyTargetKey =
   | 'image-text2image'
   | 'image-image2image'
   | 'image-multiimage'
+  | 'video-text2video'
+  | 'video-image2video'
 
 export const WORKSPACE_APPLY_TARGET_KEYS: ReadonlyArray<WorkspaceApplyTargetKey> = [
   'basic-system',
@@ -20,6 +22,8 @@ export const WORKSPACE_APPLY_TARGET_KEYS: ReadonlyArray<WorkspaceApplyTargetKey>
   'image-text2image',
   'image-image2image',
   'image-multiimage',
+  'video-text2video',
+  'video-image2video',
 ]
 
 export const isWorkspaceApplyTargetKey = (
@@ -47,6 +51,8 @@ export type WorkspaceExternalApplySessions = {
   imageText2ImageSession?: WorkspaceClearableSession & WorkspaceTemporaryVariablesSession
   imageImage2ImageSession?: WorkspaceClearableSession & WorkspaceTemporaryVariablesSession
   imageMultiImageSession?: WorkspaceClearableSession & WorkspaceTemporaryVariablesSession
+  videoText2VideoSession?: WorkspaceClearableSession & WorkspaceTemporaryVariablesSession
+  videoImage2VideoSession?: WorkspaceClearableSession & WorkspaceTemporaryVariablesSession
   optimizerCurrentVersions?: Ref<PromptRecordChain['versions']>
 }
 
@@ -80,6 +86,8 @@ export const getWorkspaceTemporaryVariablesSession = (
     | 'imageText2ImageSession'
     | 'imageImage2ImageSession'
     | 'imageMultiImageSession'
+    | 'videoText2VideoSession'
+    | 'videoImage2VideoSession'
   >,
 ): WorkspaceTemporaryVariablesSession | null => {
   switch (targetKey) {
@@ -93,6 +101,10 @@ export const getWorkspaceTemporaryVariablesSession = (
       return api.imageImage2ImageSession || null
     case 'image-multiimage':
       return api.imageMultiImageSession || null
+    case 'video-text2video':
+      return api.videoText2VideoSession || null
+    case 'video-image2video':
+      return api.videoImage2VideoSession || null
     default:
       return null
   }
@@ -133,6 +145,16 @@ export const clearWorkspaceContentForExternalApply = (
 
   if (targetKey === 'image-multiimage') {
     api.imageMultiImageSession?.clearContent?.({ persist: false })
+    return true
+  }
+
+  if (targetKey === 'video-text2video') {
+    api.videoText2VideoSession?.clearContent?.({ persist: false })
+    return true
+  }
+
+  if (targetKey === 'video-image2video') {
+    api.videoImage2VideoSession?.clearContent?.({ persist: false })
     return true
   }
 

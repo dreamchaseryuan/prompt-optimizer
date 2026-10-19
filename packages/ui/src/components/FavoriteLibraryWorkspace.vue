@@ -305,12 +305,15 @@ type FavoriteModeFilterKey =
   | 'image-text2image'
   | 'image-image2image'
   | 'image-multiimage'
+  | 'video-text2video'
+  | 'video-image2video'
 
 interface FavoriteModeFilterDefinition {
   value: Exclude<FavoriteModeFilterKey, 'all'>
   functionMode: NormalizedFavoriteFunctionMode
   optimizationMode?: FavoritePrompt['optimizationMode']
   imageSubMode?: FavoritePrompt['imageSubMode']
+  videoSubMode?: FavoritePrompt['videoSubMode']
 }
 
 const favoriteModeFilterDefinitions: FavoriteModeFilterDefinition[] = [
@@ -321,6 +324,8 @@ const favoriteModeFilterDefinitions: FavoriteModeFilterDefinition[] = [
   { value: 'image-text2image', functionMode: 'image', imageSubMode: 'text2image' },
   { value: 'image-image2image', functionMode: 'image', imageSubMode: 'image2image' },
   { value: 'image-multiimage', functionMode: 'image', imageSubMode: 'multiimage' },
+  { value: 'video-text2video', functionMode: 'video', videoSubMode: 'text2video' },
+  { value: 'video-image2video', functionMode: 'video', videoSubMode: 'image2video' },
 ]
 
 const favoriteModeFilterKeys = new Set<FavoriteModeFilterKey>([
@@ -409,6 +414,10 @@ const getModeFilterLabel = (definition: FavoriteModeFilterDefinition) => {
     return `${t('favorites.manager.card.functionMode.context')}-${contextModeLabel}`
   }
 
+  if (definition.functionMode === 'video') {
+    return `${t('favorites.manager.card.functionMode.video')}-${t(`favorites.manager.card.videoSubMode.${definition.videoSubMode}`)}`
+  }
+
   return `${t('favorites.manager.card.functionMode.image')}-${t(`favorites.manager.card.imageSubMode.${definition.imageSubMode}`)}`
 }
 
@@ -422,6 +431,10 @@ const favoriteMatchesModeFilter = (favorite: FavoritePrompt, filter: FavoriteMod
 
   if (definition.functionMode === 'image') {
     return favorite.imageSubMode === definition.imageSubMode
+  }
+
+  if (definition.functionMode === 'video') {
+    return favorite.videoSubMode === definition.videoSubMode
   }
 
   return favorite.optimizationMode === definition.optimizationMode

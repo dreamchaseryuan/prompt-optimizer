@@ -369,7 +369,8 @@ describe('SessionManager', () => {
       ]),
     })
     expect(registry.updatedAt).toBeGreaterThanOrEqual(3000)
-    expect(manager.getAllPromptSessions()).toHaveLength(7)
+    // 7 个既有子模式 + video-text2video / video-image2video（前端批次 1 新增）
+    expect(manager.getAllPromptSessions()).toHaveLength(9)
   })
 
   it('hydrates history chains without changing the synchronous session projection', async () => {

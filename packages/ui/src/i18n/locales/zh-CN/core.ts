@@ -246,6 +246,7 @@ const messages = {
       "versionApplied": "已应用到会话",
       "chainAutoRestored": "已从历史记录自动恢复优化链",
       "imageHistoryRestored": "图像历史记录已恢复",
+      "videoHistoryRestored": "视频历史记录已恢复",
       "conversationRestored": "已从历史记录恢复完整会话",
       "imageFavoriteLoaded": "收藏的图像提示词已加载",
       "favoriteLoaded": "已将提示词加载到输入框",
@@ -283,6 +284,7 @@ const messages = {
       "templateSelected": "选择模板",
       "optimizationModeAutoSwitched": "已自动切换到{mode}提示词优化模式",
       "switchedToImageMode": "已自动切换到图像模式",
+      "switchedToVideoMode": "已自动切换到视频模式",
       "switchedToFunctionMode": "已自动切换到{mode}模式",
       "multiTurnOptimizationPrompt": "多轮对话优化（{count}条消息）"
     }

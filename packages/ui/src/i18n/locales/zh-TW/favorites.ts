@@ -230,7 +230,8 @@ const messages = {
         "functionMode": {
           "basic": "基礎",
           "context": "情境",
-          "image": "圖像"
+          "image": "圖像",
+          "video": "影片"
         },
         "optimizationMode": {
           "system": "系統",
@@ -240,6 +241,10 @@ const messages = {
           "text2image": "文生圖",
           "image2image": "圖生圖",
           "multiimage": "多圖生成"
+        },
+        "videoSubMode": {
+          "text2video": "文生影片",
+          "image2video": "圖生影片"
         },
         "variableCount": "變數 {count}",
         "exampleCount": "範例 {count}"

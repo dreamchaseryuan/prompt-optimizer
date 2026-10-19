@@ -105,6 +105,21 @@
                 >
                   {{ t('imageMode.multiimage') }}
                 </NTag>
+                <!-- 视频模式优化类型标签 -->
+                <NTag
+                  v-if="chain.rootRecord.type === 'text2videoOptimize'"
+                  type="info"
+                  size="small"
+                >
+                  {{ t('videoMode.text2video') }}
+                </NTag>
+                <NTag
+                  v-if="chain.rootRecord.type === 'image2videoOptimize'"
+                  type="info"
+                  size="small"
+                >
+                  {{ t('videoMode.image2video') }}
+                </NTag>
                 <SourceAssetBadge
                   v-if="getChainSource(chain)"
                   :source="getChainSource(chain)!"
@@ -394,6 +409,8 @@ const getChainSource = (chain: PromptRecordChain) => {
 const getFunctionModeTagType = (recordType: string) => {
   if (recordType.includes('image')) {
     return 'warning'
+  } else if (recordType.includes('video')) {
+    return 'info'
   } else if (recordType.includes('context')) {
     return 'primary'
   } else {
@@ -407,9 +424,13 @@ const getFunctionModeLabel = (recordType: string) => {
   const imageTypes = ['imageOptimize', 'contextImageOptimize', 'imageIterate', 'text2imageOptimize', 'image2imageOptimize', 'multiimageOptimize']
   // 上下文模式类型（包含新旧类型名以支持向后兼容）
   const contextTypes = ['conversationMessageOptimize', 'contextSystemOptimize', 'contextUserOptimize', 'contextIterate']
+  // 视频模式类型
+  const videoTypes = ['text2videoOptimize', 'image2videoOptimize']
 
   if (imageTypes.includes(recordType)) {
     return t('nav.imageMode')
+  } else if (videoTypes.includes(recordType)) {
+    return t('nav.videoMode')
   } else if (contextTypes.includes(recordType)) {
     return t('nav.contextMode')
   } else {

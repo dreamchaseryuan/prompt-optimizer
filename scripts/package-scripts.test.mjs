@@ -110,7 +110,8 @@ test('desktop package defines a path-safe executable name', () => {
   const desktopPackage = readJson(path.join('packages', 'desktop', 'package.json'))
   const executableName = desktopPackage.build?.executableName
 
-  assert.equal(executableName, 'PromptOptimizer')
+  // 2026-10 桌面端统一更名 Always200Prompt（commit 2de9eb42/57b7538a）
+  assert.equal(executableName, 'Always200Prompt')
   assert.match(
     executableName,
     /^[A-Za-z0-9._() -]+$/,

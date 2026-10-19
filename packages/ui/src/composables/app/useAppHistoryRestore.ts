@@ -130,6 +130,47 @@ export function useAppHistoryRestore(options: AppHistoryRestoreOptions): AppHist
         // rootRecord.type 可能包含旧版本类型名，显式转为 string 以兼容历史数据
         const rt = chain.rootRecord.type as unknown as string
 
+        // 🆕 视频模式分支（与图像模式同型）：text2videoOptimize / image2videoOptimize
+        if (rt === 'text2videoOptimize' || rt === 'image2videoOptimize') {
+            const videoMode = rt === 'text2videoOptimize' ? 'text2video' : 'image2video'
+            const targetKey = `video-${videoMode}`
+
+            const didNavigate = await navigateToSubModeKey(targetKey)
+            if (didNavigate === false) {
+                throw new Error(`Invalid video workspace target: ${targetKey}`)
+            }
+            toast.info(t('toast.info.switchedToVideoMode'))
+
+            await nextTick()
+            restoreSourceBindingForTargetKey?.(
+                targetKey,
+                extractHistorySourceBinding(record, chain),
+            )
+
+            const videoHistoryData = {
+                originalPrompt: record.originalPrompt || chain.rootRecord.originalPrompt,
+                optimizedPrompt: record.optimizedPrompt,
+                metadata: record.metadata || chain.rootRecord.metadata,
+                chainId: chain.chainId,
+                versions: chain.versions,
+                currentVersionId: record.id,
+                videoMode,
+                templateId: record.templateId || chain.rootRecord.templateId,
+            }
+
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(
+                    new CustomEvent('video-workspace-restore', {
+                        detail: videoHistoryData,
+                    }),
+                )
+            }
+
+            await persistRestoredSession(targetKey)
+            toast.success(t('toast.success.videoHistoryRestored'))
+            return
+        }
+
         // 🆕 扩展模式切换逻辑 - 支持图像模式
         if (
             rt === 'imageOptimize' ||
@@ -138,8 +179,7 @@ export function useAppHistoryRestore(options: AppHistoryRestoreOptions): AppHist
             rt === 'text2imageOptimize' ||
             rt === 'image2imageOptimize' ||
             rt === 'multiimageOptimize'
-        ) {
-            // 图像模式：使用 navigateToSubModeKey 导航
+        ) {            // 图像模式：使用 navigateToSubModeKey 导航
             // 根据记录类型设置正确的图像子模式
             const meta = (isRecord(record.metadata) ? record.metadata : null) ??
                 (isRecord(chain.rootRecord.metadata) ? chain.rootRecord.metadata : null)
