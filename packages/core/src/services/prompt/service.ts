@@ -1022,6 +1022,8 @@ export class PromptService implements IPromptService {
       | "userOptimize"
       | "text2imageOptimize"
       | "image2imageOptimize"
+      | "text2videoOptimize"
+      | "image2videoOptimize"
       | "multiimageOptimize"
       | "imageIterate"
       | "iterate"
@@ -1049,6 +1051,8 @@ export class PromptService implements IPromptService {
         | "userOptimize"
         | "text2imageOptimize"
         | "image2imageOptimize"
+        | "text2videoOptimize"
+        | "image2videoOptimize"
         | "multiimageOptimize"
         | "iterate"
       )[] = [];
@@ -1072,6 +1076,10 @@ export class PromptService implements IPromptService {
         fallbackTypes = ["userOptimize", "optimize"]; // 文生图回退到基础优化
       } else if (templateType === "image2imageOptimize") {
         fallbackTypes = ["text2imageOptimize", "userOptimize", "optimize"]; // 图生图优先回退到文生图
+      } else if (templateType === "text2videoOptimize") {
+        fallbackTypes = ["text2imageOptimize", "userOptimize", "optimize"]; // 文生视频优先回退到文生图
+      } else if (templateType === "image2videoOptimize") {
+        fallbackTypes = ["text2videoOptimize", "text2imageOptimize", "userOptimize", "optimize"]; // 图生视频优先回退到文生视频
       } else if (templateType === "multiimageOptimize") {
         fallbackTypes = ["image2imageOptimize", "text2imageOptimize", "userOptimize", "optimize"];
       } else if (templateType === "imageIterate") {

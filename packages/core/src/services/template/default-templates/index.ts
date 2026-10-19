@@ -80,6 +80,12 @@ import { template as multiimage_optimize_en } from './image-optimize/multiimage/
 import { template as image_iterate_general } from './image-optimize/iterate/image-iterate-general';
 import { template as image_iterate_general_en } from './image-optimize/iterate/image-iterate-general_en';
 
+// 视频优化模板
+import { template as video_general_optimize } from './video-optimize/text2video/general-video-optimize';
+import { template as video_general_optimize_en } from './video-optimize/text2video/general-video-optimize_en';
+import { template as video_image_optimize } from './video-optimize/image2video/general-video-image-optimize';
+import { template as video_image_optimize_en } from './video-optimize/image2video/general-video-image-optimize_en';
+
 // 评估模板 - 基础模式/系统提示词
 import { template as evaluation_basic_system_result } from './evaluation/basic/system/evaluation-result';
 import { template as evaluation_basic_system_result_en } from './evaluation/basic/system/evaluation-result_en';
@@ -229,6 +235,12 @@ export const ALL_TEMPLATES = {
   // 图像迭代模板
   image_iterate_general,
   image_iterate_general_en,
+  // 视频优化模板 - 文生视频
+  video_general_optimize,
+  video_general_optimize_en,
+  // 视频优化模板 - 图生视频
+  video_image_optimize,
+  video_image_optimize_en,
   // 评估模板 - 基础模式/系统提示词
   evaluation_basic_system_result,
   evaluation_basic_system_result_en,

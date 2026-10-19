@@ -15,6 +15,8 @@ export type TemplateType =
   | 'user-optimize'
   | 'text2imageOptimize'
   | 'image2imageOptimize'
+  | 'text2videoOptimize'
+  | 'image2videoOptimize'
   | 'multiimageOptimize'
   | 'imageIterate'
   | 'iterate'
@@ -77,6 +79,8 @@ export class StaticLoader {
         'user-optimize': { zh: {}, en: {} },
         'text2imageOptimize': { zh: {}, en: {} },
         'image2imageOptimize': { zh: {}, en: {} },
+        'text2videoOptimize': { zh: {}, en: {} },
+        'image2videoOptimize': { zh: {}, en: {} },
         'multiimageOptimize': { zh: {}, en: {} },
         'imageIterate': { zh: {}, en: {} },
         'iterate': { zh: {}, en: {} },
@@ -112,6 +116,12 @@ export class StaticLoader {
             break;
           case 'image2imageOptimize':
             normalizedType = 'image2imageOptimize';
+            break;
+          case 'text2videoOptimize':
+            normalizedType = 'text2videoOptimize';
+            break;
+          case 'image2videoOptimize':
+            normalizedType = 'image2videoOptimize';
             break;
           case 'multiimageOptimize':
             normalizedType = 'multiimageOptimize';
