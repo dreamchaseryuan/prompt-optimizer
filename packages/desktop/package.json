@@ -1,7 +1,7 @@
 {
   "name": "@prompt-optimizer/desktop",
   "version": "2.11.11",
-  "description": "Desktop application for Prompt Optimizer",
+  "description": "Desktop application for Always200 Prompt",
   "main": "main.js",
   "repository": {
     "type": "git",
@@ -34,7 +34,7 @@
   },
   "build": {
     "appId": "com.promptoptimizer.desktop",
-    "productName": "PromptOptimizer",
+    "productName": "Always200Prompt",
     "executableName": "PromptOptimizer",
     "directories": {
       "output": "dist"

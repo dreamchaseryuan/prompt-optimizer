@@ -104,7 +104,7 @@ const messages = {
         "resourcesCorrupt": "{count} image resources are corrupt",
         "resourcesFailed": "{count} image resources failed to restore",
         "sharePngMissingData": "This PNG does not contain importable favorite share data. Use the original exported PNG file; screenshots, compressed images, or converted images cannot be imported.",
-        "shareHtmlMissingData": "This HTML file does not contain importable favorite share data. Use a share HTML file exported by Prompt Optimizer.",
+        "shareHtmlMissingData": "This HTML file does not contain importable favorite share data. Use a share HTML file exported by Always200 Prompt.",
         "readFileFailed": "Failed to read file",
         "noFileSize": "Unknown size"
       },
@@ -326,7 +326,7 @@ const messages = {
       "projectNamePlaceholder": "Project name",
       "projectUrlPlaceholder": "Project URL",
       "fixedSectionsHint": "Cover images, description, prompt content, tags, variables, and project watermark are always included.",
-      "watermarkHint": "The watermark always shows Prompt Optimizer and the official site.",
+      "watermarkHint": "The watermark always shows Always200 Prompt and the official site.",
       "previewTitle": "Export Preview",
       "previewHtml": "HTML",
       "previewPng": "PNG",
@@ -354,9 +354,9 @@ const messages = {
         "watermark": "Project watermark"
       },
       "document": {
-        "titleSuffix": "Prompt Optimizer Favorite Share",
-        "eyebrow": "Prompt Optimizer Favorite Share",
-        "metaPrefix": "Prompt Optimizer favorite share",
+        "titleSuffix": "Always200 Prompt Favorite Share",
+        "eyebrow": "Always200 Prompt Favorite Share",
+        "metaPrefix": "Always200 Prompt favorite share",
         "headerImportNote": "Import: open https://prompt.always200.com/ -> Favorites -> Import -> upload this HTML file.",
         "copy": "Copy",
         "copied": "Copied",

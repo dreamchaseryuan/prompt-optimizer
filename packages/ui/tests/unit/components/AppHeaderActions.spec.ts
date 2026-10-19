@@ -12,7 +12,7 @@ const i18nMap: Record<string, string> = {
   'nav.more': 'More Tools',
   'nav.about': 'About',
   'updater.viewOnGitHub': 'View on GitHub',
-  'about.title': 'Prompt Optimizer',
+  'about.title': 'Always200 Prompt',
   'about.website': 'Website',
   'about.websiteLabel': 'always200.com',
   'about.documentation': 'Docs',

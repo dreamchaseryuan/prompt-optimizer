@@ -80,7 +80,7 @@ const messages = {
     "context": "Context",
     "copySuccess": "Copied to clipboard",
     "copyFailed": "Copy Failed",
-    "appName": "Prompt Optimizer",
+    "appName": "Always200 Prompt",
     "selectFile": "Select File",
     "exporting": "Exporting...",
     "importing": "Importing...",
@@ -139,7 +139,7 @@ const messages = {
   "nav": {
     "home": "Home",
     "dashboard": "Dashboard",
-    "promptOptimizer": "Prompt Optimizer",
+    "promptOptimizer": "Always200 Prompt",
     "modelManager": "Model Manager",
     "history": "History",
     "templates": "Templates",
@@ -155,7 +155,7 @@ const messages = {
     "imageMode": "Image"
   },
   "about": {
-    "title": "Prompt Optimizer",
+    "title": "Always200 Prompt",
     "website": "Website",
     "websiteLabel": "always200.com",
     "documentation": "Docs",

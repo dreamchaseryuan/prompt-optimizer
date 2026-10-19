@@ -78,7 +78,7 @@ const messages = {
     "context": "上下文",
     "copySuccess": "複製成功",
     "copyFailed": "複製失敗",
-    "appName": "提示詞優化器",
+    "appName": "Always200 Prompt",
     "selectFile": "選擇檔案",
     "exporting": "匯出中...",
     "importing": "匯入中...",
@@ -139,7 +139,7 @@ const messages = {
   "nav": {
     "home": "首頁",
     "dashboard": "儀表板",
-    "promptOptimizer": "提示詞優化器",
+    "promptOptimizer": "Always200 Prompt",
     "modelManager": "模型管理",
     "history": "歷史紀錄",
     "templates": "功能提示詞",
@@ -155,7 +155,7 @@ const messages = {
     "imageMode": "圖像"
   },
   "about": {
-    "title": "提示詞優化器",
+    "title": "Always200 Prompt",
     "website": "官網",
     "websiteLabel": "always200.com",
     "documentation": "文件站",

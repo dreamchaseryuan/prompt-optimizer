@@ -104,7 +104,7 @@ const messages = {
         "resourcesCorrupt": "{count} 個圖片資源損壞",
         "resourcesFailed": "{count} 個圖片資源恢復失敗",
         "sharePngMissingData": "該 PNG 未檢測到可匯入的收藏分享資料，請使用原始匯出的 PNG 檔案；截圖、壓縮或格式轉換後的圖片無法匯入。",
-        "shareHtmlMissingData": "該 HTML 未檢測到可匯入的收藏分享資料，請使用 Prompt Optimizer 匯出的分享 HTML 檔案。",
+        "shareHtmlMissingData": "該 HTML 未檢測到可匯入的收藏分享資料，請使用 Always200 Prompt 匯出的分享 HTML 檔案。",
         "readFileFailed": "讀取檔案失敗",
         "noFileSize": "大小未知"
       },
@@ -326,7 +326,7 @@ const messages = {
       "projectNamePlaceholder": "專案名稱",
       "projectUrlPlaceholder": "專案位址",
       "fixedSectionsHint": "封面圖、描述、提示詞正文、標籤、變數和專案浮水印會預設包含。",
-      "watermarkHint": "浮水印固定顯示 Prompt Optimizer 和官網位址。",
+      "watermarkHint": "浮水印固定顯示 Always200 Prompt 和官網位址。",
       "previewTitle": "匯出預覽",
       "previewHtml": "HTML",
       "previewPng": "PNG",
@@ -354,9 +354,9 @@ const messages = {
         "watermark": "專案浮水印"
       },
       "document": {
-        "titleSuffix": "Prompt Optimizer 收藏分享",
-        "eyebrow": "Prompt Optimizer 收藏分享",
-        "metaPrefix": "Prompt Optimizer 收藏分享",
+        "titleSuffix": "Always200 Prompt 收藏分享",
+        "eyebrow": "Always200 Prompt 收藏分享",
+        "metaPrefix": "Always200 Prompt 收藏分享",
         "headerImportNote": "匯入：訪問 https://prompt.always200.com/ → 收藏夾 → 匯入 → 上傳此 HTML 檔案。",
         "copy": "複製",
         "copied": "已複製",

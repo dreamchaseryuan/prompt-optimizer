@@ -197,7 +197,7 @@ const getDefaultShareSections = (): FavoriteShareSections => ({
 
 const sections = reactive<FavoriteShareSections>(getDefaultShareSections())
 const PRODUCT_WATERMARK = {
-  projectName: 'Prompt Optimizer',
+  projectName: 'Always200 Prompt',
   projectUrl: 'https://prompt.always200.com/',
 } as const
 const previewFormat = ref<'html' | 'png'>('html')

@@ -3,7 +3,7 @@
         PromptOptimizerApp - 主应用组件
 
         职责:
-        - 提供完整的 Prompt Optimizer 应用功能
+        - 提供完整的 Always200 Prompt 应用功能
         - 统一 web 和 extension 应用的核心逻辑
         - 管理所有状态、composables 和事件处理
 
@@ -998,7 +998,7 @@ const basicSessionVersionId = computed<string>({
     set: (value) => patchActiveBasicOptimizedResult({ versionId: value || "" }),
 });
 
-// 提示词优化器
+// Always200 Prompt
 const optimizer = usePromptOptimizer(
     services,
     selectedOptimizationMode,
@@ -2033,7 +2033,7 @@ const openDocumentationSite = async () => {
 
 // 打开GitHub仓库
 const openGithubRepo = async () => {
-    await openExternalUrl("https://github.com/linshenkx/prompt-optimizer");
+    await openExternalUrl("https://github.com/dreamchaseryuan/prompt-optimizer");
 };
 
 const normalizeTemplateTypeForManager = (

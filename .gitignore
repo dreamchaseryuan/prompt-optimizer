@@ -203,3 +203,4 @@ AGENTS.md
 .codex-tmp/
 .trellis/
 scripts/eval-baseline/out/
+.workbuddy/

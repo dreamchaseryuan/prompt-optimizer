@@ -1,6 +1,6 @@
 const messages = {
   "promptOptimizer": {
-    "title": "提示词优化器",
+    "title": "Always200 Prompt",
     "inputPlaceholder": "请输入需要优化的prompt...",
     "optimize": "优化",
     "analyze": "分析",
