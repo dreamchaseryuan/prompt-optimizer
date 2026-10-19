@@ -149,6 +149,7 @@ const messages = {
     "advancedMode": "Advanced Mode",
     "variableManager": "Variable Manager",
     "more": "More Tools",
+    "tools": "Tools",
     "about": "About",
     "basicMode": "Basic",
     "contextMode": "Context",

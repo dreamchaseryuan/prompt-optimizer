@@ -113,7 +113,7 @@ export { default as AppPreviewImageGroup } from "./components/media/AppPreviewIm
 // export { default as BasicUserWorkspace } from "./components/basic-mode/BasicUserWorkspace.vue";
 
 // App 布局组件
-export { AppHeaderActions, AppCoreNav, PromptOptimizerApp } from "./components/app-layout";
+export { AppSidebar, PromptOptimizerApp } from "./components/app-layout";
 
 // Router（由 UI 包提供，应用层应安装此 router 以避免多实例/注入不一致）
 export { router } from "./router";

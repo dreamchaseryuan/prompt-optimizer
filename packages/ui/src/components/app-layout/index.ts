@@ -5,6 +5,5 @@
  * 并实现 web 和 extension 应用之间的代码复用。
  */
 
-export { default as AppHeaderActions } from './AppHeaderActions.vue'
-export { default as AppCoreNav } from './AppCoreNav.vue'
+export { default as AppSidebar } from './AppSidebar.vue'
 export { default as PromptOptimizerApp } from './PromptOptimizerApp.vue'

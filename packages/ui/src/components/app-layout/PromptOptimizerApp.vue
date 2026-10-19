@@ -29,22 +29,13 @@
         </div>
         <template v-else>
             <MainLayoutUI>
-                <!-- Title Slot -->
-                <template #title>
-                    {{ t("promptOptimizer.title") }}
-                </template>
-
-                <!-- Core Navigation Slot -->
-                <template #core-nav>
-                    <AppCoreNav
-                        :workspace-path="activeWorkspaceContextPath"
-                        :allow-workspace-reselect="isFavoritesRoute || isBatchRoute"
-                    />
-                </template>
-
-                <!-- Actions Slot -->
-                <template #actions>
-                    <AppHeaderActions
+                <!-- Sidebar Slot -->
+                <template #sidebar>
+                    <AppSidebar
+                        :app-version="appVersion"
+                        :favorites-active="isFavoritesRoute"
+                        :batch-active="isBatchRoute"
+                        :backup-reminder-due="dataBackupReminderDue"
                         @open-templates="openTemplateManager"
                         @open-history="historyManager.showHistory = true"
                         @open-model-manager="modelManager.showConfig = true"
@@ -52,14 +43,20 @@
                         @open-batch="openBatchPage"
                         @open-data-manager="showDataManager = true"
                         @open-variables="handleOpenVariableManager()"
-                        :favorites-active="isFavoritesRoute"
-                        :batch-active="isBatchRoute"
-                        :backup-reminder-due="dataBackupReminderDue"
-                        :app-version="appVersion"
                         @open-website="openOfficialWebsite"
                         @open-docs="openDocumentationSite"
                         @open-github="openGithubRepo"
                     />
+                </template>
+
+                <!-- Title Slot -->
+                <template #title>
+                    {{ currentPageTitle }}
+                </template>
+
+                <!-- Actions Slot -->
+                <template #actions>
+                    <slot name="topbar-actions"></slot>
                 </template>
                 <template #main>
                     <!-- 🔧 路由架构：使用 RouterView 自动渲染对应的工作区容器 -->
@@ -276,8 +273,7 @@ import { VariableExtractionResultDialog } from '../variable-extraction'
 import ToolManagerModal from '../tool/ToolManagerModal.vue'
 import ContextEditor from '../context-mode/ContextEditor.vue'
 import PromptPreviewPanel from '../PromptPreviewPanel.vue'
-import AppHeaderActions from './AppHeaderActions.vue'
-import AppCoreNav from './AppCoreNav.vue'
+import AppSidebar from './AppSidebar.vue'
 import { createWorkspaceRouteSwitchController } from './workspaceRouteSwitch'
 import { favoritesPageActionsKey } from '../favorites/favorites-page-context'
 import rootPackageJson from '../../../../../package.json'
@@ -489,6 +485,24 @@ const lastWorkspacePath = ref<string | null>(
 
 const isFavoritesRoute = computed(() => routerInstance.currentRoute.value.path === '/favorites')
 const isBatchRoute = computed(() => routerInstance.currentRoute.value.path === '/batch')
+
+// 顶栏标题：当前工作区/页面名
+const currentPageTitle = computed(() => {
+    const path = routerInstance.currentRoute.value.path
+    if (path === '/favorites') return t('nav.favorites')
+    if (path === '/batch') return t('nav.batch')
+    const titleByKey: Record<string, string> = {
+        '/basic/system': 'promptOptimizer.systemPrompt',
+        '/basic/user': 'promptOptimizer.userPrompt',
+        '/pro/multi': 'contextMode.optimizationMode.message',
+        '/pro/variable': 'contextMode.optimizationMode.variable',
+        '/image/text2image': 'imageMode.text2image',
+        '/image/image2image': 'imageMode.image2image',
+        '/image/multiimage': 'imageMode.multiimage',
+    }
+    const key = titleByKey[path]
+    return key ? t(key) : t('common.appName')
+})
 
 watch(
   () => routerInstance.currentRoute.value.fullPath,
