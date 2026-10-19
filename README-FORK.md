@@ -2,7 +2,7 @@
 
 本仓库是 [linshenkx/prompt-optimizer](https://github.com/linshenkx/prompt-optimizer) 的个人自用 Fork（上游基线：`develop` 分支 `1e1f94c0`，2026-10-13，桌面版 v2.11.11）。
 
-除上游能力外，本 Fork 增加了提示词健壮性加固、通用编程领域模板与四家国内模型适配器。本文件只记录差异，上游完整文档见 `README.md` / `README.zh-CN.md`。
+除上游能力外，本 Fork 增加了提示词健壮性加固、通用编程领域模板、四家国内模型适配器、模板回归基准工具，以及批量优化与收藏夹版本对比两个前端功能。本文件只记录差异，上游完整文档见 `README.md` / `README.zh-CN.md`。
 
 ## 与上游的差异
 
@@ -55,6 +55,43 @@ VITE_MOONSHOT_API_KEY=sk-...      # moonshot
 VITE_ARK_API_KEY=...               # volcengine-ark（也接受 VITE_VOLCENGINE_ARK_API_KEY）
 VITE_HUNYUAN_API_KEY=...           # hunyuan
 VITE_SPARK_API_KEY=...             # spark
+```
+
+### 4. 前端增强（M7 / M8）
+
+**模板选择器分组**
+
+- `TemplateMetadata` 新增可选 `domain` 字段；通用编程四模板标记 `domain='programming'`
+- 模板下拉在存在领域模板时按「通用 / 编程领域 / 用户自定义」分组展示（NSelect group）；其余模板类型保持原扁平列表行为
+- 新领域接入方式：模板 metadata 加 `domain: '<name>'` + 三语 locale 补 `template.groupDomain.<name>`（`packages/ui/src/i18n/locales/*/templates.ts`）
+
+**批量优化（`/#/batch`）**
+
+- 头部「⚡ 批量优化」入口（页面型目的地，与收藏夹同级，不占工作区子模式）
+- 输入解析：空行分隔多条提示词，单条可多行；单批上限 50 条
+- 顺序执行所选 optimize 模板与模型，支持停止（当前条完成后生效）
+- 结果：逐条状态/耗时、展开 Markdown 渲染、单条复制、复制全部、导出 JSON
+- 说明：批量结果不写入优化历史（MVP 取舍），需要留存请用「导出 JSON」
+
+**版本对比（收藏夹）**
+
+- 版本列表每行新增「对比」按钮（≥2 个版本时显示）
+- 弹窗内双版本自由切换（默认「次新版本 vs 当前版本」），零依赖 LCS 行级 diff：双侧行号、`+/-` 标记、红绿高亮、增删统计、相同内容空态
+- 多消息数组模板经文本投影后同样可比（图片提示词版本一致适用）
+
+### 5. 模板回归基准工具（M5 / M6）
+
+- 目录：`scripts/eval-baseline/`，方法见该目录 `README.md`
+- 12 条固定基准（覆盖中英/长短/占位符场景），`--dry-run` 离线校验渲染与证据包裹，`--live` 跑任意 OpenAI 兼容端点
+- 机械一致性校验：占位符保留、代码块包裹、Markdown 标题数、最小长度；输出 `out/<timestamp>/results-<template>.json`（已 gitignore）
+- 典型用法：
+
+```bash
+corepack pnpm build:core
+BASELINE_BASE_URL=https://api.deepseek.com/v1 \
+BASELINE_API_KEY=sk-xxx \
+BASELINE_MODEL=deepseek-chat \
+node scripts/eval-baseline/run.mjs --template general-optimize --runs 3
 ```
 
 ## 开发环境

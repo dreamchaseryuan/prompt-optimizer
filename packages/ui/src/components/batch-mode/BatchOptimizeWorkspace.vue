@@ -194,8 +194,7 @@ import { useToast } from '../../composables/ui/useToast'
 import TemplateSelect from '../TemplateSelect.vue'
 import MarkdownRenderer from '../MarkdownRenderer.vue'
 import { normalizeWorkspacePath } from '../../router/workspaceRoutes'
-
-const MAX_ENTRIES = 50
+import { MAX_BATCH_ENTRIES, parseBatchEntries } from '../../utils/batch-entries'
 
 type BatchStatus = 'pending' | 'running' | 'done' | 'failed' | 'cancelled'
 
@@ -262,17 +261,13 @@ watch(
 )
 
 // ---- 输入解析：空行分隔多条，单条可多行 ----
-const entries = computed<string[]>(() =>
-    rawInput.value
-        .split(/\n\s*\n+/)
-        .map((block) => block.trim())
-        .filter((block) => block.length > 0)
-)
+const entries = computed<string[]>(() => parseBatchEntries(rawInput.value))
+const rawEntryCount = computed(() => parseBatchEntries(rawInput.value, Number.MAX_SAFE_INTEGER).length)
 const entryCount = computed(() => entries.value.length)
 const entryCountHint = computed(() => {
     const count = t('batch.entryCount', { count: entryCount.value })
-    return entryCount.value > MAX_ENTRIES
-        ? `${count} · ${t('batch.maxEntriesHint', { max: MAX_ENTRIES })}`
+    return rawEntryCount.value > MAX_BATCH_ENTRIES
+        ? `${count} · ${t('batch.maxEntriesHint', { max: MAX_BATCH_ENTRIES })}`
         : count
 })
 
@@ -316,7 +311,7 @@ const startBatch = async () => {
         return
     }
 
-    const pendingEntries = entries.value.slice(0, MAX_ENTRIES)
+    const pendingEntries = entries.value.slice()
     if (pendingEntries.length === 0) {
         toast.warning(t('batch.noEntries'))
         return
