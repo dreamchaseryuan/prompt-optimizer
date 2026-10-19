@@ -47,11 +47,19 @@
       </button>
 
       <NSpace
-        v-if="showSetCurrentActions || showDeleteActions"
         :size="6"
         class="favorite-prompt-asset-version-list__actions"
         @click.stop
       >
+        <NButton
+          v-if="versionEntries.length > 1"
+          size="tiny"
+          quaternary
+          data-testid="favorite-prompt-asset-version-compare"
+          @click="$emit('compare-version', version)"
+        >
+          {{ t('favorites.version.compare') }}
+        </NButton>
         <NButton
           v-if="showSetCurrentActions && version.id !== currentVersionId"
           size="tiny"
@@ -103,6 +111,7 @@ const props = withDefaults(defineProps<{
 
 defineEmits<{
   'view-version': [version: PromptContentVersion]
+  'compare-version': [version: PromptContentVersion]
   'set-current-version': [version: PromptContentVersion]
   'delete-version': [version: PromptContentVersion]
 }>()

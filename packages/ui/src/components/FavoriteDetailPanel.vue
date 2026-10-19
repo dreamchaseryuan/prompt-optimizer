@@ -245,6 +245,7 @@
                 <FavoritePromptAssetVersionList
                   :prompt-asset="promptAsset"
                   @view-version="handleViewVersion"
+                  @compare-version="handleCompareVersion"
                 />
               </NCollapseItem>
               <NCollapseItem
@@ -368,6 +369,7 @@
                 <FavoritePromptAssetVersionList
                   :prompt-asset="promptAsset"
                   @view-version="handleViewVersion"
+                  @compare-version="handleCompareVersion"
                 />
               </NCollapseItem>
               <NCollapseItem
@@ -431,6 +433,11 @@
         v-model:show="showVersionPreview"
         :version="previewVersion"
       />
+      <FavoritePromptAssetVersionCompareModal
+        v-model:show="showVersionCompare"
+        :prompt-asset="promptAsset"
+        :initial-left-version-id="compareVersionId"
+      />
     </template>
   </div>
 </template>
@@ -475,6 +482,7 @@ import FavoritePreviewExtensionHost from './FavoritePreviewExtensionHost.vue'
 import FavoriteReproducibilityDisplay from './FavoriteReproducibilityDisplay.vue'
 import FavoritePromptAssetVersionList from './favorites/FavoritePromptAssetVersionList.vue'
 import FavoritePromptAssetVersionPreviewModal from './favorites/FavoritePromptAssetVersionPreviewModal.vue'
+import FavoritePromptAssetVersionCompareModal from './favorites/FavoritePromptAssetVersionCompareModal.vue'
 import FavoriteSurfaceSection from './favorites/FavoriteSurfaceSection.vue'
 import AppPreviewImage from './media/AppPreviewImage.vue'
 import AppPreviewImageGroup from './media/AppPreviewImageGroup.vue'
@@ -515,6 +523,8 @@ const reproducibilityExamplePreviews = ref<Array<{
 const activeImageIndex = ref(0)
 const showVersionPreview = ref(false)
 const previewVersion = ref<PromptContentVersion | null>(null)
+const showVersionCompare = ref(false)
+const compareVersionId = ref('')
 let resolveSequence = 0
 let reproducibilityResolveSequence = 0
 
@@ -770,6 +780,11 @@ const handleFavoriteUpdated = (favoriteId: string) => {
 const handleViewVersion = (version: PromptContentVersion) => {
   previewVersion.value = version
   showVersionPreview.value = true
+}
+
+const handleCompareVersion = (version: PromptContentVersion) => {
+  compareVersionId.value = version.id
+  showVersionCompare.value = true
 }
 
 const handleApplyExample = (options: { exampleId?: string; exampleIndex: number }) => {

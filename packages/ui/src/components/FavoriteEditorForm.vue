@@ -291,6 +291,7 @@
               show-delete-actions
               :busy-version-id="busyVersionId"
               @view-version="handleViewVersion"
+              @compare-version="handleCompareVersion"
               @set-current-version="handleSetCurrentVersion"
               @delete-version="handleDeleteVersion"
             />
@@ -368,6 +369,11 @@
       v-model:show="showVersionPreview"
       :version="previewVersion"
     />
+    <FavoritePromptAssetVersionCompareModal
+      v-model:show="showVersionCompare"
+      :prompt-asset="promptAsset"
+      :initial-left-version-id="compareVersionId"
+    />
   </div>
 </template>
 
@@ -427,6 +433,7 @@ import {
 import CategoryTreeSelect from './CategoryTreeSelect.vue'
 import FavoritePromptAssetVersionList from './favorites/FavoritePromptAssetVersionList.vue'
 import FavoritePromptAssetVersionPreviewModal from './favorites/FavoritePromptAssetVersionPreviewModal.vue'
+import FavoritePromptAssetVersionCompareModal from './favorites/FavoritePromptAssetVersionCompareModal.vue'
 import FavoriteReproducibilityEditor from './FavoriteReproducibilityEditor.vue'
 import FavoriteSurfaceSection from './favorites/FavoriteSurfaceSection.vue'
 import AppPreviewImage from './media/AppPreviewImage.vue'
@@ -491,6 +498,8 @@ const saving = ref(false)
 const busyVersionId = ref('')
 const showVersionPreview = ref(false)
 const previewVersion = ref<PromptContentVersion | null>(null)
+const showVersionCompare = ref(false)
+const compareVersionId = ref('')
 const mediaTouched = ref(false)
 const tagInputValue = ref('')
 const reproducibilityVariables = ref<FavoriteReproducibilityVariable[]>([])
@@ -1111,6 +1120,11 @@ const handleAddTag = (event: KeyboardEvent) => {
 const handleViewVersion = (version: PromptContentVersion) => {
   previewVersion.value = version
   showVersionPreview.value = true
+}
+
+const handleCompareVersion = (version: PromptContentVersion) => {
+  compareVersionId.value = version.id
+  showVersionCompare.value = true
 }
 
 const handleSetCurrentVersion = async (version: PromptContentVersion) => {
