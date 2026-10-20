@@ -1,5 +1,6 @@
 <template>
     <div class="video-image2video-workspace" data-testid="workspace" data-mode="video-image2video">
+        <WorkspacePageHero title-key="videoMode.image2video" subtitle-key="nav.videoMode" />
         <div class="workspace-page-tools">
             <WorkspaceUtilityMenu
                 :disabled="isOptimizing || isIterating"
@@ -275,6 +276,7 @@
 </template>
 
 <script setup lang="ts">
+import WorkspacePageHero from '../workspace/WorkspacePageHero.vue'
 import { onMounted, onUnmounted, inject, ref, computed, watch, nextTick, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {

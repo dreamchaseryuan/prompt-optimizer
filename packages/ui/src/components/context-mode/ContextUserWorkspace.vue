@@ -12,6 +12,7 @@
         - 包含工具管理按钮 (系统模式不包含)
     -->
     <div class="context-user-workspace" data-testid="workspace" data-mode="pro-variable">
+        <WorkspacePageHero title-key="contextMode.optimizationMode.variable" subtitle-key="nav.contextMode" />
         <div class="workspace-page-tools">
             <WorkspaceUtilityMenu
                 :disabled="contextUserOptimization.isOptimizing || contextUserOptimization.isIterating || isAnyVariantRunning"
@@ -577,6 +578,7 @@
  * />
  * ```
  */
+import WorkspacePageHero from '../workspace/WorkspacePageHero.vue'
 import { ref, reactive, computed, inject, nextTick, watch, onMounted, onUnmounted, toRef, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 

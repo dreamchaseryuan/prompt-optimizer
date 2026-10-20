@@ -1,10 +1,10 @@
 <!-- 输入面板组件 - 纯Naive UI实现 -->
 <template>
-    <NSpace vertical :size="16">
-        <!-- 标题区域 -->
+    <NSpace vertical :size="16" class="input-panel">
+        <!-- 标题区域：小节标签（页面 hero 已由 WorkspacePageHero 承担，避免双 hero） -->
         <NFlex justify="space-between" align="center" :wrap="false">
             <NFlex align="center" :size="8">
-                <NText :depth="1" style="font-size: 18px; font-weight: 500">{{
+                <NText :depth="2" class="input-panel-title">{{
                     label
                 }}</NText>
                 <!-- 🆕 帮助提示图标 -->
@@ -395,3 +395,27 @@ const handleAddMissingVariable = (varName: string) => {
     emit("add-missing-variable", varName);
 };
 </script>
+
+<style scoped>
+/* 输入区 hero 化（设计文档 §2.4.1）：更大输入字号、更强行高、弱占位色 */
+.input-panel :deep(.n-input .n-input__textarea-el) {
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.input-panel :deep(.n-input .n-input__placeholder) {
+    color: var(--ds-fg-3, var(--n-text-color-disabled));
+}
+
+/* 聚焦时输入区获得更强的主色环（2px，与 token 一致） */
+.input-panel :deep(.n-input.n-input--focus) {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--n-primary-color) 35%, transparent);
+}
+
+/* 小节标题降级：13px/600 次级色，让位输入区 */
+.input-panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ds-fg-1, var(--n-text-color-2));
+}
+</style>

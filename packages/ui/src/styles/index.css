@@ -1,5 +1,6 @@
 @import "./tokens.css";
 @import "./workspace.css";
+@import "./naive-fixes.css";
 
 @import "tailwindcss";
 @config "../../tailwind.config.js";

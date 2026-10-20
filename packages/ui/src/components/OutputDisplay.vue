@@ -179,7 +179,6 @@ defineExpose({ forceRefreshContent, forceExitEditing });
 .floating-toolbar {
   @apply absolute top-2 right-2 z-10 flex items-center gap-2 px-3 py-2 rounded-lg;
   background: color-mix(in srgb, var(--n-popover-color, var(--n-color)) 88%, transparent);
-  backdrop-filter: blur(8px);
   border: 1px solid var(--n-border-color);
   box-shadow: var(--n-box-shadow-2, 0 8px 20px color-mix(in srgb, var(--n-text-color) 12%, transparent));
 }
@@ -188,7 +187,6 @@ defineExpose({ forceRefreshContent, forceExitEditing });
 .floating-copy-btn {
   @apply absolute top-2 right-2 z-10 flex items-center gap-2 px-3 py-2 rounded-lg;
   background: color-mix(in srgb, var(--n-popover-color, var(--n-color)) 88%, transparent);
-  backdrop-filter: blur(8px);
   border: 1px solid var(--n-border-color);
   box-shadow: var(--n-box-shadow-2, 0 8px 20px color-mix(in srgb, var(--n-text-color) 12%, transparent));
 }

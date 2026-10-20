@@ -1,5 +1,6 @@
 <template>
     <div class="image-image2image-workspace" data-testid="workspace" data-mode="image-image2image">
+        <WorkspacePageHero title-key="imageMode.image2image" subtitle-key="nav.imageMode" />
         <div class="workspace-page-tools">
             <WorkspaceUtilityMenu
                 :disabled="isOptimizing || isIterating || isAnyVariantRunning"
@@ -815,6 +816,7 @@
 </template>
 
 <script setup lang="ts">
+import WorkspacePageHero from '../workspace/WorkspacePageHero.vue'
 import { onMounted, onUnmounted, inject, ref, reactive, computed, watch, nextTick, toRef, type Ref } from 'vue'
 import { useRouter, type LocationQueryRaw } from 'vue-router'
 

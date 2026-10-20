@@ -67,11 +67,13 @@
                     <!-- - /image/text2image → ImageText2ImageWorkspace -->
                     <!-- - /image/image2image → ImageImage2ImageWorkspace -->
                     <RouterView v-slot="{ Component, route: viewRoute }">
-                        <component
-                            :is="Component"
-                            :key="viewRoute.fullPath"
-                            :ref="(instance: unknown) => setWorkspaceRef(instance, viewRoute.name)"
-                        />
+                        <Transition name="ds-page" mode="out-in">
+                            <component
+                                :is="Component"
+                                :key="viewRoute.fullPath"
+                                :ref="(instance: unknown) => setWorkspaceRef(instance, viewRoute.name)"
+                            />
+                        </Transition>
                     </RouterView>
                 </template>
             </MainLayoutUI>

@@ -4,6 +4,7 @@
         data-testid="workspace"
         data-mode="basic-user"
     >
+        <WorkspacePageHero title-key="promptOptimizer.userPrompt" subtitle-key="nav.basicMode" />
         <div class="workspace-page-tools">
             <WorkspaceUtilityMenu
                 :disabled="unwrappedLogicProps.isOptimizing || unwrappedLogicProps.isIterating || isAnyVariantRunning"
@@ -511,6 +512,7 @@
  * - templateType 为 'userOptimize'（而非 'optimize'）
  * - optimizationMode 为 'user'（而非 'system'）
  */
+import WorkspacePageHero from '../workspace/WorkspacePageHero.vue'
 import { ref, reactive, computed, toRef, inject, onMounted, onUnmounted, watch, nextTick, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'

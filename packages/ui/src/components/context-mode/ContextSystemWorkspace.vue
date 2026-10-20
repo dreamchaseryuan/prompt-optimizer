@@ -1,5 +1,6 @@
 <template>
     <div class="context-system-workspace" data-testid="workspace" data-mode="pro-multi">
+        <WorkspacePageHero title-key="contextMode.optimizationMode.message" subtitle-key="nav.contextMode" />
         <div class="workspace-page-tools">
             <WorkspaceUtilityMenu
                 :disabled="displayAdapter.displayedIsOptimizing.value || isIterating || isAnyVariantRunning"
@@ -513,6 +514,7 @@
 </template>
 
 <script setup lang="ts">
+import WorkspacePageHero from '../workspace/WorkspacePageHero.vue'
 import {
     ref,
     reactive,

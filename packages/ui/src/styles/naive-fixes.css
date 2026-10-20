@@ -1,0 +1,48 @@
+/* Naive UI 动效补刀（设计文档 §3 / §4.2）
+ * 统一收敛浮层过渡到动效 token；reduced-motion 由 tokens.css 全局归零 */
+
+/* Dropdown / Popover / Modal / Message 共用的 fade-in-scale-up 过渡：
+ * 入场 200ms ease-out-quart（原 0.3s 内建），离场 150ms */
+.fade-in-scale-up-transition-enter-active {
+  transition:
+    opacity var(--ds-dur-base, 200ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) !important;
+  transition-property: opacity, transform !important;
+}
+
+.fade-in-scale-up-transition-leave-active {
+  transition:
+    opacity var(--ds-dur-fast, 150ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) !important;
+  transition-property: opacity, transform !important;
+}
+
+/* Toast（NMessage）入场：上移 8px + fade，200ms ease-out-quart */
+.message-transition-enter-active {
+  transition:
+    opacity var(--ds-dur-base, 200ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+    transform var(--ds-dur-base, 200ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) !important;
+}
+
+.message-transition-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.message-transition-leave-active {
+  transition:
+    opacity var(--ds-dur-fast, 150ms) ease,
+    transform var(--ds-dur-fast, 150ms) ease !important;
+}
+
+/* 优化完成：结果内容渲染自带一次性 fade-in（200ms） */
+.app-shell .app-content .markdown-content {
+  animation: ds-fade-in var(--ds-dur-base, 200ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+@keyframes ds-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

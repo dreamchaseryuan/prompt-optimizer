@@ -19,7 +19,10 @@
           clearable
         >
           <template #prefix>
-            <span style="font-size: 14px;">🔍</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.5-4.5" />
+            </svg>
           </template>
         </NInput>
         <NButton
@@ -34,18 +37,17 @@
     </template>
 
     <NScrollbar style="max-height: 65vh;">
-      <NSpace vertical :size="16" v-if="sortedHistory && sortedHistory.length > 0">
-        <NCard
+      <div v-if="sortedHistory && sortedHistory.length > 0" class="history-list">
+        <div
           v-for="chain in filteredHistory"
           :key="chain.chainId"
-          hoverable
+          class="history-item"
         >
-          <template #header>
-            <NSpace justify="space-between" align="center">
-              <NSpace align="center" :size="8">
-                <NText depth="3" style="font-size: 14px;">
-                  {{ t('common.createdAt') }} {{ formatDate(chain.rootRecord.timestamp) }}
-                </NText>
+          <div class="history-item-head">
+            <div class="history-item-meta">
+              <NText depth="3" style="font-size: 13px;">
+                {{ t('common.createdAt') }} {{ formatDate(chain.rootRecord.timestamp) }}
+              </NText>
                 <!-- 功能模式标签 -->
                 <NTag
                   :type="getFunctionModeTagType(chain.rootRecord.type)"
@@ -124,7 +126,7 @@
                   v-if="getChainSource(chain)"
                   :source="getChainSource(chain)!"
                 />
-              </NSpace>
+              </div>
               <NButton
                 @click="deleteChain(chain.chainId)"
                 size="small"
@@ -134,16 +136,13 @@
               >
                 {{ $t('common.delete') }}
               </NButton>
-            </NSpace>
-          </template>
-          
-          <NText style="font-size: 14px; word-break: break-all;">
-            {{ chain.rootRecord.originalPrompt }}
-          </NText>
+          </div>
 
-          
-          <!-- 版本列表 -->
-          <NDivider style="margin: 16px 0;" />
+          <div class="history-item-prompt">
+            <NText style="font-size: 14px; word-break: break-all;">
+              {{ chain.rootRecord.originalPrompt }}
+            </NText>
+          </div>
           <NSpace vertical :size="12">
             <NCollapse
               v-for="record in chain.versions.slice().reverse()"
@@ -230,14 +229,13 @@
               </NCollapseItem>
             </NCollapse>
           </NSpace>
-        </NCard>
-      </NSpace>
-      
-      <NEmpty v-else :description="$t('history.noHistory')">
-        <template #icon>
-          <span style="font-size: 48px;">📜</span>
-        </template>
-      </NEmpty>
+        </div>
+      </div>
+
+      <div v-else class="history-empty">
+        <div class="history-empty-mark">0</div>
+        <p class="history-empty-text">{{ $t('history.noHistory') }}</p>
+      </div>
     </NScrollbar>
   </NModal>
 
@@ -253,8 +251,8 @@ import { ref, watch, computed, type PropType } from 'vue'
 
 import { useI18n } from 'vue-i18n'
 import {
-  NModal, NScrollbar, NSpace, NCard, NText, NTag, NButton, 
-  NDivider, NCollapse, NCollapseItem, NEmpty, NInput
+  NModal, NScrollbar, NSpace, NText, NTag, NButton,
+  NCollapse, NCollapseItem, NInput
 } from 'naive-ui'
 import type { PromptAsset, PromptContentVersion, PromptRecord, PromptRecordChain } from '@prompt-optimizer/core'
 import { useConfirmDialog } from '../composables/ui/useConfirmDialog'
@@ -454,4 +452,65 @@ const deleteChain = async (chainId: string) => {
 </script>
 
 <style scoped>
+/* 行式历史列表（设计文档 §2.4.3）：分隔线 + 留白 + hover 底，弃卡片流 */
+.history-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-item {
+  padding: 16px 12px;
+  border-radius: 8px;
+  transition: background-color var(--ds-dur-fast, 150ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.history-item + .history-item {
+  border-top: 1px solid var(--ds-divider, var(--n-divider-color));
+}
+
+.history-item:hover {
+  background: var(--ds-bg-hover, var(--n-hover-color));
+}
+
+.history-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.history-item-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.history-item-prompt {
+  margin-top: 10px;
+}
+
+.history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 64px 0 48px;
+}
+
+/* 空态去插画：fg-3 大字（Space Grotesk）+ 一行 fg-2 说明 */
+.history-empty-mark {
+  font-family: var(--ds-font-display, inherit);
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ds-fg-3, var(--n-text-color-disabled));
+}
+
+.history-empty-text {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ds-fg-2, var(--n-text-color-3));
+}
 </style> 

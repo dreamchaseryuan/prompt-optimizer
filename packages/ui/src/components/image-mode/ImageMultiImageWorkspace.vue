@@ -1,5 +1,6 @@
 <template>
   <div class="image-multiimage-workspace" data-testid="workspace" data-mode="image-multiimage">
+        <WorkspacePageHero title-key="imageMode.multiimage" subtitle-key="nav.imageMode" />
     <div class="workspace-page-tools">
       <WorkspaceUtilityMenu
           :disabled="optimizing || isIterating || isAnyVariantRunning"
@@ -618,6 +619,7 @@
 </template>
 
 <script setup lang="ts">
+import WorkspacePageHero from '../workspace/WorkspacePageHero.vue'
 import { computed, inject, nextTick, onMounted, onUnmounted, reactive, ref, watch, toRef, type Ref } from 'vue'
 import { NButton, NCard, NEmpty, NFlex, NGrid, NGridItem, NIcon, NInput, NRadioButton, NRadioGroup, NSpace, NText } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
@@ -2078,8 +2080,6 @@ onUnmounted(() => {
   background: rgba(17, 24, 39, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.34);
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.28);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 .image-card__remove:hover,

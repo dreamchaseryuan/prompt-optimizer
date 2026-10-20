@@ -4,6 +4,7 @@
         data-testid="workspace"
         data-mode="basic-system"
     >
+        <WorkspacePageHero title-key="promptOptimizer.systemPrompt" subtitle-key="nav.basicMode" />
         <div class="workspace-page-tools">
             <WorkspaceUtilityMenu
                 :disabled="unwrappedLogicProps.isOptimizing || unwrappedLogicProps.isIterating || isAnyVariantRunning"
@@ -522,6 +523,7 @@
  * - 使用 useEvaluationHandler 处理评估功能
  * - 内联基础模式工作区布局（与 BasicUserWorkspace 保持一致）
  */
+import WorkspacePageHero from '../workspace/WorkspacePageHero.vue'
 import { ref, reactive, computed, toRef, inject, onMounted, onUnmounted, watch, nextTick, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'

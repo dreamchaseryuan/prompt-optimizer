@@ -2,6 +2,7 @@
   <NCard
     :bordered="false"
     class="output-display-core h-full"
+    :class="{ 'output-display-core--streaming': streaming }"
     content-style="padding: 0; height: 100%; max-height: 100%; display: flex; flex-direction: column; overflow: hidden;"
     :data-testid="testId"
   >
@@ -729,5 +730,68 @@ defineExpose({ resetReasoningState, forceRefreshContent, forceExitEditing })
 
 .output-copy-split-button:not(.is-disabled) :deep(.n-button:hover) {
   background: color-mix(in srgb, currentColor 8%, transparent) !important;
+}
+
+/* ===== 设计系统 §2.4.2 / §3：结果区视觉与流式反馈 ===== */
+
+/* 优化中：面板顶缘 2px 主色进度线（indeterminate 缓动，transform 驱动） */
+.output-display-core--streaming {
+  position: relative;
+}
+
+.output-display-core--streaming::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  overflow: hidden;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--n-primary-color) 40%,
+    var(--n-primary-color) 60%,
+    transparent 100%
+  );
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  animation: ds-stream-progress 1.4s var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)) infinite;
+}
+
+@keyframes ds-stream-progress {
+  from { background-position: -60% 0; }
+  to { background-position: 160% 0; }
+}
+
+/* 流式输出：内容尾部主色 caret（1s steps(2) 闪烁） */
+.output-display-core--streaming :deep(.markdown-content)::after {
+  content: '\258D';
+  margin-left: 2px;
+  color: var(--n-primary-color);
+  animation: ds-caret-blink 1s steps(2) infinite;
+}
+
+@keyframes ds-caret-blink {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* 结果区：等宽栈 + 14px（等宽作为意图性点缀，中文自动回退系统栈） */
+.output-display-core :deep(.markdown-content) {
+  font-family: var(--ds-font-family-mono, var(--ds-font-mono, monospace));
+  font-size: 14px;
+}
+
+/* 复制/编辑等操作按钮浮出式：静态弱显，hover 容器时浮现 */
+.output-display-core .output-toolbar-actions {
+  opacity: 0.4;
+  transition: opacity var(--ds-dur-base, 200ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.output-display-core:hover .output-toolbar-actions,
+.output-display-core:focus-within .output-toolbar-actions {
+  opacity: 1;
 }
 </style>

@@ -38,6 +38,51 @@ import ToastUI from './Toast.vue'
   background: var(--n-body-color);
 }
 
+/* 首挂载入场编排（设计文档 §2.1）：sidebar 0ms → body(topbar+content) 50ms，
+ * 300ms ease-out-expo，仅 CSS animation 天然只跑一次；
+ * prefers-reduced-motion 下由 tokens.css 全局归零 */
+@keyframes ds-shell-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.app-shell > * {
+  animation: ds-shell-enter var(--ds-dur-slow, 300ms) var(--ds-ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) backwards;
+}
+
+.app-shell > *:nth-child(1) { animation-delay: 0ms; }
+.app-shell > *:nth-child(2) { animation-delay: var(--ds-stagger, 50ms); }
+.app-shell > *:nth-child(3) { animation-delay: calc(var(--ds-stagger, 50ms) * 2); }
+
+/* 工作区路由切换（设计文档 §3）：fade + 位移，300ms ease-out-expo */
+.ds-page-enter-active {
+  transition:
+    opacity var(--ds-dur-slow, 300ms) var(--ds-ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+    transform var(--ds-dur-slow, 300ms) var(--ds-ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.ds-page-leave-active {
+  transition:
+    opacity var(--ds-dur-fast, 150ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)),
+    transform var(--ds-dur-fast, 150ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.ds-page-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.ds-page-leave-to {
+  opacity: 0;
+  transform: translateY(-2px);
+}
+
 .app-body {
   flex: 1;
   min-width: 0;
@@ -55,10 +100,9 @@ import ToastUI from './Toast.vue'
   justify-content: space-between;
   gap: 16px;
   padding: 0 20px;
-  border-bottom: 1px solid var(--n-border-color);
-  background: color-mix(in srgb, var(--n-card-color) 78%, transparent);
-  backdrop-filter: saturate(1.4) blur(10px);
-  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  /* 实色仪表条：不做玻璃（设计文档 §2.1），层级靠色阶与细边线 */
+  background: var(--ds-bg-shell, var(--n-card-color));
+  border-bottom: 1px solid var(--ds-divider, var(--n-border-color));
 }
 
 .topbar-title {
@@ -67,7 +111,8 @@ import ToastUI from './Toast.vue'
   min-width: 0;
   font-size: 13px;
   font-weight: 600;
-  color: var(--n-text-color-1);
+  /* 顶栏是仪表不是 hero：降级为次级文字色 */
+  color: var(--ds-fg-1, var(--n-text-color-2));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -56,7 +56,7 @@
           :aria-current="isActivePath(item.path) ? 'page' : undefined"
           @click="navigate(item.path)"
         >
-          <span class="nav-item-icon" aria-hidden="true">{{ item.icon }}</span>
+          <span class="nav-item-icon" aria-hidden="true" v-html="navIcon(item.icon)" />
           <span v-if="!collapsed" class="nav-item-label">{{ t(item.labelKey) }}</span>
         </button>
       </div>
@@ -76,7 +76,7 @@
         :aria-current="tool.active ? 'page' : undefined"
         @click="handleToolClick(tool)"
       >
-        <span class="nav-item-icon" aria-hidden="true">{{ tool.icon }}</span>
+        <span class="nav-item-icon" aria-hidden="true" v-html="navIcon(tool.icon)" />
         <span v-if="!collapsed" class="nav-item-label">{{ t(tool.labelKey) }}</span>
         <span v-if="!collapsed && tool.warn" class="nav-item-dot" :title="t('dataManager.backupReminder.tooltip')" />
       </button>
@@ -156,6 +156,7 @@ import ThemeToggleUI from '../ThemeToggleUI.vue'
 import LanguageSwitchDropdown from '../LanguageSwitchDropdown.vue'
 import UpdaterIcon from '../UpdaterIcon.vue'
 import AppPreviewImage from '../media/AppPreviewImage.vue'
+import { navIcon } from '../icons/nav-icons'
 import logoImage from '../../assets/logo.png'
 
 const { t } = useI18n()
@@ -236,30 +237,30 @@ const workspaceSections = computed<NavSection[]>(() => [
   {
     titleKey: 'nav.basicMode',
     items: [
-      { path: '/basic/system', labelKey: 'promptOptimizer.systemPrompt', icon: '🖥️' },
-      { path: '/basic/user', labelKey: 'promptOptimizer.userPrompt', icon: '📝' },
+      { path: '/basic/system', labelKey: 'promptOptimizer.systemPrompt', icon: 'basic-system' },
+      { path: '/basic/user', labelKey: 'promptOptimizer.userPrompt', icon: 'basic-user' },
     ],
   },
   {
     titleKey: 'nav.contextMode',
     items: [
-      { path: '/pro/multi', labelKey: 'contextMode.optimizationMode.message', icon: '💬' },
-      { path: '/pro/variable', labelKey: 'contextMode.optimizationMode.variable', icon: '🔣' },
+      { path: '/pro/multi', labelKey: 'contextMode.optimizationMode.message', icon: 'pro-multi' },
+      { path: '/pro/variable', labelKey: 'contextMode.optimizationMode.variable', icon: 'pro-variable' },
     ],
   },
   {
     titleKey: 'nav.imageMode',
     items: [
-      { path: '/image/text2image', labelKey: 'imageMode.text2image', icon: '🎨' },
-      { path: '/image/image2image', labelKey: 'imageMode.image2image', icon: '🖼️' },
-      { path: '/image/multiimage', labelKey: 'imageMode.multiimage', icon: '🗂️' },
+      { path: '/image/text2image', labelKey: 'imageMode.text2image', icon: 'image-text2image' },
+      { path: '/image/image2image', labelKey: 'imageMode.image2image', icon: 'image-image2image' },
+      { path: '/image/multiimage', labelKey: 'imageMode.multiimage', icon: 'image-multiimage' },
     ],
   },
   {
     titleKey: 'nav.videoMode',
     items: [
-      { path: '/video/text2video', labelKey: 'videoMode.text2video', icon: '🎬' },
-      { path: '/video/image2video', labelKey: 'videoMode.image2video', icon: '🎞️' },
+      { path: '/video/text2video', labelKey: 'videoMode.text2video', icon: 'video-text2video' },
+      { path: '/video/image2video', labelKey: 'videoMode.image2video', icon: 'video-image2video' },
     ],
   },
 ])
@@ -283,13 +284,13 @@ interface ToolItem {
 }
 
 const toolItems = computed<ToolItem[]>(() => [
-  { key: 'batch', icon: '⚡', labelKey: 'nav.batch', emitEvent: 'open-batch', active: props.batchActive },
-  { key: 'favorites', icon: '⭐', labelKey: 'nav.favorites', emitEvent: 'open-favorites', active: props.favoritesActive },
-  { key: 'templates', icon: '🗂️', labelKey: 'nav.templates', emitEvent: 'open-templates' },
-  { key: 'history', icon: '📜', labelKey: 'nav.history', emitEvent: 'open-history' },
-  { key: 'modelManager', icon: '⚙️', labelKey: 'nav.modelManager', emitEvent: 'open-model-manager' },
-  { key: 'dataManager', icon: '💾', labelKey: 'nav.dataManager', emitEvent: 'open-data-manager', warn: props.backupReminderDue },
-  { key: 'variables', icon: '🔢', labelKey: 'nav.variableManager', emitEvent: 'open-variables' },
+  { key: 'batch', icon: 'batch', labelKey: 'nav.batch', emitEvent: 'open-batch', active: props.batchActive },
+  { key: 'favorites', icon: 'favorites', labelKey: 'nav.favorites', emitEvent: 'open-favorites', active: props.favoritesActive },
+  { key: 'templates', icon: 'templates', labelKey: 'nav.templates', emitEvent: 'open-templates' },
+  { key: 'history', icon: 'history', labelKey: 'nav.history', emitEvent: 'open-history' },
+  { key: 'modelManager', icon: 'modelManager', labelKey: 'nav.modelManager', emitEvent: 'open-model-manager' },
+  { key: 'dataManager', icon: 'dataManager', labelKey: 'nav.dataManager', emitEvent: 'open-data-manager', warn: props.backupReminderDue },
+  { key: 'variables', icon: 'variables', labelKey: 'nav.variableManager', emitEvent: 'open-variables' },
 ])
 
 const handleToolClick = (item: ToolItem) => {
@@ -341,10 +342,11 @@ const handleOpenDocs = () => {
   width: 232px;
   height: 100%;
   flex-shrink: 0;
-  background: var(--n-card-color);
-  border-right: 1px solid var(--n-border-color);
+  /* 操纵台 vs 舞台：侧边栏用 bg-shell（比 canvas 亮一阶），与内容区分区（设计文档 §2.2） */
+  background: var(--ds-bg-shell, var(--n-card-color));
+  border-right: 1px solid var(--ds-border, var(--n-border-color));
   overflow: hidden;
-  transition: width 0.16s ease;
+  transition: width var(--ds-dur-base, 200ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .app-sidebar-collapsed {
@@ -411,10 +413,12 @@ const handleOpenDocs = () => {
 }
 
 .sidebar-brand-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
+  /* latin 字符走 Space Grotesk（品牌字标），中文自动回退系统栈 */
+  font-family: var(--ds-font-display, var(--ds-font-ui, inherit));
   letter-spacing: -0.02em;
-  color: var(--n-text-color-1);
+  color: var(--ds-fg-strong, var(--n-text-color-1));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -428,19 +432,20 @@ const handleOpenDocs = () => {
 }
 
 .nav-section {
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 }
 
 .nav-section-title {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--n-text-color-3);
+  color: var(--ds-fg-3, var(--n-text-color-3));
   padding: 4px 8px 6px;
 }
 
 .nav-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 9px;
@@ -451,17 +456,17 @@ const handleOpenDocs = () => {
   border: none;
   border-radius: 8px;
   background: transparent;
-  color: var(--n-text-color-2);
+  color: var(--ds-fg-1, var(--n-text-color-2));
   font: inherit;
   font-size: 13px;
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.12s ease, color 0.12s ease;
+  transition: background-color var(--ds-dur-fast, 150ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1)), color var(--ds-dur-fast, 150ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .nav-item:hover {
-  background: var(--n-hover-color);
-  color: var(--n-text-color-1);
+  background: var(--ds-bg-hover, var(--n-hover-color));
+  color: var(--ds-fg-0, var(--n-text-color-1));
 }
 
 .nav-item:focus-visible {
@@ -469,22 +474,57 @@ const handleOpenDocs = () => {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--n-primary-color) 30%, transparent);
 }
 
+/* active 态：实底 + 加粗文字 + 左侧 2px 主色指示条（弃主色 10% 大色块） */
 .nav-item-active {
-  background: color-mix(in srgb, var(--n-primary-color) 10%, transparent);
-  color: var(--n-primary-color);
+  background: var(--ds-bg-panel, var(--n-card-color));
+  color: var(--ds-fg-0, var(--n-text-color-1));
   font-weight: 600;
 }
 
+.nav-item-active::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 7px;
+  bottom: 7px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--ds-primary, var(--n-primary-color));
+  animation: ds-nav-indicator var(--ds-dur-base, 200ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+@keyframes ds-nav-indicator {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
 .nav-item-active:hover {
-  background: color-mix(in srgb, var(--n-primary-color) 14%, transparent);
-  color: var(--n-primary-color);
+  background: var(--ds-bg-panel, var(--n-card-color));
+  color: var(--ds-fg-0, var(--n-text-color-1));
 }
 
 .nav-item-icon {
-  font-size: 14px;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
-  opacity: 0.9;
+  color: var(--ds-fg-2, var(--n-text-color-3));
+  transition: color var(--ds-dur-fast, 150ms) var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.nav-item:hover .nav-item-icon {
+  color: var(--ds-fg-0, var(--n-text-color-1));
+}
+
+/* 激活项图标提亮为主色 suppl（深底亮紫/浅底深紫） */
+.nav-item-active .nav-item-icon {
+  color: var(--ds-primary-suppl, var(--n-primary-color));
 }
 
 .nav-item-label {

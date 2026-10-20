@@ -918,67 +918,22 @@ defineExpose({
     transform: translateY(0);
 }
 
+/* 版本切换反馈收敛（设计文档 §3）：删除 brightness/saturate pulse 双动画，
+ * 收敛为一次性主色环淡出（200ms，token 内缓动） */
 .version-tag-clickable--source-change {
-    animation: prompt-version-source-change-pulse 780ms ease-out;
+    animation: prompt-version-flash 200ms var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
 }
 
 .version-tag-clickable--source-error {
-    animation: prompt-version-source-error-pulse 860ms ease-out;
+    animation: prompt-version-flash 200ms var(--ds-ease-out-quart, cubic-bezier(0.25, 1, 0.5, 1));
 }
 
-@keyframes prompt-version-source-change-pulse {
-    0% {
-        transform: translateY(0) scale(1);
-        filter: brightness(1) saturate(1);
-        box-shadow: 0 0 0 0 currentColor;
+@keyframes prompt-version-flash {
+    from {
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--n-primary-color) 35%, transparent);
     }
-    24% {
-        transform: translateY(-1px) scale(1.08);
-        filter: brightness(1.08) saturate(1.35);
-        box-shadow:
-            0 0 0 2px currentColor,
-            0 0 0 6px color-mix(in srgb, currentColor 18%, transparent);
-    }
-    62% {
-        transform: translateY(-1px) scale(1.03);
-        filter: brightness(1.04) saturate(1.18);
-        box-shadow:
-            0 0 0 1px currentColor,
-            0 0 0 4px color-mix(in srgb, currentColor 12%, transparent);
-    }
-    100% {
-        transform: translateY(0) scale(1);
-        filter: brightness(1) saturate(1);
-        box-shadow: 0 0 0 0 currentColor;
-    }
-}
-
-@keyframes prompt-version-source-error-pulse {
-    0% {
-        transform: translateX(0);
-        filter: brightness(1) saturate(1);
-        box-shadow: 0 0 0 0 currentColor;
-    }
-    25% {
-        transform: translateX(-2px);
-        filter: brightness(1.1) saturate(1.35);
-    }
-    50% {
-        transform: translateX(2px);
-        filter: brightness(1.1) saturate(1.4);
-        box-shadow:
-            0 0 0 2px currentColor,
-            0 0 0 6px color-mix(in srgb, currentColor 20%, transparent);
-    }
-    70% {
-        box-shadow:
-            0 0 0 1px currentColor,
-            0 0 0 4px color-mix(in srgb, currentColor 12%, transparent);
-    }
-    100% {
-        transform: translateX(0);
-        filter: brightness(1) saturate(1);
-        box-shadow: 0 0 0 0 currentColor;
+    to {
+        box-shadow: 0 0 0 0 transparent;
     }
 }
 
