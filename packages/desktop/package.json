@@ -41,6 +41,7 @@
       "output": "dist"
     },
     "files": [
+      "LICENSE",
       "main.js",
       "preload.js",
       "remote-storage.js",
