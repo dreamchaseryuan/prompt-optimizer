@@ -272,10 +272,10 @@ export const naiveThemeConfigs: Record<string, ThemeConfig> = {
     // Violet Ink 深色色板：暖深灰紫调底（主战场，见 docs/ui-redesign-design.md §1.2）
     themeOverrides: {
       common: {
-        primaryColor: '#9d5fb8',
-        primaryColorHover: '#b07ac7',
-        primaryColorPressed: '#8a4fa6',
-        primaryColorSuppl: '#c99ade',
+        primaryColor: '#985cb2',
+        primaryColorHover: '#ab76c1',
+        primaryColorPressed: '#864da1',
+        primaryColorSuppl: '#c395d7',
         successColor: '#4ec07e',
         successColorHover: '#4ec07e',
         successColorPressed: '#4ec07e',

@@ -105,11 +105,11 @@ body {
   --ds-dark-fg-1: oklch(0.730 0.015 300);
   --ds-dark-fg-2: oklch(0.570 0.018 300);
   --ds-dark-fg-3: oklch(0.450 0.016 300);
-  /* 主色 Violet Ink（hue 310） */
-  --ds-dark-primary: oklch(0.640 0.160 310);
-  --ds-dark-primary-hover: oklch(0.690 0.150 310);
-  --ds-dark-primary-pressed: oklch(0.580 0.160 310);
-  --ds-dark-primary-suppl: oklch(0.790 0.110 310);
+  /* 主色 Violet Ink（hue ~315；primary 白字对比 4.66:1 达 WCAG AA，QA B6 P2-1） */
+  --ds-dark-primary: oklch(0.576 0.142 315);
+  --ds-dark-primary-hover: oklch(0.648 0.123 316);
+  --ds-dark-primary-pressed: oklch(0.522 0.140 314);
+  --ds-dark-primary-suppl: oklch(0.736 0.105 315);
   /* 语义色（低饱和） */
   --ds-dark-success: oklch(0.720 0.140 155);
   --ds-dark-warning: oklch(0.780 0.140 75);
