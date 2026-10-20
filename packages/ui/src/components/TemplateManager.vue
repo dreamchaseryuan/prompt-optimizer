@@ -31,12 +31,12 @@
     <NGrid :cols="3" :x-gap="8" :y-gap="8">
       <NGridItem>
         <NButton block :type="currentCategory==='system-optimize' ? 'primary' : 'default'" @click="currentCategory='system-optimize'">
-          {{ `🎯 ${t('templateManager.optimizeTemplates')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>{{ t('templateManager.optimizeTemplates') }}
         </NButton>
       </NGridItem>
       <NGridItem>
         <NButton block :type="currentCategory==='user-optimize' ? 'primary' : 'default'" @click="currentCategory='user-optimize'">
-          {{ `👤 ${t('templateManager.userOptimizeTemplates')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>{{ t('templateManager.userOptimizeTemplates') }}
         </NButton>
       </NGridItem>
       <NGridItem>
@@ -45,55 +45,55 @@
           :type="(currentCategory==='basic-system-iterate' || currentCategory==='basic-user-iterate') ? 'primary' : 'default'"
           @click="currentCategory = props.basicSubMode === 'system' ? 'basic-system-iterate' : 'basic-user-iterate'"
         >
-          {{ `🔄 ${t('templateManager.iterateTemplates')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36L21 8"/><path d="M21 3v5h-5"/></svg></span>{{ t('templateManager.iterateTemplates') }}
         </NButton>
       </NGridItem>
 
       <NGridItem>
         <NButton block :type="currentCategory==='context-system-optimize' ? 'primary' : 'default'" @click="currentCategory='context-system-optimize'">
-          {{ `🎯 ${t('templateManager.optimizeTemplatesContext')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>{{ t('templateManager.optimizeTemplatesContext') }}
         </NButton>
       </NGridItem>
       <NGridItem>
         <NButton block :type="currentCategory==='context-user-optimize' ? 'primary' : 'default'" @click="currentCategory='context-user-optimize'">
-          {{ `👤 ${t('templateManager.userOptimizeTemplatesContext')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>{{ t('templateManager.userOptimizeTemplatesContext') }}
         </NButton>
       </NGridItem>
       <NGridItem>
         <NButton block :type="currentCategory==='context-iterate' ? 'primary' : 'default'" @click="currentCategory='context-iterate'">
-          {{ `🔄 ${t('templateManager.iterateTemplatesContext')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36L21 8"/><path d="M21 3v5h-5"/></svg></span>{{ t('templateManager.iterateTemplatesContext') }}
         </NButton>
       </NGridItem>
 
       <!-- 图像 · 文生图 -->
       <NGridItem>
         <NButton block :type="currentCategory==='image-text2image-optimize' ? 'primary' : 'default'" @click="currentCategory='image-text2image-optimize'">
-          {{ `🖼️ ${t('templateManager.imageText2ImageTemplates')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></span>{{ t('templateManager.imageText2ImageTemplates') }}
         </NButton>
       </NGridItem>
       <!-- 图像 · 图生图 -->
       <NGridItem>
         <NButton block :type="currentCategory==='image-image2image-optimize' ? 'primary' : 'default'" @click="currentCategory='image-image2image-optimize'">
-          {{ `📷 ${t('templateManager.imageImage2ImageTemplates')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg></span>{{ t('templateManager.imageImage2ImageTemplates') }}
         </NButton>
       </NGridItem>
       <!-- 图像 · 迭代 -->
       <NGridItem>
         <NButton block :type="currentCategory==='image-iterate' ? 'primary' : 'default'" @click="currentCategory='image-iterate'">
-          {{ `🌀 ${t('templateManager.imageIterateTemplates')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36L21 8"/><path d="M21 3v5h-5"/></svg></span>{{ t('templateManager.imageIterateTemplates') }}
         </NButton>
       </NGridItem>
 
       <!-- 视频 · 文生视频 -->
       <NGridItem>
         <NButton block :type="currentCategory==='video-text2video-optimize' ? 'primary' : 'default'" @click="currentCategory='video-text2video-optimize'">
-          {{ `🎬 ${t('templateManager.videoText2VideoTemplates')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h5M2 15h5M17 9h5M17 15h5"/></svg></span>{{ t('templateManager.videoText2VideoTemplates') }}
         </NButton>
       </NGridItem>
       <!-- 视频 · 图生视频 -->
       <NGridItem>
         <NButton block :type="currentCategory==='video-image2video-optimize' ? 'primary' : 'default'" @click="currentCategory='video-image2video-optimize'">
-          {{ `🎞️ ${t('templateManager.videoImage2VideoTemplates')}` }}
+          <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h5M2 15h5M17 9h5M17 15h5"/></svg></span>{{ t('templateManager.videoImage2VideoTemplates') }}
         </NButton>
       </NGridItem>
     </NGrid>
@@ -245,10 +245,10 @@
                 :type="TemplateProcessor.isSimpleTemplate(template) ? 'info' : 'warning'"
                 size="small"
               >
-                {{ TemplateProcessor.isSimpleTemplate(template) 
-                  ? `📝 ${t('templateManager.simpleTemplate')}` 
-                  : `⚡ ${t('templateManager.advancedTemplate')}` 
-                }}
+                <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }">
+                  <svg v-if="TemplateProcessor.isSimpleTemplate(template)" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  <svg v-else width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </span>{{ TemplateProcessor.isSimpleTemplate(template) ? t('templateManager.simpleTemplate') : t('templateManager.advancedTemplate') }}
               </NTag>
               <NTag
                 v-if="getSelectedTemplateId() === template.id"
@@ -288,9 +288,10 @@
             :type="(viewingTemplate || editingTemplate) && TemplateProcessor.isSimpleTemplate((viewingTemplate || editingTemplate)!) ? 'info' : 'warning'"
             size="small"
           >
-            {{ (viewingTemplate || editingTemplate) && TemplateProcessor.isSimpleTemplate((viewingTemplate || editingTemplate)!) 
-              ? '📝 ' + t('templateManager.simpleTemplate') 
-              : '⚡ ' + t('templateManager.advancedTemplate') }}
+            <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }">
+              <svg v-if="(viewingTemplate || editingTemplate) && TemplateProcessor.isSimpleTemplate((viewingTemplate || editingTemplate)!)" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <svg v-else width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </span>{{ (viewingTemplate || editingTemplate) && TemplateProcessor.isSimpleTemplate((viewingTemplate || editingTemplate)!) ? t('templateManager.simpleTemplate') : t('templateManager.advancedTemplate') }}
           </NTag>
           <!-- Template Syntax Guide Toggle -->
           <NButton
@@ -327,14 +328,18 @@
               @click="form.isAdvanced = false"
               class="flex-1"
             >
-              📝 {{ t('templateManager.simpleTemplate') }}
+              <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </span>{{ t('templateManager.simpleTemplate') }}
             </NButton>
             <NButton
               :type="form.isAdvanced ? 'primary' : 'default'"
               @click="form.isAdvanced = true"
               class="flex-1"
             >
-              ⚡ {{ t('templateManager.advancedTemplate') }}
+              <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </span>{{ t('templateManager.advancedTemplate') }}
             </NButton>
           </NSpace>
         </div>

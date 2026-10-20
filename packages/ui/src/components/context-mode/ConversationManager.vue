@@ -12,7 +12,7 @@
                 <NSpace :size="8" align="center">
                     <!-- 消息数量 -->
                     <NText v-if="messages.length > 0" :depth="3" style="font-size: 13px">
-                        💬 {{ t("conversation.stats.messages") }}: {{ messages.length }}
+                        <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>{{ t("conversation.stats.messages") }}: {{ messages.length }}
                     </NText>
 
                     <!-- 变量统计 -->
@@ -21,7 +21,7 @@
                         :depth="3"
                         style="font-size: 13px"
                     >
-                        🏷️ {{ t("conversation.stats.variables") }}: {{ allUsedVariables.length }}
+                        <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>{{ t("conversation.stats.variables") }}: {{ allUsedVariables.length }}
                     </NText>
 
                     <!-- 缺失变量警告 -->
@@ -30,7 +30,7 @@
                         :depth="3"
                         style="font-size: 13px; color: var(--warning-color)"
                     >
-                        ⚠️ {{ t("conversation.stats.missing") }}: {{ allMissingVariables.length }}
+                        <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>{{ t("conversation.stats.missing") }}: {{ allMissingVariables.length }}
                     </NText>
 
                     <!-- 工具数量标签（可点击） -->
@@ -41,7 +41,7 @@
                         @click="emit('open-tool-manager')"
                         :title="t('contextEditor.toolsTab')"
                     >
-                        🔧 {{ t("conversation.stats.tools") }}: {{ toolCount || 0 }}
+                        <span :style="{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', verticalAlign: '-3px' }"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>{{ t("conversation.stats.tools") }}: {{ toolCount || 0 }}
                     </NText>
 
                     <!-- 打开上下文编辑器按钮 -->

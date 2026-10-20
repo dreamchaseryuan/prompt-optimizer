@@ -758,8 +758,8 @@
                 >
                     <n-upload-dragger>
                         <div style="padding: 24px; text-align: center">
-                            <div style="font-size: 32px; margin-bottom: 12px">
-                                📁
+                            <div style="display: flex; justify-content: center; margin-bottom: 12px; opacity: 0.55">
+                                <span :style="{ display: 'inline-flex', alignItems: 'center',  }"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14.8A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M12 12v9"/><path d="m8 17 4-4 4 4"/></svg></span>
                             </div>
                             <n-text style="font-size: 14px">{{
                                 t("imageWorkspace.upload.dragText")
