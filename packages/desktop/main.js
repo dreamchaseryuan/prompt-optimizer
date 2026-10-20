@@ -2286,6 +2286,25 @@ function setupIPC() {
 
 // This method is called when Electron has finished initialization.
 app.whenReady().then(async () => {
+  // 产品更名迁移：productName 由 Always200Prompt → 提示词工具 后 userData 目录随之变化，
+  // 首次启动时把旧目录数据搬到新目录（同盘 rename 瞬时完成，跨盘/被占用时回退递归拷贝）
+  try {
+    const fs = require('fs');
+    const oldDataDir = path.join(app.getPath('appData'), 'Always200Prompt');
+    const newDataDir = path.join(app.getPath('appData'), '提示词工具');
+    if (fs.existsSync(oldDataDir) && !fs.existsSync(newDataDir)) {
+      try {
+        fs.renameSync(oldDataDir, newDataDir);
+        console.log('[DESKTOP] Migrated userData: Always200Prompt -> 提示词工具 (rename)');
+      } catch (renameErr) {
+        fs.cpSync(oldDataDir, newDataDir, { recursive: true });
+        console.log('[DESKTOP] Migrated userData: Always200Prompt -> 提示词工具 (copy fallback)', renameErr && renameErr.message);
+      }
+    }
+  } catch (migrateErr) {
+    console.warn('[DESKTOP] userData migration skipped:', migrateErr && migrateErr.message);
+  }
+
   const servicesInitialized = await initializeServices();
   if (servicesInitialized) {
     // 必须先设置IPC监听器，再创建窗口

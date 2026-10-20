@@ -80,7 +80,7 @@ const messages = {
     "context": "Context",
     "copySuccess": "Copied to clipboard",
     "copyFailed": "Copy Failed",
-    "appName": "Always200 Prompt",
+    "appName": "提示词工具",
     "selectFile": "Select File",
     "exporting": "Exporting...",
     "importing": "Importing...",

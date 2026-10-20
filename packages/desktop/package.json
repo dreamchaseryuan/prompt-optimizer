@@ -1,6 +1,6 @@
 {
   "name": "@prompt-optimizer/desktop",
-  "productName": "Always200Prompt",
+  "productName": "提示词工具",
   "version": "2.11.11",
   "description": "Desktop application for Always200 Prompt",
   "main": "main.js",
@@ -35,7 +35,7 @@
   },
   "build": {
     "appId": "com.always200.prompt",
-    "productName": "Always200Prompt",
+    "productName": "提示词工具",
     "executableName": "Always200Prompt",
     "directories": {
       "output": "dist"

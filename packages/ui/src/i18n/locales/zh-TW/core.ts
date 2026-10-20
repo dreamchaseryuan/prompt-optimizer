@@ -78,7 +78,7 @@ const messages = {
     "context": "上下文",
     "copySuccess": "複製成功",
     "copyFailed": "複製失敗",
-    "appName": "Always200 Prompt",
+    "appName": "提示词工具",
     "selectFile": "選擇檔案",
     "exporting": "匯出中...",
     "importing": "匯入中...",
