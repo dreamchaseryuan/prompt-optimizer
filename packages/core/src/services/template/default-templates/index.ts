@@ -15,6 +15,9 @@ import { template as soul_openclaw_compose } from './optimize/soul-openclaw-comp
 import { template as soul_openclaw_compose_en } from './optimize/soul-openclaw-compose_en';
 import { template as soul_hermes_compose } from './optimize/soul-hermes-compose';
 import { template as soul_hermes_compose_en } from './optimize/soul-hermes-compose_en';
+// 任务→提示词生成器（中/英）：从任务要求直接产出完整提示词
+import { template as task_to_prompt } from './optimize/task-to-prompt';
+import { template as task_to_prompt_en } from './optimize/task-to-prompt_en';
 // 通用编程领域优化模板（中/英）
 import { template as code_review_optimize } from './optimize/programming/code-review-optimize';
 import { template as code_review_optimize_en } from './optimize/programming/code-review-optimize_en';
@@ -179,6 +182,9 @@ export const ALL_TEMPLATES = {
   soul_openclaw_compose_en,
   soul_hermes_compose,
   soul_hermes_compose_en,
+  // 任务→提示词生成器
+  task_to_prompt,
+  task_to_prompt_en,
   // 通用编程领域优化模板
   code_review_optimize,
   code_review_optimize_en,
