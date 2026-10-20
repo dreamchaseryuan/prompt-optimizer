@@ -110,7 +110,7 @@
                         <NText
                             v-else
                             :style="{
-                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+                                fontFamily: 'var(--ds-font-family-mono)',
                                 fontSize: '13px',
                                 lineHeight: '20px',
                                 maxWidth: '100%',

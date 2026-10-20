@@ -94,7 +94,7 @@ const getFragmentClass = (type: ChangeType): string => {
 
 <style scoped>
 .inline-diff {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--ds-font-family-mono);
   font-size: inherit;
   line-height: 1.5;
   white-space: pre-wrap;

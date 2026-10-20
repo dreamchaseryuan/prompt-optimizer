@@ -456,7 +456,7 @@ onMounted(renderMarkdown);
     padding: 0.2em 0.5em;
     font-size: 0.75em;
     font-family:
-        "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        var(--ds-font-family-mono);
     border-bottom-left-radius: 4px;
     user-select: none;
     background-color: var(--n-primary-color);
@@ -465,7 +465,7 @@ onMounted(renderMarkdown);
 
 .markdown-content code {
     font-family:
-        "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        var(--ds-font-family-mono);
     font-size: 0.85em;
     padding: 0.1em;
     margin: 0.3em;

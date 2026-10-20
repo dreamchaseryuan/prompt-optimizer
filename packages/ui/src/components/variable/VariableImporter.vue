@@ -79,7 +79,7 @@
               type="textarea"
               :placeholder="getTextInputPlaceholder()"
               :autosize="{ minRows: 10, maxRows: 15 }"
-              :input-props="{ style: 'font-family: Monaco, Consolas, monospace; font-size: 13px;' }"
+              :input-props="{ style: 'font-family: var(--ds-font-family-mono); font-size: 13px;' }"
             />
             <template #feedback>
               <NText depth="3" style="font-size: 12px;">

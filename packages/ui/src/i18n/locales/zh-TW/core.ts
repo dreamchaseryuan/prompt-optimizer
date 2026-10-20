@@ -186,6 +186,7 @@ const messages = {
   },
   "theme": {
     "title": "主題設定",
+    "auto": "跟隨系統",
     "light": "日間",
     "dark": "夜間",
     "blue": "藍色",

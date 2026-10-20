@@ -1,0 +1,269 @@
+/**
+ * Design System Tokens — Dark Studio (Violet Ink)
+ *
+ * 层 2 自有 token：oklch + light-dark() 原生函数。
+ * html[color-scheme] 由 naive-theme.ts applyThemeId() 同步驱动，
+ * Tailwind `.dark` class 继续由既有逻辑维护（双轨并存）。
+ *
+ * 消费者：壳层 CSS、workspace.css、自定义组件样式。
+ * Naive UI 组件走层 1 themeOverrides（见 config/naive-theme.ts）。
+ */
+
+/* ---------- 字体 ---------- */
+
+/* 展示/数字：Space Grotesk（latin 子集，版本号/计数/品牌字标） */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/space-grotesk-latin-500-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/space-grotesk-latin-700-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* 等宽：IBM Plex Mono（latin 子集，代码块/Diff/变量名） */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- 主题驱动 ---------- */
+
+:root {
+  color-scheme: light dark;
+}
+
+html.color-scheme-light {
+  color-scheme: light;
+}
+
+html.color-scheme-dark {
+  color-scheme: dark;
+}
+
+/* ---------- 全局字体栈 ---------- */
+
+:root {
+  /* 正文 UI：中文精致系统栈，不引中文 webfont */
+  --ds-font-ui: system-ui, -apple-system, 'Segoe UI', 'PingFang SC',
+    'HarmonyOS Sans SC', 'Microsoft YaHei UI', sans-serif;
+  /* 展示/数字：Space Grotesk 优先（latin 字符生效，中文自动回退） */
+  --ds-font-display: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI',
+    'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei UI', sans-serif;
+  /* 等宽：IBM Plex Mono 优先 */
+  --ds-font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', 'SF Mono',
+    Consolas, 'Liberation Mono', monospace;
+}
+
+body {
+  font-family: var(--ds-font-ui);
+}
+
+/* ---------- oklch 色板（双主题） ---------- */
+
+:root {
+  /* ===== 深色主题值 ===== */
+  /* 表面 */
+  --ds-dark-bg-canvas: oklch(0.170 0.012 300);
+  --ds-dark-bg-shell: oklch(0.205 0.014 300);
+  --ds-dark-bg-panel: oklch(0.240 0.016 300);
+  --ds-dark-bg-raised: oklch(0.275 0.018 300);
+  --ds-dark-bg-hover: oklch(0.310 0.020 300);
+  /* 前景 */
+  --ds-dark-fg-strong: oklch(0.940 0.010 300);
+  --ds-dark-fg-0: oklch(0.880 0.012 300);
+  --ds-dark-fg-1: oklch(0.730 0.015 300);
+  --ds-dark-fg-2: oklch(0.570 0.018 300);
+  --ds-dark-fg-3: oklch(0.450 0.016 300);
+  /* 主色 Violet Ink（hue 310） */
+  --ds-dark-primary: oklch(0.640 0.160 310);
+  --ds-dark-primary-hover: oklch(0.690 0.150 310);
+  --ds-dark-primary-pressed: oklch(0.580 0.160 310);
+  --ds-dark-primary-suppl: oklch(0.790 0.110 310);
+  /* 语义色（低饱和） */
+  --ds-dark-success: oklch(0.720 0.140 155);
+  --ds-dark-warning: oklch(0.780 0.140 75);
+  --ds-dark-error: oklch(0.660 0.180 25);
+  --ds-dark-info: oklch(0.700 0.090 230);
+  /* 线 */
+  --ds-dark-border: oklch(0.300 0.018 300);
+  --ds-dark-border-strong: oklch(0.360 0.020 300);
+  --ds-dark-divider: oklch(0.255 0.014 300);
+  /* 阴影基色 */
+  --ds-dark-shadow-base: oklch(0.1 0.02 300);
+
+  /* ===== 日间主题值 ===== */
+  /* 表面 */
+  --ds-light-bg-canvas: oklch(0.965 0.006 300);
+  --ds-light-bg-shell: oklch(0.945 0.008 300);
+  --ds-light-bg-panel: oklch(0.990 0.004 300);
+  --ds-light-bg-raised: oklch(1.000 0.000 0);
+  --ds-light-bg-hover: oklch(0.930 0.010 300);
+  /* 前景 */
+  --ds-light-fg-strong: oklch(0.200 0.020 300);
+  --ds-light-fg-0: oklch(0.260 0.020 300);
+  --ds-light-fg-1: oklch(0.430 0.020 300);
+  --ds-light-fg-2: oklch(0.560 0.018 300);
+  --ds-light-fg-3: oklch(0.700 0.014 300);
+  /* 主色 Violet Ink（深紫保对比） */
+  --ds-light-primary: oklch(0.480 0.170 310);
+  --ds-light-primary-hover: oklch(0.430 0.165 310);
+  --ds-light-primary-pressed: oklch(0.380 0.150 310);
+  --ds-light-primary-suppl: oklch(0.550 0.160 310);
+  /* 语义色 */
+  --ds-light-success: oklch(0.520 0.140 155);
+  --ds-light-warning: oklch(0.620 0.140 75);
+  --ds-light-error: oklch(0.550 0.190 25);
+  --ds-light-info: oklch(0.520 0.100 230);
+  /* 线 */
+  --ds-light-border: oklch(0.905 0.010 300);
+  --ds-light-border-strong: oklch(0.855 0.012 300);
+  --ds-light-divider: oklch(0.930 0.008 300);
+  /* 阴影基色 */
+  --ds-light-shadow-base: oklch(0.3 0.02 300);
+
+  /* ===== 语义别名（light-dark() 随 color-scheme 切换） ===== */
+  /* 表面 */
+  --ds-bg-canvas: light-dark(var(--ds-light-bg-canvas), var(--ds-dark-bg-canvas));
+  --ds-bg-shell: light-dark(var(--ds-light-bg-shell), var(--ds-dark-bg-shell));
+  --ds-bg-panel: light-dark(var(--ds-light-bg-panel), var(--ds-dark-bg-panel));
+  --ds-bg-raised: light-dark(var(--ds-light-bg-raised), var(--ds-dark-bg-raised));
+  --ds-bg-hover: light-dark(var(--ds-light-bg-hover), var(--ds-dark-bg-hover));
+  /* 前景 */
+  --ds-fg-strong: light-dark(var(--ds-light-fg-strong), var(--ds-dark-fg-strong));
+  --ds-fg-0: light-dark(var(--ds-light-fg-0), var(--ds-dark-fg-0));
+  --ds-fg-1: light-dark(var(--ds-light-fg-1), var(--ds-dark-fg-1));
+  --ds-fg-2: light-dark(var(--ds-light-fg-2), var(--ds-dark-fg-2));
+  --ds-fg-3: light-dark(var(--ds-light-fg-3), var(--ds-dark-fg-3));
+  /* 主色 */
+  --ds-primary: light-dark(var(--ds-light-primary), var(--ds-dark-primary));
+  --ds-primary-hover: light-dark(var(--ds-light-primary-hover), var(--ds-dark-primary-hover));
+  --ds-primary-pressed: light-dark(var(--ds-light-primary-pressed), var(--ds-dark-primary-pressed));
+  --ds-primary-suppl: light-dark(var(--ds-light-primary-suppl), var(--ds-dark-primary-suppl));
+  --ds-primary-tint: color-mix(in oklab, var(--ds-primary) 14%, transparent);
+  /* 语义色 */
+  --ds-success: light-dark(var(--ds-light-success), var(--ds-dark-success));
+  --ds-warning: light-dark(var(--ds-light-warning), var(--ds-dark-warning));
+  --ds-error: light-dark(var(--ds-light-error), var(--ds-dark-error));
+  --ds-info: light-dark(var(--ds-light-info), var(--ds-dark-info));
+  /* 线 */
+  --ds-border: light-dark(var(--ds-light-border), var(--ds-dark-border));
+  --ds-border-strong: light-dark(var(--ds-light-border-strong), var(--ds-dark-border-strong));
+  --ds-divider: light-dark(var(--ds-light-divider), var(--ds-dark-divider));
+  /* 字体 */
+  --ds-font-family: var(--ds-font-ui);
+  --ds-font-family-mono: var(--ds-font-mono);
+}
+
+/* `.dark` class 回退轨（Tailwind darkMode: 'class' 已由 applyThemeId 同步）：
+ * 不支持 light-dark() 的环境下由该块接管别名值。 */
+@supports not (color: light-dark(red, blue)) {
+  html.dark {
+    --ds-bg-canvas: var(--ds-dark-bg-canvas);
+    --ds-bg-shell: var(--ds-dark-bg-shell);
+    --ds-bg-panel: var(--ds-dark-bg-panel);
+    --ds-bg-raised: var(--ds-dark-bg-raised);
+    --ds-bg-hover: var(--ds-dark-bg-hover);
+    --ds-fg-strong: var(--ds-dark-fg-strong);
+    --ds-fg-0: var(--ds-dark-fg-0);
+    --ds-fg-1: var(--ds-dark-fg-1);
+    --ds-fg-2: var(--ds-dark-fg-2);
+    --ds-fg-3: var(--ds-dark-fg-3);
+    --ds-primary: var(--ds-dark-primary);
+    --ds-primary-hover: var(--ds-dark-primary-hover);
+    --ds-primary-pressed: var(--ds-dark-primary-pressed);
+    --ds-primary-suppl: var(--ds-dark-primary-suppl);
+    --ds-success: var(--ds-dark-success);
+    --ds-warning: var(--ds-dark-warning);
+    --ds-error: var(--ds-dark-error);
+    --ds-info: var(--ds-dark-info);
+    --ds-border: var(--ds-dark-border);
+    --ds-border-strong: var(--ds-dark-border-strong);
+    --ds-divider: var(--ds-dark-divider);
+  }
+}
+
+/* ---------- 间距 / 圆角 / 阴影 ---------- */
+
+:root {
+  /* 间距节奏：组件内 8/12；组件间 16；区块间 24；大区块组间 40 */
+  --ds-space-1: 4px;
+  --ds-space-2: 8px;
+  --ds-space-3: 12px;
+  --ds-space-4: 16px;
+  --ds-space-6: 24px;
+  --ds-space-10: 40px;
+
+  /* 圆角 */
+  --ds-radius-sm: 6px;
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+
+  /* 阴影：平面元素零阴影；阴影只属于浮层 */
+  --ds-shadow-overlay: 0 8px 24px light-dark(var(--ds-light-shadow-base) / 0.08, var(--ds-dark-shadow-base) / 0.45),
+    0 32px 80px light-dark(var(--ds-light-shadow-base) / 0.12, var(--ds-dark-shadow-base) / 0.55);
+}
+
+/* ---------- 动效 ---------- */
+
+:root {
+  /* 缓动：默认 out-quart；大位移入场 out-expo */
+  --ds-ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ds-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* 时长 */
+  --ds-dur-fast: 150ms;
+  --ds-dur-base: 200ms;
+  --ds-dur-slow: 300ms;
+
+  /* 入场编排步进 */
+  --ds-stagger: 50ms;
+}
+
+/* 无障碍：偏好减少动效时全部归零 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ds-dur-fast: 0ms;
+    --ds-dur-base: 0ms;
+    --ds-dur-slow: 0ms;
+    --ds-stagger: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

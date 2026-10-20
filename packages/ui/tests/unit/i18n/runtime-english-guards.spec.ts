@@ -213,7 +213,7 @@ describe('ui runtime english guards', () => {
     expect(themeConfigSource).not.toMatch(/name:\s*'米杏模式'/)
 
     expect(themeToggleSource).toMatch(/t\(`theme\.\$\{themeId\.value\}`\)/)
-    expect(themeToggleSource).toMatch(/label:\s*t\(`theme\.\$\{theme\.id\}`\)/)
+    expect(themeToggleSource).toMatch(/label:\s*t\(`theme\.\$\{(theme\.id|id)\}`\)/)
   })
 
   it('keeps test result titles and variable importer feedback locale-backed', () => {

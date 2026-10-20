@@ -76,7 +76,7 @@ const parsedTree = computed(() => parseXmlContent(props.content))
 
 .xml-renderer__fallback {
   margin: 0;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family: var(--ds-font-family-mono);
   font-size: 13px;
   line-height: 1.6;
   white-space: pre-wrap;

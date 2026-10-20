@@ -2107,7 +2107,7 @@ const getStorageItemDetail = (item: Pick<StorageBreakdownItem, 'key' | 'count'>)
 
 .storage-path-value {
   word-break: break-all;
-  font-family: monospace;
+  font-family: var(--ds-font-family-mono);
   font-size: 12px;
   margin-top: 4px;
 }

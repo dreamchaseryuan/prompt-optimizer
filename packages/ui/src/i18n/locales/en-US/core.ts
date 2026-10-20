@@ -186,6 +186,7 @@ const messages = {
   },
   "theme": {
     "title": "Theme Settings",
+    "auto": "System",
     "light": "Light",
     "dark": "Dark",
     "blue": "Blue",

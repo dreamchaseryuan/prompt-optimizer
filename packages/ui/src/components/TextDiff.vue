@@ -62,7 +62,7 @@ const getFragmentClass = (type: ChangeType): string => {
 .normal-text {
   padding: 0.75rem 1rem;
   line-height: 1.6;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-family: var(--ds-font-family-mono);
   font-size: 14px;
   white-space: pre-wrap;
   word-break: break-word;

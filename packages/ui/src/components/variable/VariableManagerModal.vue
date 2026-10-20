@@ -313,7 +313,7 @@
                         type="textarea"
                         :autosize="{ minRows: 8, maxRows: 12 }"
                         :input-props="{
-                            style: 'font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,\'Liberation Mono\',\'Courier New\',monospace; font-size: 12px;',
+                            style: 'font-family: var(--ds-font-family-mono); font-size: 12px;',
                         }"
                     />
                 </div>

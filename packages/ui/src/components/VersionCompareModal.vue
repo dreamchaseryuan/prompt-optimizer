@@ -197,7 +197,7 @@ const hasDiff = computed(() => diff.value.lines.some((line) => line.type !== 'eq
   border: 1px solid color-mix(in srgb, var(--n-border-color) 72%, transparent);
   border-radius: 8px;
   background: var(--n-color);
-  font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+  font-family: var(--ds-font-family-mono);
   font-size: 12px;
   line-height: 1.6;
 }

@@ -126,7 +126,7 @@ const toggleExpanded = () => {
 
 .xml-summary,
 .xml-line {
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family: var(--ds-font-family-mono);
   font-size: 13px;
   line-height: 1.6;
   color: inherit;

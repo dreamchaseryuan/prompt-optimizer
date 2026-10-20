@@ -218,7 +218,7 @@
                     type="textarea"
                     :autosize="{ minRows: 8, maxRows: 12 }"
                     :placeholder="defaultParametersJson"
-                    style="font-family: ui-monospace, monospace"
+                    style="font-family: var(--ds-font-family-mono)"
                 />
                 <NText v-if="jsonError" type="error" class="mt-2">
                     {{ t('contextEditor.invalidJson') }}: {{ jsonError }}
