@@ -18,6 +18,24 @@ import { template as soul_hermes_compose_en } from './optimize/soul-hermes-compo
 // 任务→提示词生成器（中/英）：从任务要求直接产出完整提示词
 import { template as task_to_prompt } from './optimize/task-to-prompt';
 import { template as task_to_prompt_en } from './optimize/task-to-prompt_en';
+// 场景化生成器模板（中/英）：文案/编程/教学/客服/数据/翻译/图像/视频
+import { template as task_to_prompt_copywriting } from './optimize/task-to-prompt-copywriting';
+import { template as task_to_prompt_copywriting_en } from './optimize/task-to-prompt-copywriting_en';
+import { template as task_to_prompt_coding } from './optimize/task-to-prompt-coding';
+import { template as task_to_prompt_coding_en } from './optimize/task-to-prompt-coding_en';
+import { template as task_to_prompt_teaching } from './optimize/task-to-prompt-teaching';
+import { template as task_to_prompt_teaching_en } from './optimize/task-to-prompt-teaching_en';
+import { template as task_to_prompt_service } from './optimize/task-to-prompt-service';
+import { template as task_to_prompt_service_en } from './optimize/task-to-prompt-service_en';
+import { template as task_to_prompt_data } from './optimize/task-to-prompt-data';
+import { template as task_to_prompt_data_en } from './optimize/task-to-prompt-data_en';
+import { template as task_to_prompt_translation } from './optimize/task-to-prompt-translation';
+import { template as task_to_prompt_translation_en } from './optimize/task-to-prompt-translation_en';
+// 场景化生成器模板 - 图像/视频（挂载 text2imageOptimize / text2videoOptimize）
+import { template as task_to_prompt_image } from './optimize/task-to-prompt-image';
+import { template as task_to_prompt_image_en } from './optimize/task-to-prompt-image_en';
+import { template as task_to_prompt_video } from './optimize/task-to-prompt-video';
+import { template as task_to_prompt_video_en } from './optimize/task-to-prompt-video_en';
 // 通用编程领域优化模板（中/英）
 import { template as code_review_optimize } from './optimize/programming/code-review-optimize';
 import { template as code_review_optimize_en } from './optimize/programming/code-review-optimize_en';
@@ -185,6 +203,24 @@ export const ALL_TEMPLATES = {
   // 任务→提示词生成器
   task_to_prompt,
   task_to_prompt_en,
+  // 场景化生成器模板（中/英）
+  task_to_prompt_copywriting,
+  task_to_prompt_copywriting_en,
+  task_to_prompt_coding,
+  task_to_prompt_coding_en,
+  task_to_prompt_teaching,
+  task_to_prompt_teaching_en,
+  task_to_prompt_service,
+  task_to_prompt_service_en,
+  task_to_prompt_data,
+  task_to_prompt_data_en,
+  task_to_prompt_translation,
+  task_to_prompt_translation_en,
+  // 场景化生成器模板 - 图像/视频
+  task_to_prompt_image,
+  task_to_prompt_image_en,
+  task_to_prompt_video,
+  task_to_prompt_video_en,
   // 通用编程领域优化模板
   code_review_optimize,
   code_review_optimize_en,
