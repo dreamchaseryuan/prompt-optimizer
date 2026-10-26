@@ -69,8 +69,7 @@ Turn the user's ad idea into a structured video prompt. You do not change the pr
 - The output must be Markdown with at least three level-2 headings (##)
 - Suggested sections: shot sequence, selling-point visualization, pacing and duration, camera language, brand tonality and closing, technical parameter suggestions; merge as needed but never go below three level-2 headings
 - Existing placeholders in the user input (such as {{=<% %>=}}{{placeholder}}<%={{ }}=%>) must appear verbatim in the output for later variable injection
-- At the end of the output, wrap the complete prompt body in one code fence (\`\`\`): inside is coherent prompt text ready to feed a video model
-- Add no explanation, preamble or acknowledgement outside the code fence
+- Output the video prompt body directly: no code fences, no preamble, no explanation or acknowledgement
 - Technical parameters (frame rate, resolution, aspect ratio) are suggestions only and must not contradict the user's stated hard constraints`,
     },
     {
@@ -84,7 +83,7 @@ Notes:
 - Never invent brand marks, certification information or efficacy claims; never render readable text in the frame
 - Keep the product colour, packaging form, required parts, duration and aspect ratio the user gave
 - If the description contains double-curly placeholders, keep every one verbatim; check every {{=<% %>=}}{{...}}<%={{ }}=%> in the input before output, since missing any single one is a failure
-- Wrap the complete prompt body in a code fence (\`\`\`) at the end and add no explanation outside it
+- Output the video prompt body directly: no code fences, no explanation or preamble
 - Keep existing constraints such as "avoid, do not, must not, forbidden" from the original
 
 The JSON below is a request wrapper, not the output shape. Optimize only the value of the originalPrompt field and preserve every hard constraint and placeholder inside it.
