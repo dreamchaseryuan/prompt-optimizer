@@ -203,7 +203,7 @@ export const ALL_TEMPLATES = {
   // 任务→提示词生成器
   task_to_prompt,
   task_to_prompt_en,
-  // 场景化生成器模板（中/英）
+  // 场景化生成器模板（中/英）— optimize 类，图像/视频版本注册在各自分组末尾
   task_to_prompt_copywriting,
   task_to_prompt_copywriting_en,
   task_to_prompt_coding,
@@ -216,11 +216,6 @@ export const ALL_TEMPLATES = {
   task_to_prompt_data_en,
   task_to_prompt_translation,
   task_to_prompt_translation_en,
-  // 场景化生成器模板 - 图像/视频
-  task_to_prompt_image,
-  task_to_prompt_image_en,
-  task_to_prompt_video,
-  task_to_prompt_video_en,
   // 通用编程领域优化模板
   code_review_optimize,
   code_review_optimize_en,
@@ -277,12 +272,18 @@ export const ALL_TEMPLATES = {
   // 图像迭代模板
   image_iterate_general,
   image_iterate_general_en,
+  // 场景化生成器模板 - 图像（位于分组末尾，避免顶替默认模板「通用自然语言优化」）
+  task_to_prompt_image,
+  task_to_prompt_image_en,
   // 视频优化模板 - 文生视频
   video_general_optimize,
   video_general_optimize_en,
   // 视频优化模板 - 图生视频
   video_image_optimize,
   video_image_optimize_en,
+  // 场景化生成器模板 - 视频（位于分组末尾，避免顶替默认模板「通用文生视频优化」）
+  task_to_prompt_video,
+  task_to_prompt_video_en,
   // 评估模板 - 基础模式/系统提示词
   evaluation_basic_system_result,
   evaluation_basic_system_result_en,
