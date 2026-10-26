@@ -50,6 +50,11 @@ import { template as context_iterate_en } from './iterate/context/context-iterat
 // 上下文消息优化模板（多轮对话模式专用）- 通用模板优先
 import { template as context_message_optimize } from './optimize/context/context-message-optimize';
 import { template as context_message_optimize_en } from './optimize/context/context-message-optimize_en';
+// 上下文消息优化模板：多轮引导/上下文压缩（中/英）
+import { template as context_message_multiturn_guide } from './optimize/context/context-message-multiturn-guide';
+import { template as context_message_multiturn_guide_en } from './optimize/context/context-message-multiturn-guide_en';
+import { template as context_message_compress } from './optimize/context/context-message-compress';
+import { template as context_message_compress_en } from './optimize/context/context-message-compress_en';
 // 上下文消息优化模板：分析型/输出格式（中/英）
 import { template as context_analytical_optimize } from './optimize/context/context-analytical-optimize';
 import { template as context_analytical_optimize_en } from './optimize/context/context-analytical-optimize_en';
@@ -62,11 +67,24 @@ import { template as context_user_prompt_professional_ctx } from './user-optimiz
 import { template as context_user_prompt_professional_ctx_en } from './user-optimize/context/context-user-prompt-professional_en';
 import { template as context_user_prompt_planning_ctx } from './user-optimize/context/context-user-prompt-planning';
 import { template as context_user_prompt_planning_ctx_en } from './user-optimize/context/context-user-prompt-planning_en';
+// 上下文用户提示词优化：纠正反馈（中/英）
+import { template as context_user_correction } from './user-optimize/context/context-user-correction';
+import { template as context_user_correction_en } from './user-optimize/context/context-user-correction_en';
+// 上下文迭代：按反馈迭代（中/英）
+import { template as context_iterate_feedback } from './iterate/context/context-iterate-feedback';
+import { template as context_iterate_feedback_en } from './iterate/context/context-iterate-feedback_en';
 
 import { template as iterate } from './iterate/iterate';
 import { template as iterate_en } from './iterate/iterate_en';
 import { template as soul_iterate } from './iterate/soul-iterate';
 import { template as soul_iterate_en } from './iterate/soul-iterate_en';
+// 迭代优化：按反馈/细节增强/精简压缩（中/英）
+import { template as iterate_feedback } from './iterate/iterate-feedback';
+import { template as iterate_feedback_en } from './iterate/iterate-feedback_en';
+import { template as iterate_enhance } from './iterate/iterate-enhance';
+import { template as iterate_enhance_en } from './iterate/iterate-enhance_en';
+import { template as iterate_simplify } from './iterate/iterate-simplify';
+import { template as iterate_simplify_en } from './iterate/iterate-simplify_en';
 
 import { user_prompt_professional } from './user-optimize/user-prompt-professional';
 import { user_prompt_professional_en } from './user-optimize/user-prompt-professional_en';
@@ -74,6 +92,13 @@ import { user_prompt_basic } from './user-optimize/user-prompt-basic';
 import { user_prompt_basic_en } from './user-optimize/user-prompt-basic_en';
 import { user_prompt_planning } from './user-optimize/user-prompt-planning';
 import { user_prompt_planning_en } from './user-optimize/user-prompt-planning_en';
+// 用户提示词优化：任务指令/多约束复杂任务/角色扮演（中/英）
+import { template as user_prompt_task_instruction } from './user-optimize/user-prompt-task-instruction';
+import { template as user_prompt_task_instruction_en } from './user-optimize/user-prompt-task-instruction_en';
+import { template as user_prompt_multi_constraint } from './user-optimize/user-prompt-multi-constraint';
+import { template as user_prompt_multi_constraint_en } from './user-optimize/user-prompt-multi-constraint_en';
+import { template as user_prompt_roleplay } from './user-optimize/user-prompt-roleplay';
+import { template as user_prompt_roleplay_en } from './user-optimize/user-prompt-roleplay_en';
 
 // 图像优化模板（重构后的目录结构）
 // 文生图
@@ -87,6 +112,13 @@ import { template as image_creative_text2image } from './image-optimize/text2ima
 import { template as image_creative_text2image_en } from './image-optimize/text2image/creative-text2image_en';
 import { template as image_json_structured_optimize } from './image-optimize/text2image/json-structured-optimize';
 import { template as image_json_structured_optimize_en } from './image-optimize/text2image/json-structured-optimize_en';
+// 文生图场景化：人物写真/电商产品图/插画动漫（中/英）
+import { template as image_portrait_optimize } from './image-optimize/text2image/image-portrait-optimize';
+import { template as image_portrait_optimize_en } from './image-optimize/text2image/image-portrait-optimize_en';
+import { template as image_ecommerce_optimize } from './image-optimize/text2image/image-ecommerce-optimize';
+import { template as image_ecommerce_optimize_en } from './image-optimize/text2image/image-ecommerce-optimize_en';
+import { template as image_illustration_optimize } from './image-optimize/text2image/image-illustration-optimize';
+import { template as image_illustration_optimize_en } from './image-optimize/text2image/image-illustration-optimize_en';
 // 图生图
 import { template as image2image_optimize } from './image-optimize/image2image/image2image-optimize';
 import { template as image2image_optimize_en } from './image-optimize/image2image/image2image-optimize_en';
@@ -94,18 +126,44 @@ import { template as image2image_design_text_edit_optimize } from './image-optim
 import { template as image2image_design_text_edit_optimize_en } from './image-optimize/image2image/design-text-edit-optimize_en';
 import { template as image2image_json_structured_optimize } from './image-optimize/image2image/json-structured-optimize';
 import { template as image2image_json_structured_optimize_en } from './image-optimize/image2image/json-structured-optimize_en';
+// 图生图场景化：风格迁移/局部编辑/换装造型（中/英）
+import { template as image2image_style_transfer } from './image-optimize/image2image/image2image-style-transfer';
+import { template as image2image_style_transfer_en } from './image-optimize/image2image/image2image-style-transfer_en';
+import { template as image2image_local_edit } from './image-optimize/image2image/image2image-local-edit';
+import { template as image2image_local_edit_en } from './image-optimize/image2image/image2image-local-edit_en';
+import { template as image2image_outfit } from './image-optimize/image2image/image2image-outfit';
+import { template as image2image_outfit_en } from './image-optimize/image2image/image2image-outfit_en';
 // 多图生图
 import { template as multiimage_optimize } from './image-optimize/multiimage/multiimage-optimize';
 import { template as multiimage_optimize_en } from './image-optimize/multiimage/multiimage-optimize_en';
 // 图像迭代
 import { template as image_iterate_general } from './image-optimize/iterate/image-iterate-general';
 import { template as image_iterate_general_en } from './image-optimize/iterate/image-iterate-general_en';
+// 图像迭代：按反馈微调/风格强化（中/英）
+import { template as image_iterate_feedback } from './image-optimize/iterate/image-iterate-feedback';
+import { template as image_iterate_feedback_en } from './image-optimize/iterate/image-iterate-feedback_en';
+import { template as image_iterate_style_boost } from './image-optimize/iterate/image-iterate-style-boost';
+import { template as image_iterate_style_boost_en } from './image-optimize/iterate/image-iterate-style-boost_en';
 
 // 视频优化模板
 import { template as video_general_optimize } from './video-optimize/text2video/general-video-optimize';
 import { template as video_general_optimize_en } from './video-optimize/text2video/general-video-optimize_en';
 import { template as video_image_optimize } from './video-optimize/image2video/general-video-image-optimize';
 import { template as video_image_optimize_en } from './video-optimize/image2video/general-video-image-optimize_en';
+// 文生视频场景化：产品广告/人物叙事/风景旅拍（中/英）
+import { template as video_product_ad } from './video-optimize/text2video/video-product-ad';
+import { template as video_product_ad_en } from './video-optimize/text2video/video-product-ad_en';
+import { template as video_narrative } from './video-optimize/text2video/video-narrative';
+import { template as video_narrative_en } from './video-optimize/text2video/video-narrative_en';
+import { template as video_travel } from './video-optimize/text2video/video-travel';
+import { template as video_travel_en } from './video-optimize/text2video/video-travel_en';
+// 图生视频场景化：人物微动/场景运镜/产品旋转（中/英）
+import { template as video_image_portrait_motion } from './video-optimize/image2video/video-image-portrait-motion';
+import { template as video_image_portrait_motion_en } from './video-optimize/image2video/video-image-portrait-motion_en';
+import { template as video_image_camera_move } from './video-optimize/image2video/video-image-camera-move';
+import { template as video_image_camera_move_en } from './video-optimize/image2video/video-image-camera-move_en';
+import { template as video_image_product_spin } from './video-optimize/image2video/video-image-product-spin';
+import { template as video_image_product_spin_en } from './video-optimize/image2video/video-image-product-spin_en';
 
 // 评估模板 - 基础模式/系统提示词
 import { template as evaluation_basic_system_result } from './evaluation/basic/system/evaluation-result';
@@ -227,28 +285,53 @@ export const ALL_TEMPLATES = {
   error_diagnosis_optimize_en,
   context_iterate,
   context_iterate_en,
+  // 上下文迭代：按反馈迭代（追加在组末尾，不顶替默认模板）
+  context_iterate_feedback,
+  context_iterate_feedback_en,
   context_message_optimize,
   context_message_optimize_en,
   context_analytical_optimize,
   context_analytical_optimize_en,
   context_output_format_optimize,
   context_output_format_optimize_en,
+  // 上下文消息优化：多轮引导/上下文压缩（追加在组末尾，不顶替默认模板「通用消息优化」）
+  context_message_multiturn_guide,
+  context_message_multiturn_guide_en,
+  context_message_compress,
+  context_message_compress_en,
   context_user_prompt_basic,
   context_user_prompt_basic_en,
   context_user_prompt_professional_ctx,
   context_user_prompt_professional_ctx_en,
   context_user_prompt_planning_ctx,
   context_user_prompt_planning_ctx_en,
+  // 上下文用户提示词优化：纠正反馈（追加在组末尾，不顶替默认模板「基础精炼」）
+  context_user_correction,
+  context_user_correction_en,
   user_prompt_professional,
   user_prompt_professional_en,
   iterate,
   iterate_en,
   soul_iterate,
   soul_iterate_en,
+  // 迭代优化：按反馈/细节增强/精简压缩（追加在组末尾，不顶替默认模板「通用迭代」）
+  iterate_feedback,
+  iterate_feedback_en,
+  iterate_enhance,
+  iterate_enhance_en,
+  iterate_simplify,
+  iterate_simplify_en,
   user_prompt_basic,
   user_prompt_basic_en,
   user_prompt_planning,
   user_prompt_planning_en,
+  // 用户提示词优化：任务指令/多约束复杂任务/角色扮演（追加在组末尾，不顶替默认模板「专业优化」）
+  user_prompt_task_instruction,
+  user_prompt_task_instruction_en,
+  user_prompt_multi_constraint,
+  user_prompt_multi_constraint_en,
+  user_prompt_roleplay,
+  user_prompt_roleplay_en,
   // 图像优化模板
   image_general_optimize,
   image_general_optimize_en,
@@ -260,6 +343,13 @@ export const ALL_TEMPLATES = {
   image_creative_text2image_en,
   image_json_structured_optimize,
   image_json_structured_optimize_en,
+  // 文生图场景化：人物写真/电商产品图/插画动漫（追加在组末尾，不顶替默认模板「通用自然语言优化」）
+  image_portrait_optimize,
+  image_portrait_optimize_en,
+  image_ecommerce_optimize,
+  image_ecommerce_optimize_en,
+  image_illustration_optimize,
+  image_illustration_optimize_en,
   // 图生图模板
   image2image_optimize,
   image2image_optimize_en,
@@ -267,11 +357,23 @@ export const ALL_TEMPLATES = {
   image2image_design_text_edit_optimize_en,
   image2image_json_structured_optimize,
   image2image_json_structured_optimize_en,
+  // 图生图场景化：风格迁移/局部编辑/换装造型（追加在组末尾，不顶替默认模板「通用编辑优化」）
+  image2image_style_transfer,
+  image2image_style_transfer_en,
+  image2image_local_edit,
+  image2image_local_edit_en,
+  image2image_outfit,
+  image2image_outfit_en,
   multiimage_optimize,
   multiimage_optimize_en,
   // 图像迭代模板
   image_iterate_general,
   image_iterate_general_en,
+  // 图像迭代：按反馈微调/风格强化（追加在组末尾，不顶替默认模板「通用迭代」）
+  image_iterate_feedback,
+  image_iterate_feedback_en,
+  image_iterate_style_boost,
+  image_iterate_style_boost_en,
   // 场景化生成器模板 - 图像（位于分组末尾，避免顶替默认模板「通用自然语言优化」）
   task_to_prompt_image,
   task_to_prompt_image_en,
@@ -281,9 +383,23 @@ export const ALL_TEMPLATES = {
   // 视频优化模板 - 图生视频
   video_image_optimize,
   video_image_optimize_en,
+  // 图生视频场景化：人物微动/场景运镜/产品旋转（追加在组末尾，不顶替默认模板「通用图生视频优化」）
+  video_image_portrait_motion,
+  video_image_portrait_motion_en,
+  video_image_camera_move,
+  video_image_camera_move_en,
+  video_image_product_spin,
+  video_image_product_spin_en,
   // 场景化生成器模板 - 视频（位于分组末尾，避免顶替默认模板「通用文生视频优化」）
   task_to_prompt_video,
   task_to_prompt_video_en,
+  // 文生视频场景化：产品广告/人物叙事/风景旅拍（追加在组末尾，不顶替默认模板「通用文生视频优化」）
+  video_product_ad,
+  video_product_ad_en,
+  video_narrative,
+  video_narrative_en,
+  video_travel,
+  video_travel_en,
   // 评估模板 - 基础模式/系统提示词
   evaluation_basic_system_result,
   evaluation_basic_system_result_en,
