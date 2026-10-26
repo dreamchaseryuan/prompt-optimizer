@@ -46,3 +46,49 @@
     opacity: 1;
   }
 }
+
+/* ---------- 空状态统一（NEmpty 默认空图替换） ----------
+ * Naive 默认空图是“图片框+山丘”的通用插画，在深色工作区里读作
+ * “图片加载失败/资源缺失”。改为“裁切角 + 插入符”的槽位标记：
+ * 语义上表示“等待填充的位置”，视觉上单色描边、非插图，贴合工具气质。
+ * 用 mask + currentColor 继承主题色，一处规则覆盖全站所有 NEmpty。 */
+.n-empty .n-empty__icon {
+  position: relative;
+  margin-bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+}
+
+/* Naive 的默认空图实际结构为 div.n-empty__icon > i.n-base-icon > svg，
+ * 三者都要隐藏，再以 ::before 的 mask 记号顶上 */
+.n-empty .n-empty__icon > img,
+.n-empty .n-empty__icon > svg,
+.n-empty .n-empty__icon > i,
+.n-empty .n-empty__icon .n-base-icon {
+  display: none;
+}
+
+.n-empty .n-empty__icon::before {
+  content: '';
+  width: 34px;
+  height: 34px;
+  /* 品牌色而非继承 Naive 的 icon 灰：浅色下更深、深色下更亮，两套主题都可读 */
+  background-color: var(--ds-primary, currentColor);
+  opacity: 0.5;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34' fill='none' stroke='white' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M11.5 6.5H8a1.5 1.5 0 0 0-1.5 1.5v3.5M22.5 6.5H26a1.5 1.5 0 0 1 1.5 1.5v3.5M11.5 27.5H8A1.5 1.5 0 0 1 6.5 26v-3.5M22.5 27.5H26a1.5 1.5 0 0 0 1.5-1.5v-3.5'/%3E%3Cpath d='M17 14v6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34' fill='none' stroke='white' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M11.5 6.5H8a1.5 1.5 0 0 0-1.5 1.5v3.5M22.5 6.5H26a1.5 1.5 0 0 1 1.5 1.5v3.5M11.5 27.5H8A1.5 1.5 0 0 1 6.5 26v-3.5M22.5 27.5H26a1.5 1.5 0 0 0 1.5-1.5v-3.5'/%3E%3Cpath d='M17 14v6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* 空状态说明文字：收敛字号与行高，避免大块留白里的孤行 */
+.n-empty .n-empty__description {
+  margin-top: 2px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  color: var(--ds-fg-3, var(--n-text-color-3));
+  max-width: 36ch;
+  text-align: center;
+}

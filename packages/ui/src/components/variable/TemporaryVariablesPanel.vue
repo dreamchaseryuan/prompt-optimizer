@@ -70,7 +70,8 @@
                     <NText v-if="displayVariables.length > 0" :depth="3">
                         {{ t('test.variables.tempCount', { count: displayVariables.length }) }}
                     </NText>
-                    <span v-else />
+                    <!-- 空态与计数同位：一行内说明“没有变量”，行动按钮在右，省掉一整行 -->
+                    <NText v-else :depth="3">{{ t('test.variables.noVariables') }}</NText>
 
                     <NButton
                         size="small"
@@ -188,10 +189,7 @@
                     </div>
                 </div>
 
-                <!-- 无变量提示 -->
-                <div v-if="displayVariables.length === 0" :style="{ padding: '2px 0' }">
-                    <NText :depth="3">{{ t('test.variables.noVariables') }}</NText>
-                </div>
+                <!-- 无变量提示已并入上方计数位（一行内完成说明 + 操作） -->
             </NSpace>
         </template>
     </NCard>

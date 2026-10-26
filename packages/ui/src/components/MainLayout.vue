@@ -109,10 +109,11 @@ import ToastUI from './Toast.vue'
   display: flex;
   align-items: center;
   min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
-  /* 顶栏是仪表不是 hero：降级为次级文字色 */
-  color: var(--ds-fg-1, var(--n-text-color-2));
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  /* 顶栏是位置指示，不是标题：弱化到三级文字色，把层级让给页头 hero */
+  color: var(--ds-fg-2, var(--n-text-color-3));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
