@@ -179,8 +179,12 @@
         {{ t('updater.devEnvironment') }}
       </NAlert>
 
+      <NAlert v-if="state.lastCheckResult === 'no-channel'" type="info" :show-icon="true">
+        {{ t('updater.noReleaseChannel') }}
+      </NAlert>
+
       <NAlert
-        v-if="state.lastCheckMessage && state.lastCheckResult === 'error'"
+        v-else-if="state.lastCheckMessage && state.lastCheckResult === 'error'"
         type="error"
         :show-icon="true"
       >

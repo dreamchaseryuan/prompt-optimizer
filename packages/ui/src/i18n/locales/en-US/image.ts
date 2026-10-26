@@ -334,6 +334,7 @@ const messages = {
     "installError": "Installation failed",
     "upToDate": "Up to Date",
     "devEnvironment": "Development Environment: Update checking is disabled",
+    "noReleaseChannel": "This build is distributed locally without an online update source.\nNew versions are provided by whoever shared the installer with you.",
     "clickToCheck": "Click to check for updates",
     "viewOnGitHub": "View on GitHub",
     "manualUpdateTitle": "macOS currently requires a manual update",

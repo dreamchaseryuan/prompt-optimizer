@@ -25,7 +25,7 @@ export interface UpdaterState {
   isDownloading: boolean
   isDownloaded: boolean
   isCheckingUpdate: boolean
-  lastCheckResult: 'none' | 'available' | 'not-available' | 'error' | 'dev-disabled'
+  lastCheckResult: 'none' | 'available' | 'not-available' | 'error' | 'dev-disabled' | 'no-channel'
   lastCheckMessage: string
   stableVersion: string | null
   stableReleaseUrl: string | null
@@ -76,6 +76,30 @@ interface UpdaterInstance {
 
 // 全局单例状态，确保所有组件共享同一个状态
 let globalUpdaterInstance: UpdaterInstance | null = null
+
+/**
+ * 归因更新检查失败的原因（纯函数，便于单测）：
+ * - no-release-channel：仓库没有 Release / 406 / 404 —— 属分发方式，不是故障
+ * - offline：网络不可达
+ * - other：其余未知错误
+ */
+export type UpdateCheckErrorKind = 'no-release-channel' | 'offline' | 'other'
+
+export function classifyUpdateCheckError(raw: unknown): UpdateCheckErrorKind {
+  const text = String(raw ?? '')
+  if (
+    /Cannot parse releases feed/i.test(text) ||
+    /Unable to find latest version/i.test(text) ||
+    /https?:\/\/[^\s]*\/releases/i.test(text) ||
+    /HttpError:\s*40[46]/i.test(text)
+  ) {
+    return 'no-release-channel'
+  }
+  if (/ENOTFOUND|ECONNREFUSED|ETIMEDOUT|EAI_AGAIN|socket hang up/i.test(text)) {
+    return 'offline'
+  }
+  return 'other'
+}
 
 export function useUpdater() {
   // 如果已有实例，直接返回
@@ -133,6 +157,31 @@ export function useUpdater() {
   const { setPreference } = usePreferences(services)
   const { t } = useI18n()
 
+  /**
+   * 本次检查是否为「启动静默检查」。
+   * 静默检查失败（如未配置发布渠道 / 网络不可达）只写日志，绝不弹错误面
+   * ——自动检查不是用户发起的操作，失败不应打扰使用。
+   */
+  let isSilentCheck = false
+
+  /** 把更新源原始技术错误收敛成人能读懂的一句话 */
+  const humanizeCheckError = (raw: string): string => {
+    const kind = classifyUpdateCheckError(raw)
+    if (kind === 'no-release-channel') return t('updater.noReleaseChannel')
+    const text = String(raw || '')
+    if (kind === 'offline') {
+      return t('updater.downloadFailedGeneric', { type: t('updater.stable'), error: text.slice(0, 160) })
+    }
+    return text.length > 300 ? `${text.slice(0, 300)}…` : text
+  }
+
+  /** 统一写入检查错误状态：区分「无渠道（信息提示）」与「真故障（错误）」 */
+  const applyCheckError = (raw: string) => {
+    const kind = classifyUpdateCheckError(raw)
+    state.lastCheckResult = kind === 'no-release-channel' ? 'no-channel' : 'error'
+    state.lastCheckMessage = humanizeCheckError(raw)
+  }
+
   // 直接使用 window.electronAPI，简单直接
 
   const state = reactive<UpdaterState>({
@@ -172,7 +221,7 @@ export function useUpdater() {
   let downloadStartedListener: ((info: { versionType?: 'stable' | 'prerelease'; version?: string }) => void) | null = null
 
   // 检查两种版本的内部函数
-  const checkBothVersions = async () => {
+  const checkBothVersions = async (silent = false) => {
     try {
       // 获取当前版本
       state.currentVersion = await getCurrentVersion()
@@ -302,11 +351,15 @@ export function useUpdater() {
         const hasPrereleaseNoVersionFound = results.prerelease?.noVersionFound
 
         if (hasStableError || hasPrereleaseError) {
-          state.lastCheckResult = 'error'
           const errors = []
           if (hasStableError && results.stable?.error) errors.push(`stable: ${results.stable.error}`)
           if (hasPrereleaseError && results.prerelease?.error) errors.push(`prerelease: ${results.prerelease.error}`)
-          state.lastCheckMessage = `Update check failed: ${errors.join(', ')}`
+          if (silent) {
+            // 启动静默检查：失败只留痕，不改变 UI 状态
+            console.info('[useUpdater] Silent check failed (ignored):', errors.join(' | '))
+            return
+          }
+          applyCheckError(errors.join(', '))
         } else if (hasStableNoVersionFound && hasPrereleaseNoVersionFound) {
           state.lastCheckResult = 'not-available'
           state.lastCheckMessage = 'No releases found. This project may not have published any versions yet.'
@@ -322,8 +375,12 @@ export function useUpdater() {
     } catch (error) {
       console.error('[useUpdater] Error checking all versions:', error)
       invalidateActionableCheckState(state)
+      if (silent) {
+        console.info('[useUpdater] Silent check aborted (ignored):', error instanceof Error ? error.message : String(error))
+        return
+      }
       state.lastCheckResult = 'error'
-      state.lastCheckMessage = error instanceof Error ? error.message : String(error)
+      state.lastCheckMessage = humanizeCheckError(error instanceof Error ? error.message : String(error))
     } finally {
       // 无论成功还是失败，都保存检测状态
       state.isCheckingUpdate = false
@@ -495,7 +552,8 @@ export function useUpdater() {
   }
 
   // 检查更新 - 增强版本，支持双重检查
-  const checkUpdate = async () => {
+  // silent=true 用于启动静默检查：任何失败都不进入错误 UI
+  const checkUpdate = async (silent = false) => {
     if (!window.electronAPI?.updater) {
       console.warn('[useUpdater] Electron updater API not available')
       return
@@ -507,10 +565,11 @@ export function useUpdater() {
       return
     }
 
+    isSilentCheck = silent
     try {
       state.isCheckingUpdate = true
       // 检查两种版本：正式版和预览版
-      await checkBothVersions()
+      await checkBothVersions(silent)
     } catch (error) {
       console.error('[useUpdater] Check update error:', error)
       const extendedError = asExtendedError(error)
@@ -524,28 +583,34 @@ export function useUpdater() {
       }
 
       state.lastCheckResult = 'error'
+      if (silent) {
+        // 静默检查失败不进入错误 UI，避免启动即报错
+        console.info('[useUpdater] Silent check error (ignored):', extendedError?.message || error)
+        return
+      }
       if (extendedError) {
         if (extendedError.detailedMessage) {
           // 检查是否是开发环境的配置文件缺失错误
           if (extendedError.detailedMessage.includes('dev-app-update.yml') && extendedError.detailedMessage.includes('ENOENT')) {
             state.lastCheckMessage = 'Development environment: Update checking is disabled (no dev-app-update.yml configured)'
           } else {
-            state.lastCheckMessage = extendedError.detailedMessage
+            applyCheckError(extendedError.detailedMessage)
           }
         } else if (extendedError.originalError !== undefined) {
-          state.lastCheckMessage = String(extendedError.originalError)
+          applyCheckError(String(extendedError.originalError))
         } else {
           let detailedMessage = `Client Error: ${extendedError.message}`
           if (extendedError.stack) {
             detailedMessage += `\n\nStack Trace:\n${extendedError.stack}`
           }
-          state.lastCheckMessage = detailedMessage
+          applyCheckError(detailedMessage)
         }
       } else {
-        state.lastCheckMessage = String(error ?? 'Update check failed')
+        applyCheckError(String(error ?? 'Update check failed'))
       }
     } finally {
       state.isCheckingUpdate = false
+      isSilentCheck = false
     }
   }
 
@@ -947,6 +1012,14 @@ export function useUpdater() {
     updateErrorListener = (error: { message?: string; code?: string; error?: string }) => {
       console.error('[useUpdater] Update error:', error)
 
+      // 启动静默检查期间的上游错误一律不外显（下载过程中的错误仍然要提示）
+      const inDownloadFlow =
+        !!state.lastDownloadAttempt || state.isDownloadingStable || state.isDownloadingPrerelease
+      if (isSilentCheck && !inDownloadFlow) {
+        console.info('[useUpdater] Silent check: upstream error suppressed')
+        return
+      }
+
       // 简单处理：重置下载状态，保持更新信息让用户重试
       state.isDownloading = false
       state.downloadProgress = null
@@ -967,7 +1040,8 @@ export function useUpdater() {
       }
 
       // 使用详细的错误信息，优先使用 message 字段（包含详细信息）
-      state.lastCheckMessage = errorMessage
+      // 收敛成可读文案：更新源缺失/离线等不再直出 GitHub 原始报错
+      state.lastCheckMessage = humanizeCheckError(errorMessage)
       // 保持 hasUpdate 和 updateInfo，让用户可以重新下载
     }
     window.electronAPI.on('update-error', updateErrorListener)
@@ -1033,8 +1107,9 @@ export function useUpdater() {
       // 每次启动都自动检查更新，确保状态最新
       console.log('[useUpdater] Performing automatic update check on startup')
       // 延迟3秒后自动检测，避免影响应用启动速度
+      // silent=true：自动检查失败（未配置发布渠道/离线）只写日志，不弹错误
       setTimeout(() => {
-        checkUpdate().catch(error => {
+        checkUpdate(true).catch(error => {
           console.warn('[useUpdater] Automatic update check failed:', error)
         })
       }, 3000)

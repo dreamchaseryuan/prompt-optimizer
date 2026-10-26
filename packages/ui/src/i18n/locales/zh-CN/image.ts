@@ -335,6 +335,7 @@ const messages = {
     "upToDate": "已是最新版本",
     "viewOnGitHub": "在 GitHub 上查看",
     "devEnvironment": "开发环境：更新检查已禁用",
+    "noReleaseChannel": "当前版本为本地分发，未配置在线更新源。\n有新版本时会由分发者提供安装包。",
     "clickToCheck": "点击检查更新",
     "manualUpdateTitle": "macOS 当前需要手动更新",
     "manualUpdateDescription": "当前 macOS 发布包未使用 Apple Developer ID 签名，无法在应用内完成安装。请前往版本发布页下载适用于本机的 DMG，退出应用后将其拖入“应用程序”并选择替换。若首次打开被拦截，请在“系统设置 → 隐私与安全性”中允许打开。",

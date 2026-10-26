@@ -335,6 +335,7 @@ const messages = {
     "upToDate": "已是最新版本",
     "viewOnGitHub": "在 GitHub 上檢視",
     "devEnvironment": "開發環境：更新檢查已停用",
+    "noReleaseChannel": "目前版本為本機分發，未設定線上更新來源。\n有新版本時會由分發者提供安裝檔。",
     "clickToCheck": "點選檢查更新",
     "manualUpdateTitle": "macOS 目前需要手動更新",
     "manualUpdateDescription": "目前的 macOS 發布套件未使用 Apple Developer ID 簽署，無法在應用程式內完成安裝。請前往版本發布頁下載適用於本機的 DMG，結束應用程式後將其拖入「應用程式」並選擇取代。若首次開啟遭到阻擋，請在「系統設定 → 隱私權與安全性」中允許開啟。",

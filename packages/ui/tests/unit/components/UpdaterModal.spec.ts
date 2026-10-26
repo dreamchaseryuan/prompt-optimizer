@@ -293,4 +293,19 @@ describe('UpdaterModal update delivery actions', () => {
 
     expect(wrapper.text()).toContain('The release page could not be opened.')
   })
+
+  it('renders the missing update channel as a friendly notice, not the raw GitHub error', () => {
+    createUpdater({
+      updateDelivery: manualDelivery(),
+      lastCheckResult: 'no-channel',
+      lastCheckMessage: 'This build is distributed locally without an online update source.',
+    })
+    const wrapper = mountUpdaterModal()
+
+    // 只说人话：出现「无在线更新源」说明，且原始 406 / releases feed 报错不外露
+    expect(wrapper.findAll('.n-alert')).toHaveLength(1)
+    expect(wrapper.text()).toContain('online update source')
+    expect(wrapper.text()).not.toContain('Cannot parse releases feed')
+    expect(wrapper.text()).not.toContain('HttpError')
+  })
 })
